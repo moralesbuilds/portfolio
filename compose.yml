@@ -1,0 +1,16 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: web
+    ports:
+      - "8787:8787"
+    command: pnpm --filter web dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/apps/web/node_modules
+      - /app/.pnpm-store
+    environment:
+      - NODE_ENV=development
