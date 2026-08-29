@@ -1,0 +1,9 @@
+# Collapse generated TypeScript definitions from Wrangler
+worker-configuration.d.ts linguist-generated=true
+
+# Hide compiled build artifacts if you commit them (e.g., Rust/Wasm shims or bundled JS)
+dist/** linguist-generated=true
+.wrangler/** linguist-generated=true
+
+# Force proper line endings across environments
+* text=auto eol=lf
