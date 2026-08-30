@@ -9,7 +9,7 @@
     "start": "next start",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "size": "wrangler deploy --dry-run --outdir=.wrangler/dry-run",
-    "upload": "wrangler versions upload",
+    "upload": "opennextjs-cloudflare build && wrangler versions upload",
     "deploy": "wrangler deploy"
   },
   "keywords": [
