@@ -18,6 +18,9 @@ jobs:
       contents: read
       pull-requests: write
 
+    env:
+      WRANGLER_SEND_METRICS: false
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v7.0.1
@@ -26,12 +29,16 @@ jobs:
         uses: pnpm/setup@v1
         with:
           runtime: node@26.8.1
-          run_install: false
+          install: false
           cache: true
 
       - name: Instal dependencies
         run: |
           pnpm install --frozen-lockfile
+
+      - name: Build OpenNext worker
+        run: |
+          pnpm --filter web exec opennextjs-cloudflare build
 
       - name: Measure bundle compressed size
         id: dry_run
