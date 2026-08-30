@@ -26,6 +26,7 @@ jobs:
         uses: pnpm/setup@v1
         with:
           runtime: node@26.8.1
+          run_install: false
           cache: true
 
       - name: Instal dependencies
@@ -35,11 +36,7 @@ jobs:
       - name: Measure bundle compressed size
         id: dry_run
         run: |
-          {
-            echo 'size<<EOF'
-            pnpm --filter web size 2>&1
-            echo EOF
-          } >> "$GITHUB_OUTPUT"
+          pnpm --filter web size
 
       - name: Reporting dry-run execution
         uses: mshick/add-pr-comment@v3
