@@ -2,5 +2,11 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "web",
   "main": "index.ts",
-  "compatibility_date": "2026-08-29"
+  "compatibility_date": "2026-08-29",
+  "r2_buckets": [
+    {
+      "binding": "EXAMPLES_BUCKET",
+      "bucket_name": "examples"
+    }
+  ]
 }
