@@ -17,6 +17,7 @@ services:
       - UID=${UID:-1000}
       - GID=${GID:-1000}
       - NODE_ENV=development
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
 
 volumes:
   global_deps:
