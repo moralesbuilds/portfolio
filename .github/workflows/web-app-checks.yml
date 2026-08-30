@@ -11,7 +11,7 @@ jobs:
   test-build:
     runs-on: ubuntu-latest
     permissions:
-      pull_requests: write
+      pull-requests: write
 
     steps:
       - name: Checkout Repository
