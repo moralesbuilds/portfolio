@@ -1,0 +1,39 @@
+name: web-app-checks
+run-name: Portfolio's Web app checks
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reponed]
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    permissions:
+      pull_request: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Setup pnpm and Node.js
+        uses: pnpm/setup@v6.0.10
+        with:
+          version: 12
+          runtime: node@26.8.1
+          cache: true
+
+      - name: Measure bundle compressed size
+        run: |
+          {
+            echo 'size<<EOF'
+            pnpm --filter web size 2>&1
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Reporting dry-run execution
+        uses: mshick/add-pr-comment@v3
+        if: always()
+        with:
+          message: $size
