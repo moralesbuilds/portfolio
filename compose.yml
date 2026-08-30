@@ -10,7 +10,7 @@ services:
     ports:
       - "8787:8787"
     volumes:
-      - ./apps/web:/app/apps/web
+      - .:/app
       - global_deps:/app/node_modules
       - web_deps:/app/apps/web/node_modules
     environment:
