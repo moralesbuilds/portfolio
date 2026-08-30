@@ -6,3 +6,5 @@ dist
 .dockerignore
 Dockerfile
 Dockerfile.*
+.env*
+.wrangler
