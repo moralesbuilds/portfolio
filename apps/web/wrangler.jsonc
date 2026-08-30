@@ -1,12 +1,40 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "web",
-  "main": "index.ts",
+  "main": ".open-next/worker.js",
   "compatibility_date": "2026-08-29",
+  "compatibility_flags": [
+    // Enable Node.js API
+    // see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#nodejs-compatibility-flag
+    "nodejs_compat",
+    // Allow to fetch URLs in your app
+    // see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#global-fetch-strictly-public
+    "global_fetch_strictly_public"
+  ],
+  "routes": [
+    {
+      "pattern": "moralesbuilds.dev",
+      "custom_domain": true
+    }
+  ],
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "web"
+    }
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
   "r2_buckets": [
     {
       "binding": "EXAMPLES_BUCKET",
       "bucket_name": "examples"
+    },
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "web-app-incrementa-cache"
     }
   ]
 }
