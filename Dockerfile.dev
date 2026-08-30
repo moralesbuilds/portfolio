@@ -18,8 +18,9 @@ RUN groupadd -g ${GROUP_ID} appuser && \
 
 COPY --from=dependencies --chown=appuser:appuser /app/node_modules ./node_modules
 COPY --from=dependencies --chown=appuser:appuser /app/apps/web/node_modules ./apps/web/node_modules
+RUN mkdir -p /app/apps/web/.next && chown appuser:appuser /app/apps/web/.next
 
-EXPOSE 8787
+EXPOSE 3000
 
 USER appuser
 
