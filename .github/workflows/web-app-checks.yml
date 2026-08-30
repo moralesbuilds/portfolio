@@ -20,6 +20,7 @@ jobs:
 
     env:
       WRANGLER_SEND_METRICS: false
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout Repository
@@ -41,12 +42,12 @@ jobs:
           pnpm --filter web exec opennextjs-cloudflare build
 
       - name: Measure bundle compressed size
-        id: dry_run
+        continue-on-error: true
         run: |
-          pnpm --filter web size
+          set -o pipefail
+          pnpm --filter web size > report.md
 
       - name: Reporting dry-run execution
-        uses: mshick/add-pr-comment@v3
         if: always()
-        with:
-          message: ${{ steps.dry_run.outputs.size }}
+        run: |
+          gh pr comment "$PR_NUMBER" --body-file report.md --edit-last --create-if-none
