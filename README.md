@@ -6,3 +6,4 @@ This is where I build my own corner on the web, for now just configuring the dev
 
 ### The stack
 * [Typescript 7](https://www.typescriptlang.org/)
+* [tailwindcss](https://tailwindcss.com/)
