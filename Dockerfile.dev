@@ -1,0 +1,26 @@
+FROM ghcr.io/pnpm/pnpm:12.0.0 AS base
+RUN pnpm runtime set node 26.8.1 -g
+WORKDIR /app
+
+FROM base AS dependencies
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY apps/ ./apps/
+RUN find apps -type f ! -name 'package.json' -delete
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+
+FROM base AS web
+
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+
+RUN groupadd -g ${GROUP_ID} appuser && \
+  useradd -u ${USER_ID} -g appuser -m appuser
+
+COPY --from=dependencies --chown=appuser:appuser /app/node_modules ./node_modules
+COPY --from=dependencies --chown=appuser:appuser /app/apps/web/node_modules ./apps/web/node_modules
+
+EXPOSE 8787
+
+USER appuser
+
+CMD ["pnpm", "--filter", "web", "dev"]
