@@ -3,3 +3,5 @@
 .env*
 .pnpm-store/
 .dev.vars
+**/.next/
+**/.open-next/
