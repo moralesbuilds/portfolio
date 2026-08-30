@@ -2,9 +2,9 @@
   "name": "web",
   "version": "1.0.0",
   "description": "Luis Morales' personal website and portfolio product",
-  "private": "true",
+  "private": true,
   "scripts": {
-    "dev": "wrangler dev"
+    "dev": "wrangler dev --ip 0.0.0.0"
   },
   "keywords": [
     "Portfolio",
@@ -12,19 +12,8 @@
   ],
   "author": "moralesbuilds",
   "license": "MIT",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "12.0.0",
-      "onFail": "download"
-    }
-  },
-  "packageManager": "pnpm@12.0.0",
   "type": "module",
   "devDependencies": {
     "wrangler": "^4.127.0"
-  },
-  "engines": {
-    "node": "24.20.0"
   }
 }
