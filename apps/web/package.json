@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "size": "wrangler deploy --dry-run --outdir=.wrangler/dry-run"
   },
   "keywords": [
     "Portfolio",
