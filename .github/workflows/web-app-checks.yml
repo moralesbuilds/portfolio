@@ -5,12 +5,17 @@ on:
     branches:
       - main
     paths:
+      - package.json
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+      - '.github/workflows/web-app-checks.yml'
       - 'apps/web/**'
 
 jobs:
   test-build:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pull-requests: write
 
     steps:
@@ -23,7 +28,12 @@ jobs:
           runtime: node@26.8.1
           cache: true
 
+      - name: Instal dependencies
+        run: |
+          pnpm install --frozen-lockfile
+
       - name: Measure bundle compressed size
+        id: dry_run
         run: |
           {
             echo 'size<<EOF'
@@ -35,4 +45,4 @@ jobs:
         uses: mshick/add-pr-comment@v3
         if: always()
         with:
-          message: $size
+          message: ${{ steps.dry_run.outputs.size }}
