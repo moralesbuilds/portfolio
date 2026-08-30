@@ -1,11 +1,11 @@
 name: web-app-checks
 run-name: Portfolio's Web app checks
-
 on:
   pull_request:
     branches:
       - main
-    types: [opened, synchronize, reponed]
+    paths:
+      - 'apps/web/**'
 
 jobs:
   test-build:
