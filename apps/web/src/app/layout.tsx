@@ -1,4 +1,5 @@
 import "./app.css";
+import { NextIntlClientProvider } from "next-intl";
 import { Inter, JetBrains_Mono } from "next/font/google";
 
 // Title font
@@ -18,7 +19,9 @@ const inter = Inter({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${jetBrainsMono.variable}`}>
-      <body>{children}</body>
+      <body>
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+      </body>
     </html>
   );
 }
