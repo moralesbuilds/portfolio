@@ -1,4 +1,5 @@
-import "./app.css";
+import "../app.css";
+import { routing } from "../../i18n/routing";
 import { NextIntlClientProvider } from "next-intl";
 import { Inter, JetBrains_Mono } from "next/font/google";
 
@@ -15,6 +16,10 @@ const inter = Inter({
   variable: '--font-inter',
   display: 'swap'
 });
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
