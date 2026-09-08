@@ -1,8 +1,23 @@
-import "./globals.css";
+import "./app.css";
+import { Inter, JetBrains_Mono } from "next/font/google";
+
+// Title font
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap'
+});
+
+// Body font
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap'
+});
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${jetBrainsMono.variable}`}>
       <body>{children}</body>
     </html>
   );
