@@ -13,7 +13,7 @@
   ],
   "workers_dev": false,
   "build": {
-    "command": "pnpm --filter web run deploy",
+    "command": "pnpm --filter web run build:cf",
     "watch_dir": [
       "src",
       "public",

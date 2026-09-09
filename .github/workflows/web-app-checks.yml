@@ -41,7 +41,7 @@ jobs:
 
       - name: Build OpenNext worker
         run: |
-          pnpm --filter web exec opennextjs-cloudflare build
+          pnpm --filter web run build:cf
 
       - name: Measure bundle compressed size
         continue-on-error: true
