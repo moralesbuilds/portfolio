@@ -1,4 +1,5 @@
-import "./app.css";
+import "../app.css";
+import { routing } from "../../i18n/routing";
 import { Inter, JetBrains_Mono } from "next/font/google";
 
 // Title font
@@ -15,7 +16,11 @@ const inter = Inter({
   display: 'swap'
 });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${jetBrainsMono.variable}`}>
       <body>{children}</body>
