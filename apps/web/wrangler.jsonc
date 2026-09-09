@@ -14,7 +14,6 @@
   "workers_dev": false,
   "build": {
     "command": "pnpm --filter web run deploy",
-    "cwd": "/",
     "watch_dir": [
       "src",
       "public",
