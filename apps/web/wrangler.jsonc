@@ -12,6 +12,25 @@
     "global_fetch_strictly_public"
   ],
   "workers_dev": false,
+  "build": {
+    "command": "pnpm --filter web run build:cf",
+    "watch_dir": [
+      "src",
+      "public",
+      "messages",
+      "package.json",
+      "next.config.ts",
+      "tsconfig.json",
+      "open-next.config.ts",
+      "wrangler.json",
+      "postcss.config.mjs",
+
+      // 2. Monorepo root files that affect the build (stepping up to repo root)
+      "../../pnpm-lock.yaml",
+      "../../pnpm-workspace.yaml",
+      "../../package.json",
+    ]
+  },
   "routes": [
     {
       "pattern": "moralesbuilds.dev",
