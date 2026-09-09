@@ -120,7 +120,7 @@ importers:
         version: 16.3.4(@types/node@26.5.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       next-intl:
         specifier: ^4.14.2
-        version: 4.14.2(@swc/helpers@0.5.23)(next@16.3.3(@types/node@26.4.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+        version: 4.14.2(@swc/helpers@0.5.23)(next@16.3.4(@types/node@26.5.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
       react:
         specifier: ^19.2.8
         version: 19.2.8
@@ -5002,7 +5002,7 @@ snapshots:
 
   next-intl-swc-plugin-extractor@4.14.2: {}
 
-  next-intl@4.14.2(@swc/helpers@0.5.23)(next@16.3.3(@types/node@26.4.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8):
+  next-intl@4.14.2(@swc/helpers@0.5.23)(next@16.3.4(@types/node@26.5.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8):
     dependencies:
       '@eloqnt/config': 0.1.0
       '@eloqnt/format-json': 0.1.0
@@ -5012,7 +5012,7 @@ snapshots:
       '@swc/core': 1.16.2(@swc/helpers@0.5.23)
       icu-minify: 4.14.2
       negotiator: 1.1.0
-      next: 16.3.3(@types/node@26.4.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      next: 16.3.4(@types/node@26.5.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       next-intl-swc-plugin-extractor: 4.14.2
       react: 19.2.8
       use-intl: 4.14.2(react@19.2.8)
