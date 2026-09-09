@@ -1,6 +1,5 @@
 import "../app.css";
 import { routing } from "../../i18n/routing";
-import { NextIntlClientProvider } from "next-intl";
 import { Inter, JetBrains_Mono } from "next/font/google";
 
 // Title font
@@ -24,9 +23,7 @@ export function generateStaticParams() {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${jetBrainsMono.variable}`}>
-      <body>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
