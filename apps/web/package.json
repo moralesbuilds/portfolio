@@ -10,7 +10,8 @@
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "size": "wrangler deploy --dry-run --outdir=.wrangler/dry-run",
     "upload": "opennextjs-cloudflare build && wrangler versions upload",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "build:cf": "opennextjs-cloudflare build"
   },
   "keywords": [
     "Portfolio",
