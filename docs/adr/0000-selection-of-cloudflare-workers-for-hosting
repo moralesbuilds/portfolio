@@ -1,0 +1,33 @@
+# ADR-0000: Selection of Cloudflare Pages/Workers over Vercel and AWS for Portfolio Hosting
+
+## Status
+Accepted (2026-08-29)
+
+## Context
+When initializing this personal portfolio and software engineering blog, I needed to select a hosting platform capable of delivering low-latency edge rendering for Next.js while maintaining a strict $0/month operational budget (excluding standard domain registration fees).
+
+The platform choice needed to align with this core criterion: \
+**Commercial Usage Compliance**: The primary purpose of the platform is professional outreach—demonstrating engineering capabilities to prospective employers and clients. The hosting choice must legally allow commercial and professional presentation on its non-paid tier.
+
+## Decision
+I will host the portfolio application on Cloudflare Pages / Workers instead of AWS or Vercel.
+
+## Alternatives Evaluated
+1. Amazon Web Services (AWS - S3, CloudFront, Lambda@Edge)
+    * Pros: Deep personal production experience; fine-grained control over infrastructure and IAM permissions.
+    * Cons: Discarded immediately due to cost unpredictability. Even minimal egress, request routing, and edge compute invocations can incur recurring monthly charges, violating the $0 budget constraint.
+2. Vercel (Hobby / Free Tier)
+    * Pros: Native platform support and optimal developer experience for Next.js; familiar framework deployment workflows.
+    * Cons: Vercel's Hobby tier's terms of service explicitly forbid commercial use. Using a free Vercel deployment to market software engineering services or solicit client work violates their licensing terms, introducing legal and operational risk. Upgrading to the Pro tier ($20/month) breaks the budget constraint ([Vercel Fair Use Guidelines](https://vercel.com/docs/limits/fair-use-guidelines)).
+3. Cloudflare Pages & Workers (selected)
+    * Pros: **Generous Free Quota**: Includes 100,000 Workers requests per day at $0 cost.
+    * Pros: **Commercial Use Allowed**: Cloudflare's free tier permits commercial and professional portfolio sites without licensing restrictions.
+    * Pros: **Frictionless domain integration**: Buying and managing the custom domain through Cloudflare Registrar enabled instant, zero-fuss DNS routing and automatic SSL provisioning directly to Pages/Workers.
+    * Cons: Requires additional framework adaptation via `vinext` or `@opennextjs/cloudflare` compared to native Vercel deployments; limited knowledge of the platform.
+
+## Consequences
+* **Positive**: Zero base cost. Full site delivery and edge execution remain within Cloudflare's free tier quotas.
+* **Positive**: Legal & Commercial Compliance. Full authorization to showcase professional services and portfolio projects without violating platform terms.
+* **Positive**: Unified Ecosystem. Domain management, DNS, edge compute (Workers), object storage (R2), and relational database (D1) exist within a single management console and billing boundary.
+* **Negative**: Integration overhead: App router features must be compiled through `vinext` or `@opennextjs/cloudflare`, adding extra configuration depending on the chosen library.
+* **Negative**: Requires bundle optimization — the worker bundle size needs to be monitored to stay under the 64 MiB limit ([Cloudflare Worker Limits](https://developers.cloudflare.com/workers/platform/limits/)).
