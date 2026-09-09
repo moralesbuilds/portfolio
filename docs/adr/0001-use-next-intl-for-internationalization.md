@@ -1,7 +1,7 @@
 # ADR-0001: Use next-intl for internationalization
 
 ## Status
-Accepted
+Accepted (2026-09-08)
 
 ## Context
 I am building a portfolio which also doubles as a personal website where people can learn more about how I work and reach out to me.
