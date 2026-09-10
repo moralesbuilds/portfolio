@@ -14,7 +14,8 @@ export default getRequestConfig(async ({ locale }) => {
     }
   }
 
-  const messages = (await import(`../../messages/${locale}.json`)).default;
-
-  return { locale, messages };
+  const localeMessages = (await import(`../../messages/${locale}.json`)).default;
+  const sharedMessages = (await import("../../messages/shared.json")).default;
+  
+  return { locale, messages: { ...localeMessages, ...sharedMessages } };
 });
