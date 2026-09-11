@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import Header from "@/components/header";
 import { NextIntlClientProvider } from "next-intl";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import Container from "@/components/container";
 
 // Title font
 const jetBrainsMono = JetBrains_Mono({
@@ -43,11 +44,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             githubUrl={githubUrl}
           />
 
-          <main id="content" className="shrink-0">
-            <div className="max-w-340 min-h-160 mx-auto py-10 px-4 sm:px-6 lg:px-8 bg-base">
-              {children}
-            </div>
-          </main>
+          <Container>{children}</Container>
         </NextIntlClientProvider>
       </body>
     </html>
