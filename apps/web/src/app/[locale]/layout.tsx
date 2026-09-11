@@ -1,8 +1,8 @@
 import "../app.css";
-import { routing } from "../../i18n/routing";
+import { routing } from "@/i18n/routing";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { getTranslations } from "next-intl/server";
-import Header from "../../components/header";
+import Header from "@/components/header";
 import { NextIntlClientProvider } from "next-intl";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
