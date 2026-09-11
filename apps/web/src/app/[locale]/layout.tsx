@@ -4,6 +4,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import { getTranslations } from "next-intl/server";
 import Header from "../../components/header";
 import { NextIntlClientProvider } from "next-intl";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 // Title font
 const jetBrainsMono = JetBrains_Mono({
@@ -26,6 +27,8 @@ export function generateStaticParams() {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("root");
   const b = await getTranslations("brands");
+  const { env } = await getCloudflareContext({ async: true });
+  const githubUrl = env.GITHUB_PORTFOLIO_URL;
 
   return (
     <html lang="en" className={`${inter.variable} ${jetBrainsMono.variable}`}>
@@ -37,6 +40,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             contactLabel={t("contact")}
             openMenuLabel={t("open_menu")}
             githubLabel={b("github")}
+            githubUrl={githubUrl}
           />
 
           <main id="content" className="shrink-0">
