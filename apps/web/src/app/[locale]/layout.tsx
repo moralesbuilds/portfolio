@@ -1,11 +1,10 @@
 import "../app.css";
 import { routing } from "@/i18n/routing";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Header,  Container } from "@/components";
 import { getTranslations } from "next-intl/server";
-import Header from "@/components/header";
 import { NextIntlClientProvider } from "next-intl";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import Container from "@/components/container";
 
 // Title font
 const jetBrainsMono = JetBrains_Mono({
