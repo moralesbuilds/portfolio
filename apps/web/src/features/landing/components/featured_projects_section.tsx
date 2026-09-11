@@ -20,6 +20,7 @@ export async function FeaturedProjectsSection() {
         {t("title")}
       </h2>
 
+      {/* Project entry cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {projects.map((p) => (<ProjectCard
           key={p.key}
