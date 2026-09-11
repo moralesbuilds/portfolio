@@ -1,4 +1,9 @@
-import { HeroSection, AboutMeAndServicesSection, FeaturedProjectsSection } from "@/features/landing";
+import {
+  HeroSection,
+  AboutMeAndServicesSection,
+  FeaturedProjectsSection,
+  LatestBlogPostsSection
+} from "@/features/landing";
 
 export default async function Home() {
   return (
@@ -6,6 +11,7 @@ export default async function Home() {
       <HeroSection />
       <AboutMeAndServicesSection />
       <FeaturedProjectsSection />
+      <LatestBlogPostsSection />
     </>
   );
 }
