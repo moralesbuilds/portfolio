@@ -2,7 +2,8 @@ import {
   HeroSection,
   AboutMeAndServicesSection,
   FeaturedProjectsSection,
-  LatestBlogPostsSection
+  LatestBlogPostsSection,
+  ContactSection
 } from "@/features/landing";
 
 export default async function Home() {
@@ -12,6 +13,7 @@ export default async function Home() {
       <AboutMeAndServicesSection />
       <FeaturedProjectsSection />
       <LatestBlogPostsSection />
+      <ContactSection />
     </>
   );
 }

@@ -93,6 +93,27 @@
           "date": "Jul 29, 2026"
         }
       ]
+    },
+    "contact": {
+      "title": "Contact Me",
+      "subtitle": "[Placeholder]: Let's work together!"
     }
+  },
+  "contact": {
+    "fields": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Your Name"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "you@example.com"
+      },
+      "message": {
+        "label": "Message",
+        "placeholder": "Write your message here..."
+      }
+    },
+    "submit": "Send"
   }
 }
