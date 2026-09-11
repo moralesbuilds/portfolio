@@ -6,7 +6,7 @@ type ServiceCardProps = {
 
 export default function ServiceCard({ index, title, description }: ServiceCardProps) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-base p-6 shadow-sm transition-all hover:shadow-md hover:border-slate-300">
+    <div className="border border-slate-200 bg-base p-6 shadow-sm transition-all hover:shadow-md hover:border-slate-300">
       <div className="flex items-center space-x-4">
         <div className="h-10 w-10 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-lg shrink-0">
           0{index}

@@ -36,6 +36,43 @@
           "description": "Building secure RESTful and GraphQL APIs optimized for speed, reliability, and ease of developer access."
         }
       ]
+    },
+    "projects": {
+      "title": "Featured Projects / Study cases",
+      "view_details": "View Details",
+      "projects": [
+        {
+          "key": "htor",
+          "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+          "title": "High-Throughput Order Engine",
+          "description": "Low-latency order processing and execution architecture designed for high concurrency and sub-millisecond reliability.",
+          "tags": [
+            "C++",
+            "Distributed System"
+          ]
+        },
+        {
+          "key": "db",
+          "image": "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=800&q=80",
+          "title": "Automated DB Migration Pipeline",
+          "description": "Containerized testing framework for relational database schema migrations and automated verification workflows.",
+          "tags": [
+            "Docker",
+            "PostgreSQL",
+            "Liquibase"
+          ]
+        },
+        {
+          "key": "node",
+          "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
+          "title": "Custom Event Node Engine",
+          "description": "Tailored integration node using asynchronous message queues for distributed event stream processing and automation.",
+          "tags": [
+            "ASP.NET Core",
+            "RabbitMQ"
+          ]
+        }
+      ]
     }
   }
 }
