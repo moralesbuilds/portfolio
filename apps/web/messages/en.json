@@ -73,6 +73,26 @@
           ]
         }
       ]
+    },
+    "latest_blog_posts": {
+      "title": "Latest Blog Posts",
+      "blog_posts": [
+        {
+          "key": "arch",
+          "title": "Building Low-Latency Order Processing Engines in Modern C++",
+          "date": "Aug 28, 2026"
+        },
+        {
+          "key": "docker",
+          "title": "Automating PostgreSQL Migrations safely with Liquibase and Docker",
+          "date": "Aug 12, 2026"
+        },
+        {
+          "key": "api",
+          "title": "Integrating Custom Event Trigger Nodes into n8n via ASP.NET Core",
+          "date": "Jul 29, 2026"
+        }
+      ]
     }
   }
 }
