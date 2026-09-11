@@ -39,6 +39,6 @@
     }
   ],
   "vars": {
-    "NEXT_PUBLIC_GITHUB_PORTFOLIO_URL": "https://github.com/moralesbuilds/portfolio"
+    "GITHUB_PORTFOLIO_URL": "https://github.com/moralesbuilds/portfolio"
   }
 }
