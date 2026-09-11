@@ -11,6 +11,31 @@
       "subtitle": "[Placeholder]: Build completely by hand from scratch without any scaffolding CLIs.",
       "projects": "View Projects",
       "contact": "Contact me"
+    },
+    "about": {
+      "title": "About Me",
+      "heading": "[Placeholder]: Passionate about reliable code and efficient infrastructure.",
+      "content": "[Placeholder]: With years of experience designing enterprise backend services, distributed systems, and low-latency APIs. I focus on building resilient software solutions tailored to scaling requirements and strict operational budgets",
+      "photo1": "Photo 1",
+      "photo2": "Photo 2",
+      "services": "Services",
+      "service_list": [
+        {
+          "key": "arch",
+          "title": "Backend System Architecture",
+          "description": "Designing distributed systems, microservices, and high-throughput data processing pipelines."
+        },
+        {
+          "key": "infra",
+          "title": "Edge & Cloud Infrastructure",
+          "description": "Deploying serverless edge workloads, database integrations, and zero-cost optimized server setups."
+        },
+        {
+          "key": "api",
+          "title": "API Design & Integration",
+          "description": "Building secure RESTful and GraphQL APIs optimized for speed, reliability, and ease of developer access."
+        }
+      ]
     }
   }
 }
