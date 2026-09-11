@@ -13,7 +13,7 @@ type HeaderProps = {
   githubUrl: string;
 };
 
-export default function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, githubLabel, githubUrl }: HeaderProps) {
+export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, githubLabel, githubUrl }: HeaderProps) {
   const [mobileMenuOpened, setMobileMenuOpened] = useState(false);
   const onMobileMenuButtonClicked = () => setMobileMenuOpened((prevValue) => !prevValue);
   

@@ -6,7 +6,11 @@
     "open_menu": "Open main menu"
   },
   "home": {
-    "title": "MoralesBuilds, build with Next.js on Cloudflare",
-    "content": "Build completely by hand from scratch without any scaffolding CLIs."
+    "hero": {
+      "heading": "[Placeholder]: MoralesBuilds, build with Next.js on Cloudflare",
+      "subtitle": "[Placeholder]: Build completely by hand from scratch without any scaffolding CLIs.",
+      "projects": "View Projects",
+      "contact": "Contact me"
+    }
   }
 }
