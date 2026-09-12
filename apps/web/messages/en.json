@@ -1,6 +1,129 @@
 {
+  "root": {
+    "blog": "Blog",
+    "contact": "Contact",
+    "open_menu": "Open main menu"
+  },
   "home": {
-    "title": "MoralesBuilds, build with Next.js on Cloudflare",
-    "content": "Build completely by hand from scratch without any scaffolding CLIs."
+    "hero": {
+      "heading": "[Placeholder]: MoralesBuilds, build with Next.js on Cloudflare",
+      "subtitle": "[Placeholder]: Build completely by hand from scratch without any scaffolding CLIs.",
+      "projects": "View Projects",
+      "contact": "Contact me"
+    },
+    "about": {
+      "title": "About Me",
+      "heading": "[Placeholder]: Passionate about reliable code and efficient infrastructure.",
+      "content": "[Placeholder]: With years of experience designing enterprise backend services, distributed systems, and low-latency APIs. I focus on building resilient software solutions tailored to scaling requirements and strict operational budgets",
+      "photo1": "Photo 1",
+      "photo2": "Photo 2",
+      "services": "Services",
+      "service_list": [
+        {
+          "key": "arch",
+          "title": "Backend System Architecture",
+          "description": "Designing distributed systems, microservices, and high-throughput data processing pipelines."
+        },
+        {
+          "key": "infra",
+          "title": "Edge & Cloud Infrastructure",
+          "description": "Deploying serverless edge workloads, database integrations, and zero-cost optimized server setups."
+        },
+        {
+          "key": "api",
+          "title": "API Design & Integration",
+          "description": "Building secure RESTful and GraphQL APIs optimized for speed, reliability, and ease of developer access."
+        }
+      ]
+    },
+    "projects": {
+      "title": "Featured Projects / Study cases",
+      "view_details": "View Details",
+      "projects": [
+        {
+          "key": "htor",
+          "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+          "title": "High-Throughput Order Engine",
+          "description": "Low-latency order processing and execution architecture designed for high concurrency and sub-millisecond reliability.",
+          "tags": [
+            "C++",
+            "Distributed System"
+          ]
+        },
+        {
+          "key": "db",
+          "image": "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=800&q=80",
+          "title": "Automated DB Migration Pipeline",
+          "description": "Containerized testing framework for relational database schema migrations and automated verification workflows.",
+          "tags": [
+            "Docker",
+            "PostgreSQL",
+            "Liquibase"
+          ]
+        },
+        {
+          "key": "node",
+          "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
+          "title": "Custom Event Node Engine",
+          "description": "Tailored integration node using asynchronous message queues for distributed event stream processing and automation.",
+          "tags": [
+            "ASP.NET Core",
+            "RabbitMQ"
+          ]
+        }
+      ]
+    },
+    "latest_blog_posts": {
+      "title": "Latest Blog Posts",
+      "blog_posts": [
+        {
+          "key": "arch",
+          "title": "Building Low-Latency Order Processing Engines in Modern C++",
+          "date": "Aug 28, 2026"
+        },
+        {
+          "key": "docker",
+          "title": "Automating PostgreSQL Migrations safely with Liquibase and Docker",
+          "date": "Aug 12, 2026"
+        },
+        {
+          "key": "api",
+          "title": "Integrating Custom Event Trigger Nodes into n8n via ASP.NET Core",
+          "date": "Jul 29, 2026"
+        }
+      ]
+    },
+    "contact": {
+      "title": "Contact Me",
+      "subtitle": "[Placeholder]: Let's work together!"
+    }
+  },
+  "footer": {
+    "description": "Web development freelance",
+    "navigation": "navigation",
+    "links": {
+      "start": "Start",
+      "blog": "Blog",
+      "contact": "Contact"
+    },
+    "external_links": "External Links",
+    "copyright": "2026 {brand}. All rights reserved"
+  },
+  "contact": {
+    "fields": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Your Name"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "you@example.com"
+      },
+      "message": {
+        "label": "Message",
+        "placeholder": "Write your message here..."
+      }
+    },
+    "submit": "Send"
   }
 }

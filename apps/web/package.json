@@ -11,7 +11,8 @@
     "size": "wrangler deploy --dry-run --outdir=.wrangler/dry-run",
     "upload": "opennextjs-cloudflare build && wrangler versions upload",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "build:cf": "opennextjs-cloudflare build"
+    "build:cf": "opennextjs-cloudflare build",
+    "types": "wrangler types --env-interface CloudflareEnv"
   },
   "keywords": [
     "Portfolio",
