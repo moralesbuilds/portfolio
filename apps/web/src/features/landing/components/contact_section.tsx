@@ -5,7 +5,7 @@ export async function ContactSection() {
   const t = await getTranslations("home.contact");
   
   return (
-    <section className="py-16 md:py-24 border-t border-slate-200 flex flex-col items-center bg-surface">
+    <section className="py-16 md:py-24 border-t border-slate-200 flex flex-col items-center bg-base">
       {/* Header block */}
       <div className="text-center max-w-xl mb-8">
         <h2 className="text-small font-bold tracking-tight text-indigo-600 mb-6">

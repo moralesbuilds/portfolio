@@ -1,5 +1,8 @@
 {
   "brands": {
-    "github": "GitHub"
+    "own": "MoralesBuilds",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "x": "X"
   }
 }
