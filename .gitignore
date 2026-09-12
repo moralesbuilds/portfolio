@@ -5,3 +5,4 @@
 .dev.vars
 **/.next/
 **/.open-next/
+next-env.d.ts
