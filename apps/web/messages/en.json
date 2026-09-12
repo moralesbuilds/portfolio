@@ -1,6 +1,5 @@
 {
   "root": {
-    "brand": "MoralesBuilds",
     "blog": "Blog",
     "contact": "Contact",
     "open_menu": "Open main menu"
@@ -98,6 +97,17 @@
       "title": "Contact Me",
       "subtitle": "[Placeholder]: Let's work together!"
     }
+  },
+  "footer": {
+    "description": "Web development freelance",
+    "navigation": "navigation",
+    "links": {
+      "start": "Start",
+      "blog": "Blog",
+      "contact": "Contact"
+    },
+    "external_links": "External Links",
+    "copyright": "2026 {brand}. All rights reserved"
   },
   "contact": {
     "fields": {
