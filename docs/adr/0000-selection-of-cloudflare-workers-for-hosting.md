@@ -13,13 +13,13 @@ The platform choice needed to align with this core criterion: \
 I will host the portfolio application on Cloudflare Pages / Workers instead of AWS or Vercel.
 
 ## Alternatives Evaluated
-1. Amazon Web Services (AWS - S3, CloudFront, Lambda@Edge)
+### 1. Amazon Web Services (AWS - S3, CloudFront, Lambda@Edge)
 * Pros: Deep personal production experience; fine-grained control over infrastructure and IAM permissions.
 * Cons: Discarded immediately due to cost unpredictability. Even minimal egress, request routing, and edge compute invocations can incur recurring monthly charges, violating the $0 budget constraint.
-2. Vercel (Hobby / Free Tier)
+### 2. Vercel (Hobby / Free Tier)
 * Pros: Native platform support and optimal developer experience for Next.js; familiar framework deployment workflows.
 * Cons: Vercel's Hobby tier's terms of service explicitly forbid commercial use. Using a free Vercel deployment to market software engineering services or solicit client work violates their licensing terms, introducing legal and operational risk. Upgrading to the Pro tier ($20/month) breaks the budget constraint ([Vercel Fair Use Guidelines](https://vercel.com/docs/limits/fair-use-guidelines)).
-3. Cloudflare Pages & Workers (selected)
+### 3. Cloudflare Pages & Workers (selected)
 * Pros: **Generous Free Quota**: Includes 100,000 Workers requests per day at $0 cost.
 * Pros: **Commercial Use Allowed**: Cloudflare's free tier permits commercial and professional portfolio sites without licensing restrictions.
 * Pros: **Frictionless domain integration**: Buying and managing the custom domain through Cloudflare Registrar enabled instant, zero-fuss DNS routing and automatic SSL provisioning directly to Pages/Workers.
