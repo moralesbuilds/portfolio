@@ -1,4 +1,4 @@
-# ADR-0001: Use next-intl for internationalization
+# ADR-0002: Use next-intl for internationalization
 
 ## Status
 Accepted (2026-09-08)
