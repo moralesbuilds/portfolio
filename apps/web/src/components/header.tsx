@@ -67,7 +67,7 @@ export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, git
             </div>
 
             {/* Mobile menu button */}
-            <div className="-mr-2 flex items-center sm:hidden gap-2" data-testid="mobile-buttons">
+            <div className="-mr-2 flex items-center sm:hidden gap-2" data-testid="mobile-panel">
               {github}
               <button
                 id="mobile-menu-button"
@@ -75,7 +75,7 @@ export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, git
                 onClick={onMobileMenuButtonClicked}
                 className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
                 aria-controls="mobile-menu"
-                aria-expanded="false"
+                aria-expanded={mobileMenuOpened}
                 data-testid="mobile-menu"
               >
                 <span className="sr-only">{openMenuLabel}</span>
