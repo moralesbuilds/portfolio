@@ -101,6 +101,6 @@ export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, git
           </div>
         </div>
       </nav>
-    </header >
+    </header>
   );
 }
