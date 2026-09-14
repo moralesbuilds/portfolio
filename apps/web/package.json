@@ -12,7 +12,11 @@
     "upload": "opennextjs-cloudflare build && wrangler versions upload",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "build:cf": "opennextjs-cloudflare build",
-    "types": "wrangler types --env-interface CloudflareEnv"
+    "types": "wrangler types --env-interface CloudflareEnv",
+    "test": "vitest run",
+    "ts:check": "tsc --noEmit",
+    "test:browser": "vitest run --config vitest.browser.config.ts",
+    "test:browser:watch": "vitest --config vitest.browser.config.ts --browser.headless=false"
   },
   "keywords": [
     "Portfolio",
@@ -24,6 +28,7 @@
   "devDependencies": {
     "@opennextjs/cloudflare": "^1.20.6",
     "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.5.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
