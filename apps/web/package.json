@@ -15,7 +15,7 @@
     "types": "wrangler types --env-interface CloudflareEnv",
     "test": "vitest run",
     "test:browser": "vitest run --config vitest.browser.config.ts",
-    "test:browser:watch": "vitest --config vitest.browser.config.ts"
+    "test:browser:watch": "vitest --config vitest.browser.config.ts --browser.headless=false"
   },
   "keywords": [
     "Portfolio",

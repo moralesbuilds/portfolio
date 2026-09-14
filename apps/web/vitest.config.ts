@@ -11,5 +11,10 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["./src/vitest.setup.ts"],
     exclude: ["**/node_modules/**", "**/*.browser.test.{ts,tsx}"],
+    server: {
+      deps: {
+        inline: ["next-intl"],
+      },
+    },
   },
 });
