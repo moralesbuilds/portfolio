@@ -43,7 +43,7 @@ describe("Header", () => {
     const mobileContactLink = page.getByTestId("mobile-contact-link");
     await expect.element(mobileContactLink).not.toBeVisible();
 
-    const mobileButtons = page.getByTestId("mobile-buttons");
+    const mobileButtons = page.getByTestId("mobile-panel");
     const menu = mobileButtons.getByTestId("mobile-menu");
     await expect.element(menu).not.toBeVisible();
   });
@@ -53,7 +53,7 @@ describe("Header", () => {
     renderHeader();
 
     // Check what should and shouldn't be visible by default
-    const mobileButtons = page.getByTestId("mobile-buttons");
+    const mobileButtons = page.getByTestId("mobile-panel");
 
     const brandLink = page.getByTestId("brand-link");
     await expect.element(brandLink).toBeVisible();
@@ -76,9 +76,12 @@ describe("Header", () => {
     // Act: Click the mobile menu button
     const menu = mobileButtons.getByTestId("mobile-menu");
     await expect.element(menu).toBeVisible();
+    await expect.element(menu).toHaveAttribute("aria-expanded", "false");
     await userEvent.click(menu);
 
     await expect.element(mobileBlogLink).toBeVisible();
     await expect.element(mobileContactLink).toBeVisible();
+
+    await expect.element(menu).toHaveAttribute("aria-expanded", "true");
   });
 });
