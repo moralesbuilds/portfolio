@@ -52,12 +52,12 @@ jobs:
           key: playwright-${{ runner.os }}-${{ env.PLAYWRIGHT_VERSION }}
 
       - name: Install Playwright OS dependencies & Chromium
-        if: step.playwright-cache.outputs.cache-hit != 'true'
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: |
           pnpm exec playwright install --with-deps chromium
 
       - name: Install Playwright OS system dependencies only (if browser cached)
-        if: step.playwright-cache.outputs.cache-hit == 'true'
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: |
           pnpm exec playwright install-deps chromium
 
