@@ -14,6 +14,7 @@
     "build:cf": "opennextjs-cloudflare build",
     "types": "wrangler types --env-interface CloudflareEnv",
     "test": "vitest run",
+    "ts:check": "tsc --noEmit",
     "test:browser": "vitest run --config vitest.browser.config.ts",
     "test:browser:watch": "vitest --config vitest.browser.config.ts --browser.headless=false"
   },
