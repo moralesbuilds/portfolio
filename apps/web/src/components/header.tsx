@@ -19,7 +19,14 @@ export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, git
   const onMobileMenuButtonClicked = () => setMobileMenuOpened((prevValue) => !prevValue);
 
   const github = (
-    <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-900 transition-colors" aria-label={githubLabel}>
+    <a
+      href={githubUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-gray-500 hover:text-gray-900 transition-colors"
+      aria-label={githubLabel}
+      data-testid="github-link"
+    >
       <GitHubIcon />
     </a>
   );
@@ -31,14 +38,27 @@ export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, git
           <div className="flex justify-between h-16">
             {/* Brand name */}
             <div className="shrink-0 flex items-center">
-              <Link className="text-text-primary flex-none font-semibold text-xl focus:outline-hidden focus:opacity-80" href="#" aria-label={brandLabel}>{brandLabel}</Link>
+              <Link
+                href="#"
+                className="text-text-primary flex-none font-semibold text-xl focus:outline-hidden focus:opacity-80"
+                aria-label={brandLabel}
+                data-testid="brand-link"
+              >{brandLabel}</Link>
             </div>
 
             {/* Desktop links */}
             <div className="hidden sm:flex sm:items-center sm:space-x-8">
               <div className="flex space-x-8 h-full">
-                <Link href="#" className="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{blogLabel}</Link>
-                <Link href="#" className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">{contactLabel}</Link>
+                <Link
+                  href="#"
+                  className="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  data-testid="blog-link"
+                >{blogLabel}</Link>
+                <Link
+                  href="#"
+                  className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  data-testid="contact-link"
+                >{contactLabel}</Link>
               </div>
 
               <div className="flex items-center space-x-4 border-l border-gray-200 pl-6">
@@ -47,9 +67,17 @@ export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, git
             </div>
 
             {/* Mobile menu button */}
-            <div className="-mr-2 flex items-center sm:hidden gap-2">
+            <div className="-mr-2 flex items-center sm:hidden gap-2" data-testid="mobile-buttons">
               {github}
-              <button id="mobile-menu-button" type="button" onClick={onMobileMenuButtonClicked} className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none" aria-controls="mobile-menu" aria-expanded="false">
+              <button
+                id="mobile-menu-button"
+                type="button"
+                onClick={onMobileMenuButtonClicked}
+                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+                aria-controls="mobile-menu"
+                aria-expanded="false"
+                data-testid="mobile-menu"
+              >
                 <span className="sr-only">{openMenuLabel}</span>
                 <MenuIcon />
               </button>
@@ -60,11 +88,19 @@ export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, git
         {/* Mobile menu links */}
         <div className={mobileMenuOpened ? 'sm:hidden' : 'hidden sm:hidden'} id="mobile-menu">
           <div className="pt-2 pb-3 space-y-1">
-            <Link href="#" className="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 font-medium">{blogLabel}</Link>
-            <Link href="#" className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 font-medium">{contactLabel}</Link>
+            <Link
+              href="#"
+              className="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 font-medium"
+              data-testid="mobile-blog-link"
+            >{blogLabel}</Link>
+            <Link
+              href="#"
+              className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 font-medium"
+              data-testid="mobile-contact-link"
+            >{contactLabel}</Link>
           </div>
         </div>
       </nav>
-    </header>
+    </header >
   );
 }
