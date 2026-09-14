@@ -6,3 +6,5 @@
 **/.next/
 **/.open-next/
 next-env.d.ts
+**/test-results/
+tsconfig.tsbuildinfo
