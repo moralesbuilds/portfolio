@@ -39,6 +39,40 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
 
+      - name: Store Playwright CLI version
+        id: playwright-version
+        run: |
+          echo "PLAYWRIGHT_VERSION=$(pnpm exec playwright --version | cut -d' ' -f2)" >> $GITHUB_ENV
+
+      - name: Cache Playwright Browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ env.PLAYWRIGHT_VERSION }}
+
+      - name: Install Playwright OS dependencies & Chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: |
+          pnpm exec playwright install --with-deps chromium
+
+      - name: Install Playwright OS system dependencies only (if browser cached)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: |
+          pnpm exec playwright install-deps chromium
+
+      - name: Run Typescript checks
+        run: |
+          pnpm --filter web ts:check
+
+      - name: Run Unit tests
+        run: |
+          pnpm --filter web test
+
+      - name: Run Browser tests
+        run: |
+          pnpm --filter web test:browser
+
       - name: Build OpenNext worker
         run: |
           pnpm --filter web run build:cf
