@@ -1,4 +1,4 @@
-# ADR-0002: Use Cloudflare D1 over PostgreSQL for Database Storage
+# ADR-0007: Use Cloudflare D1 over PostgreSQL for Database Storage
 
 ## Status
 Accepted (2026-09-09)
