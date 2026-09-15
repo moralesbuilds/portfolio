@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@moralesbuilds/web",
   "version": "1.0.0",
   "description": "Luis Morales' personal website and portfolio product",
   "private": true,
@@ -39,6 +39,7 @@
     "next": "^16.3.4",
     "next-intl": "^4.14.2",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "@moralesbuilds/contents-db": "workspace:*"
   }
 }

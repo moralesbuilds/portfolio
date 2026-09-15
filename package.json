@@ -24,10 +24,5 @@
       "onFail": "download"
     }
   },
-  "packageManager": "pnpm@12.3.4",
-  "pnpm": {
-    "overrides": {
-      "vitest": "5.0.0"
-    }
-  }
+  "packageManager": "pnpm@12.3.4"
 }
