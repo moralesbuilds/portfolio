@@ -1,4 +1,4 @@
-# ADR-0006: Custom Domain Email Provider Selection via Zoho Mail
+# ADR-0002: Custom Domain Email Provider Selection via Zoho Mail
 
 ## Status
 Accepted (2026-08-31)
