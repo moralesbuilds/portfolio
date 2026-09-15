@@ -30,7 +30,7 @@ export async function Footer({ brandLabel, githubUrl, githubLabel, linkedinUrl, 
                 {/* Logo image or SVG goes here */}
                 <CodeIcon />
               </div>
-              <Link href="#" className="text-xl font-bold tracking-tight text-slate-900 hover:text-indigo-600 transition-colors">
+              <Link href="#" className="text-xl font-bold tracking-tight text-slate-900 hover:text-indigo-600 transition-colors font-mono">
                 {brandLabel}<span className="text-indigo-600">.</span>
               </Link>
               <p className="text-sm text-slate-600 leading-relaxed max-w-sm">
