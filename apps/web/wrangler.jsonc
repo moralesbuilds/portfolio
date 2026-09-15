@@ -34,6 +34,14 @@
       "bucket_name": "web-app-incrementa-cache"
     }
   ],
+  "d1_databases": [
+    {
+      "binding": "CONTENTS_DB",
+      "database_name": "contents-db",
+      "database_id": "ee75be99-340b-4965-a35f-203eebef7a23",
+      "migrations_dir": "../../migrations/contents-db"
+    }
+  ],
   "vars": {
     "GITHUB_PORTFOLIO_URL": "https://github.com/moralesbuilds/portfolio",
     "LINKED_IN_URL": "https://www.linkedin.com/in/moralesbuilds",

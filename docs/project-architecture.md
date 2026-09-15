@@ -50,4 +50,3 @@ type BlogPost = {
 - Search System: Full-text or vector search engine implementation across published MDX posts.
 - Comment Engine: User feedback, authentication, or third-party comment integration.
 - The built-in interface/tooling to upload MDX files to R2 and insert records into D1. For the first phase, content files and database records will be added manually.
-- R2 + D1 storage decision — formal ADR pending (tracked for a future PR)
