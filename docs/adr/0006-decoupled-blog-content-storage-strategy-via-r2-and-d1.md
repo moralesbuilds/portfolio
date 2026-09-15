@@ -1,4 +1,4 @@
-# ADR-0005: Decoupled blog content storage strategy via Cloudflare R2 and D1
+# ADR-0006: Decoupled blog content storage strategy via Cloudflare R2 and D1
 
 ## Status
 Accepted (2026-09-07)

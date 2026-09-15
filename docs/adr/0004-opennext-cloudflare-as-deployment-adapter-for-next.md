@@ -1,4 +1,4 @@
-# ADR-0002: Selection of Cloudflare Deployment Adapter for Next.js
+# ADR-0004: Selection of Cloudflare Deployment Adapter for Next.js
 
 ## Status
 Accepted (2026-08-31)
