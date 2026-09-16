@@ -13,7 +13,7 @@ export function PostList({ items, readMoreLabel, emptyTitle, emptyDescritpion }:
   const hasItems = (items?.length ?? 0) > 0;
 
   return (
-    <div className="max-w-4xl mx-auto my-8 p-6 bg-base border border-gray-200 rounded-md shadow-sm">
+    <div className="w-full my-8 p-6 bg-base border border-gray-200 rounded-md shadow-sm">
       {hasItems && <ul className="divide-y divide-gray-200">
         {items?.map((p) => (<PostItem
           key={p.id}
