@@ -125,5 +125,10 @@
       }
     },
     "submit": "Send"
+  },
+  "blog": {
+    "read_more": "Read more",
+    "empty_title": "No posts found",
+    "empty_description": "There are no published blog posts at the moment. Please check back later for new updates."
   }
 }

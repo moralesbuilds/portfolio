@@ -39,7 +39,7 @@ export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, git
             {/* Brand name */}
             <div className="shrink-0 flex items-center">
               <Link
-                href="#"
+                href="/"
                 className="text-text-primary flex-none font-semibold text-xl focus:outline-hidden focus:opacity-80"
                 aria-label={brandLabel}
                 data-testid="brand-link"
@@ -50,7 +50,7 @@ export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, git
             <div className="hidden sm:flex sm:items-center sm:space-x-8">
               <div className="flex space-x-8 h-full">
                 <Link
-                  href="#"
+                  href="/blog"
                   className="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                   data-testid="blog-link"
                 >{blogLabel}</Link>
