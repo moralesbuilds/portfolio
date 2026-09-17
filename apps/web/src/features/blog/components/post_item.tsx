@@ -1,4 +1,4 @@
-import { Tag } from "@/components";
+import { Tag, Date } from "@/components";
 import { getLink } from "../utils/link";
 import { Link } from "@/i18n/navigation";
 
@@ -17,9 +17,7 @@ export default function PostItem({ publishedAt, category, slug, title, summary, 
   return (
     <li className="py-6 first:pt-0 last:pb-0 flex flex-col md:flex-row md:items-start gap-4 md:gap-8">
       {/* Published Date */}
-      <div className="w-32 shrink-0 text-sm font-medium text-gray-500 pt-0.5">
-        {publishedAt}
-      </div>
+      <Date value={publishedAt} className="w-32 shrink-0 text-sm font-medium text-gray-500 pt-0.5" />
 
       {/* Post details */}
       <div className="flex flex-col items-start gap-2.5 flex-1">

@@ -1,5 +1,6 @@
 import { Link } from "@/i18n/navigation";
 import { getLink } from "../utils/link";
+import { Date } from "@/components";
 
 type LatestPostItemProps = {
   title: string;
@@ -15,7 +16,7 @@ export function LatestPostItem({ title, publishedAt, slug }: LatestPostItemProps
       <h3 className="text-lg font-semibold text-slate-900 hover:text-indigo-600 transition-colors">
         <Link href={link}>{title}</Link>
       </h3>
-      <time dateTime="2026-08-28" className="text-sm text-slate-500 mt-1 sm:mt-0 sm:ml-4 shrink-0">{publishedAt}</time>
+      <Date value={publishedAt} className="text-sm text-slate-500 mt-1 sm:mt-0 sm:ml-4 shrink-0" />
     </article>
   );
 }

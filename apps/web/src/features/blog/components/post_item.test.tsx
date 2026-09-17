@@ -8,7 +8,7 @@ describe("PostItem (unit)", () => {
     render(
       <NextIntlClientProvider locale="en" messages={{}}>
         <PostItem
-          publishedAt="2026-09-17"
+          publishedAt="2026-09-17T23:10:32Z"
           category="Testing"
           slug="testing"
           title="Unit testing the component"
@@ -18,7 +18,7 @@ describe("PostItem (unit)", () => {
       </NextIntlClientProvider>
     );
 
-    expect(screen.getByText("2026-09-17")).toBeInTheDocument();
+    expect(screen.getByText("Sep 17, 2026")).toBeInTheDocument();
     expect(screen.getByText("Testing")).toBeInTheDocument();
 
     const link = "/blog/testing";

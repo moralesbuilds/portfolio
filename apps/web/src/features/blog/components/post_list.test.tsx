@@ -38,7 +38,7 @@ describe("PostList (unit)", () => {
     render(<MockPostList items={[
       {
         id: 1,
-        publishedAt: '2026-09-01',
+        publishedAt: '2026-09-01T23:10:32Z',
         category: 'Testing',
         title: 'First blog post',
         summary: 'My first published blog post',
@@ -46,7 +46,7 @@ describe("PostList (unit)", () => {
       },
       {
         id: 2,
-        publishedAt: '2026-09-17',
+        publishedAt: '2026-09-17T23:10:32Z',
         category: 'Testing',
         title: 'Second blog post',
         summary: 'My second published blog post',
@@ -62,13 +62,13 @@ describe("PostList (unit)", () => {
     expect(readMoreLinks).toHaveLength(2);
 
     // First item
-    expect(screen.getByText("2026-09-01")).toBeInTheDocument();
+    expect(screen.getByText("Sep 1, 2026")).toBeInTheDocument();
     expect(screen.getByText("First blog post")).toBeInTheDocument();
     expect(screen.getByText("My first published blog post")).toBeInTheDocument();
     expect(readMoreLinks[0]).toHaveAttribute("href", "/blog/first-blog");
 
     // Second item
-    expect(screen.getByText("2026-09-17")).toBeInTheDocument();
+    expect(screen.getByText("Sep 17, 2026")).toBeInTheDocument();
     expect(screen.getByText("Second blog post")).toBeInTheDocument();
     expect(screen.getByText("My second published blog post")).toBeInTheDocument();
     expect(readMoreLinks[1]).toHaveAttribute("href", "/blog/second-blog");
