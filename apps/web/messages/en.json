@@ -1,8 +1,11 @@
 {
   "root": {
+    "home": "Home",
     "blog": "Blog",
     "contact": "Contact",
-    "open_menu": "Open main menu"
+    "open_menu": "Open main menu",
+    "prev": "Previous",
+    "next": "Next"
   },
   "home": {
     "hero": {
@@ -127,6 +130,8 @@
     "submit": "Send"
   },
   "blog": {
+    "title": "Blog",
+    "brief": "[Placeholder]: Brief notes on architecture, infrastructure, and what I am learning while building things.",
     "read_more": "Read more",
     "empty_title": "No posts found",
     "empty_description": "There are no published blog posts at the moment. Please check back later for new updates."
