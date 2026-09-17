@@ -14,7 +14,7 @@ export async function fetchLatestBlogPosts(db: Db, params?: FetchLatestBlogPostP
 
   const { results } =  await db.prepare(`
       SELECT p.id, p.slug, p.title, p.published_at AS publishedAt FROM blog_posts p
-      WHERE p.locale = ?
+      WHERE p.locale = ? AND p.status = 'published'
       ORDER BY p.published_at DESC
       LIMIT ?;`)
     .bind(locale, limit)
