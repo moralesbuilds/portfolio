@@ -5,7 +5,7 @@ type EmptyPostList = {
   description: string;
 };
 
-export default function EmptyPostList({ title, description }: EmptyPostList) {
+export function EmptyPostList({ title, description }: EmptyPostList) {
   return (
     <div className="flex flex-col items-center justify-center max-w-sm mx-auto">
       {/* Icon placeholder */}

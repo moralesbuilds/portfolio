@@ -1,6 +1,6 @@
 import { BlogPostItem } from "@moralesbuilds/contents-db";
 import PostItem from "./post_item";
-import EmptyPostList from "./empty_post_list";
+import { EmptyPostList } from "./empty_post_list";
 
 type PostListProps = {
   items?: BlogPostItem[] | null;

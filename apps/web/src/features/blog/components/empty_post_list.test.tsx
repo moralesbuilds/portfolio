@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { render, screen } from "@testing-library/react";
-import EmptyPostList from "./empty_post_list";
+import { EmptyPostList } from "./empty_post_list";
 
 describe("EmptyPostList (unit)", () => {
   test("show title and description", () => {
