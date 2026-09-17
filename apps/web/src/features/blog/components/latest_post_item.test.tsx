@@ -15,6 +15,6 @@ describe("LatestBlogItem (unit)", () => {
     expect(title).toBeInTheDocument();
     expect(title).toHaveAttribute("href", "/blog/very-important");
 
-    expect(screen.getByText("2026-09-17")).toBeInTheDocument();
+    expect(screen.getByText("Sep 17, 2026")).toBeInTheDocument();
   });
 });

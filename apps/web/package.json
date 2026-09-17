@@ -13,10 +13,10 @@
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "build:cf": "opennextjs-cloudflare build",
     "types": "wrangler types --env-interface CloudflareEnv",
-    "test": "vitest run",
+    "test": "cross-env TZ=UTC LANG=en-US vitest run",
     "ts:check": "tsc --noEmit",
-    "test:browser": "vitest run --config vitest.browser.config.ts",
-    "test:browser:watch": "vitest --config vitest.browser.config.ts --browser.headless=false"
+    "test:browser": "cross-env TZ=UTC LANG=en-US vitest run --config vitest.browser.config.ts",
+    "test:browser:watch": "cross-env TZ=UTC LANG=en-US vitest --config vitest.browser.config.ts --browser.headless=false"
   },
   "keywords": [
     "Portfolio",
