@@ -1,15 +1,16 @@
 import { getTranslations } from "next-intl/server";
-import BlogPostItem from "./blog_post_item";
-
-type BlogPostItem = {
-  key: string;
-  title: string;
-  date: string;
-};
+import { EmptyPostList, LatestPostItem } from "@/features/blog";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { fetchLatestBlogPosts, getDb } from "@moralesbuilds/contents-db";
 
 export async function LatestBlogPostsSection() {
   const t = await getTranslations("home.latest_blog_posts");
-  const blogPosts = t.raw("blog_posts") as BlogPostItem[];
+  const e = await getTranslations("blog");
+
+  const { env } = await getCloudflareContext({ async: true });
+  const db = getDb(env.CONTENTS_DB);
+  const blogPosts = await fetchLatestBlogPosts(db)
+  const hasItems = (blogPosts?.length ?? 0) > 0;
 
   return (
     <section className="py-16 md:py-24 border-t border-slate-200">
@@ -18,9 +19,11 @@ export async function LatestBlogPostsSection() {
       </h2>
 
       {/* Posts list */}
-      <div className="flex flex-col border border-slate-200 p-6 bg-white shadow-sm space-y-6">
-        {blogPosts.map((b) => (<BlogPostItem key={b.key} title={b.title} date={b.date} />))}
-      </div>
+      {hasItems && <div className="flex flex-col border border-slate-200 p-6 bg-white shadow-sm space-y-6">
+        {blogPosts.map((b) => (<LatestPostItem key={b.id} title={b.title} publishedAt={b.publishedAt} slug={b.slug} />))}
+      </div>}
+
+      {!hasItems && <EmptyPostList title={e("empty_title")} description={e("empty_description")} />}
     </section>
   );
 }

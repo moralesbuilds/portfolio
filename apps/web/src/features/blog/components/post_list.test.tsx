@@ -2,15 +2,18 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 import { PostList } from "./post_list";
 import { BlogPostItem } from "@moralesbuilds/contents-db";
+import { NextIntlClientProvider } from "next-intl";
 
 function MockPostList({ items }: { items?: BlogPostItem[] | null }) {
   return (
-    <PostList
-      items={items}
-      readMoreLabel="Read more"
-      emptyTitle="This is empty"
-      emptyDescritpion="No blog posts yet!"
-    />
+    <NextIntlClientProvider locale="en" messages={{}}>
+      <PostList
+        items={items}
+        readMoreLabel="Read more"
+        emptyTitle="This is empty"
+        emptyDescritpion="No blog posts yet!"
+      />
+    </NextIntlClientProvider>
   );
 }
 
