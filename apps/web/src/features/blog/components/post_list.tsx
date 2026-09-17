@@ -3,7 +3,7 @@ import PostItem from "./post_item";
 import EmptyPostList from "./empty_post_list";
 
 type PostListProps = {
-  items?: BlogPostItem[];
+  items?: BlogPostItem[] | null;
   readMoreLabel: string;
   emptyTitle: string;
   emptyDescritpion: string;
