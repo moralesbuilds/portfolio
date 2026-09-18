@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react";
-import { Link } from "../i18n/navigation";
+import { Link } from "@/i18n/navigation";
 import { GitHubIcon, MenuIcon } from "./icons";
 import { useSelectedLayoutSegments } from "next/navigation";
 
