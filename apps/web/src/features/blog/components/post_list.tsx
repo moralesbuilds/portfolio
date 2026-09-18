@@ -21,7 +21,7 @@ export function PostList({ items, readMoreLabel, emptyTitle, emptyDescritpion }:
           category={p.category}
           title={p.title}
           slug={p.slug}
-          summary={p.summary}
+          summary={p.summary!}
           readMoreLabel={readMoreLabel}
         />))}
       </ul>}
