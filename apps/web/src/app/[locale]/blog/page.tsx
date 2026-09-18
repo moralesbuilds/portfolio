@@ -1,3 +1,4 @@
+import { Breadcrumbs } from "@/components";
 import { PostList } from "@/features/blog";
 import { fetchBlogPosts, getDb } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -14,22 +15,7 @@ export default async function BlogListPage() {
     <div className="w-full py-8 space-y-8">
       {/* Header Section */}
       <header className="space-y-4">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb">
-          <ol className="flex items-center space-x-2 text-sm text-gray-500 font-mono">
-            <li>
-              <a href="/" className="hover:text-gray-700 transition-colors">
-                {r("home")}
-              </a>
-            </li>
-            <li>
-              <span className="text-gray-400">/</span>
-            </li>
-            <li className="font-medium text-gray-900" aria-current="page">
-              {r("blog")}
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumbs />
 
         {/*Page tile & description */}
         <div className="space-y-2">
