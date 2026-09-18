@@ -4,7 +4,11 @@ import React from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 
-export function Breadcrumbs() {
+type BreadcrumbsProps = {
+  overrides?: Record<string, string>;
+};
+
+export function Breadcrumbs({ overrides }: BreadcrumbsProps) {
   const t = useTranslations("root");
   const pathname = usePathname();
   const segments = pathname.split('/').filter((segment) => segment);
@@ -21,7 +25,7 @@ export function Breadcrumbs() {
         {segments.map((segment, index) => {
           const href = `/${segments.slice(0, index + 1).join('/')}`;
           const isLast = index === segments.length - 1;
-          const title = t(segment);
+          const title = overrides?.[segment] ?? t(segment);
 
           return (
             <React.Fragment key={href}>
