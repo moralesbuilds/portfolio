@@ -36,10 +36,12 @@
     "wrangler": "^4.129.1"
   },
   "dependencies": {
+    "@moralesbuilds/contents-db": "workspace:*",
     "next": "^16.3.4",
     "next-intl": "^4.14.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "@moralesbuilds/contents-db": "workspace:*"
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
   }
 }
