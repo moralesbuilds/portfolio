@@ -32,6 +32,10 @@
     {
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
       "bucket_name": "web-app-incrementa-cache"
+    },
+    {
+      "binding": "BLOG_CONTENTS",
+      "bucket_name": "blog-contents"
     }
   ],
   "d1_databases": [
