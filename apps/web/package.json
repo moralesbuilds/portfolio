@@ -28,6 +28,7 @@
   "devDependencies": {
     "@opennextjs/cloudflare": "^1.20.6",
     "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.5.0",
     "@types/react": "^19.2.18",
@@ -37,6 +38,7 @@
   },
   "dependencies": {
     "@moralesbuilds/contents-db": "workspace:*",
+    "gray-matter": "^4.0.3",
     "next": "^16.3.4",
     "next-intl": "^4.14.2",
     "react": "^19.2.8",

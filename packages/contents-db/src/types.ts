@@ -4,7 +4,9 @@ export type BlogPostItem = {
   id: number;
   slug: string;
   title: string;
-  summary: string;
+  summary?: string;
   publishedAt: string;
-  category: string
+  category: string;
+  tags?: string[];
+  locale?: Locale;
 };
