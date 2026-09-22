@@ -32,7 +32,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const raw = await object.text();
   const { data: _, content } = matter(raw);
-  const hasTags = (details.tags?.length) ?? 0 > 0
+  const hasTags = (details.tags?.length ?? 0) > 0
 
   return (
     <div className="w-full py-8 space-y-8">
