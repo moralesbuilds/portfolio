@@ -1,4 +1,4 @@
-# ADR-0004: Dual Licensing Strategy — MIT for Code, CC BY 4.0 for Content
+# ADR-0009: Dual Licensing Strategy — MIT for Code, CC BY 4.0 for Content
 
 ## Status
 Accepted (2026-09-15)
