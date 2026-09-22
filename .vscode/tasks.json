@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Create content-db migration file",
+      "type": "shell",
+      "command": "pnpm exec --filter web wrangler d1 migrations create contents-db ${input:migration-name}"
+    },
+    {
+      "label": "Apply content-db migrations locally",
+      "type": "shell",
+      "command": "pnpm exec --filter web wrangler d1 migrations apply contents-db --local"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "migration-name",
+      "type": "promptString",
+      "description": "Name of the migration file"
+    }
+  ]
+}
