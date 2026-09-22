@@ -10,7 +10,7 @@ type FetchBlogPostParams = {
 export async function fetchBlogPosts(db: Db, params?: FetchBlogPostParams): Promise<Page<BlogPostItem>> {
   const locale = params?.locale ?? 'en';
   const limit = params?.pageSize ?? 10;
-  const offset = ((params?.pageIndex ?? 0) - 1) * limit;
+  const offset = ((params?.pageIndex ?? 1) - 1) * limit;
 
   const countResult = await db.prepare(`
       SELECT COUNT(*) AS count
