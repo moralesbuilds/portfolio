@@ -7,6 +7,9 @@ type FetchBlogPostDetailsParams = {
 };
 
 export async function fetchBlogPostDetails(db: Db, params: FetchBlogPostDetailsParams): Promise<BlogPostItem | null> {
+  const locale = params?.locale ?? 'en';
+  const slug = params?.slug || (() => { throw new Error("Slug is required"); })();
+
   const item = await db.prepare(`
       SELECT p.id, p.slug, p.title, p.locale, p.published_at AS publishedAt, c.label AS category, json_group_array(t.label) as tags_str
       FROM blog_posts p
@@ -15,7 +18,7 @@ export async function fetchBlogPostDetails(db: Db, params: FetchBlogPostDetailsP
       LEFT JOIN tags t ON pbt.tag_id = t.id
       WHERE p.slug = ? AND p.locale = ? AND p.status = 'published'
       GROUP BY p.id;`)
-    .bind(params.slug, params.locale)
+    .bind(slug, locale)
     .first<BlogPostItem & { tags_str?: string }>();
 
   if (item?.tags_str) {

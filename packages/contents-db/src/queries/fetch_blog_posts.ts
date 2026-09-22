@@ -1,4 +1,4 @@
-import type { BlogPostItem, Locale } from "../types";
+import type { BlogPostItem, Locale, Page } from "../types";
 import type { Db } from "../client";
 
 type FetchBlogPostParams = {
@@ -7,10 +7,17 @@ type FetchBlogPostParams = {
   pageIndex?: number;
 };
 
-export async function fetchBlogPosts(db: Db, params?: FetchBlogPostParams): Promise<BlogPostItem[]> {
+export async function fetchBlogPosts(db: Db, params?: FetchBlogPostParams): Promise<Page<BlogPostItem>> {
   const locale = params?.locale ?? 'en';
   const limit = params?.pageSize ?? 10;
-  const offset = (params?.pageIndex ?? 0) * limit;
+  const offset = ((params?.pageIndex ?? 0) - 1) * limit;
+
+  const countResult = await db.prepare(`
+      SELECT COUNT(*) AS count
+      FROM blog_posts p
+      WHERE p.locale = ? AND p.status = 'published'`)
+    .bind(locale)
+    .first<{ count: number }>();
 
   const { results } = await db.prepare(`
       SELECT p.id, p.slug, p.title, p.summary, p.published_at AS publishedAt, c.label AS category
@@ -21,5 +28,9 @@ export async function fetchBlogPosts(db: Db, params?: FetchBlogPostParams): Prom
       LIMIT ? OFFSET ?;`)
     .bind(locale, limit, offset)
     .all<BlogPostItem>();
-  return results;
+  return {
+    items: results,
+    count: countResult?.count ?? 0,
+    size: limit,
+  };
 }
