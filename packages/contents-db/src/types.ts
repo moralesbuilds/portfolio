@@ -1,3 +1,9 @@
+export type Page<T> = {
+  items?: T[];
+  count: number;
+  size: number;
+};
+
 export type Locale = "en" | "es";
 
 export type BlogPostItem = {
