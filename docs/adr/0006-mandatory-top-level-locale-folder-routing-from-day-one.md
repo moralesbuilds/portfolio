@@ -1,4 +1,4 @@
-# ADR-0007: Mandatory Top-Level `/[locale]` Folder Routing from Day One
+# ADR-0006: Mandatory Top-Level `/[locale]` Folder Routing from Day One
 
 ## Status
 Accepted (2026-09-08)
