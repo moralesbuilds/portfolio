@@ -10,5 +10,15 @@
       "types": "./src/index.ts",
       "default": "./src/index.ts"
     }
+  },
+  "scripts": {
+    "types": "wrangler types --config vitest.wrangler.jsonc",
+    "test": "cross-env TZ=UTC LANG=en-US vitest run",
+    "ts:check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.1.13",
+    "@cloudflare/workers-types": "^5.20260920.1",
+    "vitest": "^4.1.0"
   }
 }
