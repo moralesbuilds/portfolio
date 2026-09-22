@@ -4,10 +4,10 @@
 Accepted (2026-09-08)
 
 ## Context
-Building on ADR-0005 (`next-intl` adoption), the initial MVP release of the portfolio targets a single active locale (English). Modern internationalization routing strategies offer two layout choices: flattening routes initially (`/contact`, `/blog`) and introducing localized path prefixed later, or enforcing a parameterized top-level-route segment (`/[locale]/contact`, `/[locale]/blog`) from project inception. Postponing route-level localization until Spanish content is introduced creates severe migration friction—breaking canonical URLs, invalidating indexed search engine paths, requiring bulk file tree refactoring, and altering client-side link behaviors. I need to select a folder-based routing architecture that accommodates single-language delivery today with prefixless default URLs while preventing destructive structural refactoring when additional languages are launched.
+Building on ADR-0005 (`next-intl` adoption), the initial MVP release of the portfolio targets a single active locale (English). Modern internationalization routing strategies offer two layout choices: flattening routes initially (`/contact`, `/blog`) and introducing localized path prefixes later, or enforcing a parameterized top-level-route segment (`/[locale]/contact`, `/[locale]/blog`) from project inception. Postponing route-level localization until Spanish content is introduced creates severe migration friction—breaking canonical URLs, invalidating indexed search engine paths, requiring bulk file tree refactoring, and altering client-side link behaviors. I need to select a folder-based routing architecture that accommodates single-language delivery today with prefixless default URLs while preventing destructive structural refactoring when additional languages are launched.
 
 ## Decision
-Enfoce `/[locale]` folder layout at the root of the Next.js `apps/web/app` directory from Day One across all public-facing pages and dynamic routes, configured with `localePrefix: 'as-needed'` and `defaultLocale: 'en'`.
+Enforce `/[locale]` folder layout at the root of the Next.js `apps/web/app` directory from Day One across all public-facing pages and dynamic routes, configured with `localePrefix: 'as-needed'` and `defaultLocale: 'en'`.
 
 ## Alternatives evaluated
 ### 1. Top-Level `/[locale]` Folder Layout with `as-needed` Prefixing (Selected)
@@ -28,4 +28,4 @@ Enfoce `/[locale]` folder layout at the root of the Next.js `apps/web/app` direc
 
 ## Consequences
 * **Positive**: Eliminates future breaking changes to the project's file structure and public URL taxonomy. Serves clean default URLs (`/`, `/blog`, `/contact`) for English visitors today while maintaining zero-friction expansion for `/es/...` routes in future releases.
-* **Negative**: Requires disciplined self-adherence to next-intl's navigation utilities (`Link`, `redirect`, `usePathname` and translation hooks (`useTranslations` / `getTranslations`) across the codebase, rather than relying on standard next/link imports.
+* **Negative**: Requires disciplined self-adherence to next-intl's navigation utilities (`Link`, `redirect`, `usePathname`) and translation hooks (`useTranslations` / `getTranslations`) across the codebase, rather than relying on standard next/link imports.
