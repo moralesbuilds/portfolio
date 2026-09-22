@@ -73,6 +73,9 @@ jobs:
         run: |
           pnpm --filter web test:browser
 
+      - name: Apply D1 migrations (local)
+        run: pnpm --filter web exec wrangler d1 migrations apply contents-db --local
+
       - name: Build OpenNext worker
         run: |
           pnpm --filter web run build:cf
