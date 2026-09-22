@@ -54,12 +54,12 @@ jobs:
       - name: Install Playwright OS dependencies & Chromium
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: |
-          pnpm exec playwright install --with-deps chromium
+          pnpm exec --filter web playwright install --with-deps chromium
 
       - name: Install Playwright OS system dependencies only (if browser cached)
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: |
-          pnpm exec playwright install-deps chromium
+          pnpm exec --filter web playwright install-deps chromium
 
       - name: Run Typescript checks
         run: |
@@ -72,6 +72,9 @@ jobs:
       - name: Run Browser tests
         run: |
           pnpm --filter web test:browser
+
+      - name: Apply D1 migrations (local)
+        run: pnpm --filter web exec wrangler d1 migrations apply contents-db --local
 
       - name: Build OpenNext worker
         run: |

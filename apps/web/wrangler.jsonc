@@ -32,6 +32,18 @@
     {
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
       "bucket_name": "web-app-incrementa-cache"
+    },
+    {
+      "binding": "BLOG_CONTENTS",
+      "bucket_name": "blog-contents"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "CONTENTS_DB",
+      "database_name": "contents-db",
+      "database_id": "ee75be99-340b-4965-a35f-203eebef7a23",
+      "migrations_dir": "../../migrations/contents-db"
     }
   ],
   "vars": {

@@ -30,7 +30,7 @@ export async function Footer({ brandLabel, githubUrl, githubLabel, linkedinUrl, 
                 {/* Logo image or SVG goes here */}
                 <CodeIcon />
               </div>
-              <Link href="#" className="text-xl font-bold tracking-tight text-slate-900 hover:text-indigo-600 transition-colors">
+              <Link href="/" className="text-xl font-bold tracking-tight text-slate-900 hover:text-indigo-600 transition-colors font-mono">
                 {brandLabel}<span className="text-indigo-600">.</span>
               </Link>
               <p className="text-sm text-slate-600 leading-relaxed max-w-sm">
@@ -46,12 +46,12 @@ export async function Footer({ brandLabel, githubUrl, githubLabel, linkedinUrl, 
             </h3>
             <ul className="space-y-3 text-sm font-medium text-slate-600">
               <li>
-                <Link href="#" className="hover:text-indigo-600 transition-colors">
+                <Link href="/" className="hover:text-indigo-600 transition-colors">
                   {t("links.start")}
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-indigo-600 transition-colors">
+                <Link href="/blog" className="hover:text-indigo-600 transition-colors">
                   {t("links.blog")}
                 </Link>
               </li>

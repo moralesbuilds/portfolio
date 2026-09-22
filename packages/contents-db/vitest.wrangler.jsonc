@@ -1,0 +1,7 @@
+{
+  "compatibility_date": "2026-08-29",
+  "main": "./test/worker.ts",
+  "d1_databases": [
+    { "binding": "CONTENTS_DB", "database_name": "contents-db-test", "database_id": "test" }
+  ]
+}

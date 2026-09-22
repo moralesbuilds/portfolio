@@ -37,7 +37,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="en" className={`${inter.variable} ${jetBrainsMono.variable}`}>
-      <body>
+      <body className="flex flex-col min-h-screen w-full bg-base">
         <NextIntlClientProvider>
           <Header
             brandLabel={brandLabel}
