@@ -31,7 +31,7 @@
   "r2_buckets": [
     {
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
-      "bucket_name": "web-app-incrementa-cache"
+      "bucket_name": "web-app-incremental-cache"
     },
     {
       "binding": "BLOG_CONTENTS",
