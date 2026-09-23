@@ -1,5 +1,5 @@
-import type { BlogPostItem, Locale } from "../types";
-import type { Db } from "../client";
+import type { BlogPostItem, Locale } from "../../types";
+import type { Db } from "../../client";
 
 type LatestBlogPost = Pick<BlogPostItem, "id" | "title" | "publishedAt" | "slug">;
 
