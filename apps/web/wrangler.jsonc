@@ -49,6 +49,7 @@
   "vars": {
     "GITHUB_PORTFOLIO_URL": "https://github.com/moralesbuilds/portfolio",
     "LINKED_IN_URL": "https://www.linkedin.com/in/moralesbuilds",
-    "X_URL": "https://x.com/moralesbuilds"
+    "X_URL": "https://x.com/moralesbuilds",
+    "CONTACT_EMAIL": "luis@moralesbuilds.dev"
   }
 }
