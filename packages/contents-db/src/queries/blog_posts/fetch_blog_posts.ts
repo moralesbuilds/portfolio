@@ -1,5 +1,5 @@
-import type { BlogPostItem, Locale, Page } from "../types";
-import type { Db } from "../client";
+import type { BlogPostItem, Locale, Page } from "../../types";
+import type { Db } from "../../client";
 
 type FetchBlogPostParams = {
   locale?: Locale;

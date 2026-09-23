@@ -1,6 +1,6 @@
 import { env } from "cloudflare:workers";
 import { beforeAll, beforeEach, describe, expect, test } from "vitest";
-import { type Db, getDb } from "../client";
+import { type Db, getDb } from "../../client";
 import { fetchLatestBlogPosts } from "./fetch_latest_blog_posts";
 
 async function seedCategory(
