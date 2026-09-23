@@ -24,7 +24,7 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
       <header className="space-y-4">
         <Breadcrumbs />
 
-        {/*Page tile & description */}
+        {/* Page tile & description */}
         <div className="space-y-2">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
             {t("title")}

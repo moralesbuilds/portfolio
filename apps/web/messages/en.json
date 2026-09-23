@@ -97,6 +97,13 @@
     "copyright": "2026 {brand}. All rights reserved"
   },
   "contact": {
+    "title": "[Placeholder]: Tell me about your project",
+    "brief": "[Placeholder]:  Whether you need help architecting a complex system, building an edge-native application, or discussing engineering challenges, reach out below to start the conversation.",
+    "response_time": {
+      "title": "Response Time",
+      "delay": "1 to 2 business days",
+      "availability": "Monitored Monday through Friday."
+    },
     "fields": {
       "name": {
         "label": "Name",

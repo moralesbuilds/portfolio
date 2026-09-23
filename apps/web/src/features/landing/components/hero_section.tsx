@@ -21,7 +21,7 @@ export async function HeroSection() {
           {t("projects")}
         </Link>
 
-        <Link href="#" className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-inding-600 px-6 py-3.5 text-text-primary font-semibold shadow-md hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all">
+        <Link href="/contact" className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-inding-600 px-6 py-3.5 text-text-primary font-semibold shadow-md hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all">
           {t("contact")}
         </Link>
       </div>
