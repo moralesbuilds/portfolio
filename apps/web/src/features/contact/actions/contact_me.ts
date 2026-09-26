@@ -12,7 +12,16 @@ export async function contactMeAction(_prev: ContactMeActionState, formData: For
   if (formData.get("website")) {
     return { success: true };
   }
+
+  // Timetrap
+  const { env } = await getCloudflareContext({ async: true });
+  const minFormFillMS = Number(env.MIN_FORM_FILL_MS);
+  const loadedAt = Number(formData.get("t"));
+  if (!loadedAt || Date.now() - loadedAt < minFormFillMS) {
+    return { success: true };
+  }
   
+  // Validation
   const form = Object.fromEntries(formData);
   const validationResult = contactMeSchema.safeParse(form);
   if (!validationResult.success) {
@@ -23,10 +32,10 @@ export async function contactMeAction(_prev: ContactMeActionState, formData: For
     };
   }
 
-  const { env } = await getCloudflareContext({ async: true });
   const db = getDb(env.CONTENTS_DB);
   const headerList = await headers();
 
+  // IP Address
   const cfConnectingIp = headerList.get("cf-connecting-ip");
   const forwardedFor = headerList.get("x-forwarded-for");
   let ipAddress = "127.0.0.1";

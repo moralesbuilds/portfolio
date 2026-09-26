@@ -54,6 +54,7 @@
     "LINKED_IN_URL": "https://www.linkedin.com/in/moralesbuilds",
     "X_URL": "https://x.com/moralesbuilds",
     "CONTACT_EMAIL": "luis@moralesbuilds.dev",
-    "APP_EMAIL": "portfolio@moralesbuilds.dev"
+    "APP_EMAIL": "portfolio@moralesbuilds.dev",
+    "MIN_FORM_FILL_MS": "3000"
   }
 }
