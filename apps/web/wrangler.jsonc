@@ -24,6 +24,9 @@
       "service": "web"
     }
   ],
+  "send_email": [
+    { "name": "EMAIL" }
+  ],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
@@ -50,6 +53,7 @@
     "GITHUB_PORTFOLIO_URL": "https://github.com/moralesbuilds/portfolio",
     "LINKED_IN_URL": "https://www.linkedin.com/in/moralesbuilds",
     "X_URL": "https://x.com/moralesbuilds",
-    "CONTACT_EMAIL": "luis@moralesbuilds.dev"
+    "CONTACT_EMAIL": "luis@moralesbuilds.dev",
+    "APP_EMAIL": "portfolio@moralesbuilds.dev"
   }
 }
