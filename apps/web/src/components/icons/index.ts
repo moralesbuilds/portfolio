@@ -5,4 +5,5 @@ export { LinkedInIcon } from "./linkedin";
 export { MenuIcon } from "./menu";
 export { PageIcon } from "./page";
 export { RightArrowIcon } from "./right_arrow";
+export { WarningIcon } from "./warning";
 export { XIcon } from "./x";
