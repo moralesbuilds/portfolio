@@ -72,7 +72,7 @@ describe("contactMeAction", () => {
 
     const mockHeaders = new Headers();
     mockHeaders.append("cf-connecting-ip", "1.1.1.1");
-    vi.mocked(headers).mockReturnValue(Promise.resolve(mockHeaders));
+    vi.mocked(headers).mockResolvedValue(mockHeaders);
 
     const result = await contactMeAction({ success: false }, formData);
     expect(result.success).toBeFalsy();
@@ -111,7 +111,7 @@ describe("contactMeAction", () => {
 
     const mockHeaders = new Headers();
     mockHeaders.append("x-forwarded-for", "2.2.2.2");
-    vi.mocked(headers).mockReturnValue(Promise.resolve(mockHeaders));
+    vi.mocked(headers).mockResolvedValue(mockHeaders);
 
     const result = await contactMeAction({ success: false }, formData);
     expectLeadToBeCreatedAndNotificationSent(result, "2.2.2.2");
