@@ -8,6 +8,11 @@ import { ContactMeActionState, contactMeSchema } from "../schemas";
 import { renderContactNotificationEmail } from "../emails/contact_notification_email";
 
 export async function contactMeAction(_prev: ContactMeActionState, formData: FormData): Promise<ContactMeActionState> {
+  // Honeypot trap
+  if (formData.get("website")) {
+    return { success: true };
+  }
+  
   const form = Object.fromEntries(formData);
   const validationResult = contactMeSchema.safeParse(form);
   if (!validationResult.success) {

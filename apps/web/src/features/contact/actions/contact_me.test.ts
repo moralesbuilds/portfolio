@@ -116,4 +116,18 @@ describe("contactMeAction", () => {
     const result = await contactMeAction({ success: false }, formData);
     expectLeadToBeCreatedAndNotificationSent(result, "2.2.2.2");
   });
+
+  test("triggering the honeypot trap", async () => {
+    const formData = new FormData();
+    formData.append("name", "Tester");
+    formData.append("email", "tester@external.com");
+    formData.append("message", "I want to test your product");
+    formData.append("website", "This is a trap");
+
+    const result = await contactMeAction({ success: false }, formData);
+    expect(result.success).toBeTruthy();
+
+    expect(createLead).not.toHaveBeenCalled();
+    expect(mockSend).not.toHaveBeenCalled();
+  });
 });

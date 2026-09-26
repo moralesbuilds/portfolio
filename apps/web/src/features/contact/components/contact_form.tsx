@@ -81,6 +81,16 @@ export function ContactForm() {
           <FieldErrors id="message-errors" errors={state.errors?.message} />
         </div>
 
+        {/* Honeypot: Website Field */}
+        <input
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          style={{ position: "absolute", left: "-9999px" }}
+          data-testid="field-website"
+        />
+
         <SubmitButton label={t("submit")} isSubmitting={isPending} />
       </form>
     </div>

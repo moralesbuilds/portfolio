@@ -62,6 +62,10 @@ describe("ContactForm (unit)", () => {
     expect(messageInput).toHaveAttribute("placeholder", "Message");
     expect(messageInput).not.toHaveAccessibleDescription();
 
+    const websiteInput = screen.getByTestId("field-website");
+    expect(websiteInput).toBeInTheDocument();
+    expect(websiteInput).toHaveAttribute("aria-hidden", "true");
+
     const submitButton = screen.getByText("Submit");
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).toBeEnabled();
