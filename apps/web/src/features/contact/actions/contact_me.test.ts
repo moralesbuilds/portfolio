@@ -70,12 +70,12 @@ function expectFalsifiedSuccess(result: ContactMeActionState) {
   expect(mockSend).not.toHaveBeenCalled();
 }
 
-function getTestFormData(t: string | undefined = undefined): FormData {
+function getTestFormData(params: { t?: string; message?: string; } | undefined = undefined): FormData {
   const formData = new FormData();
   formData.append("name", "Tester");
   formData.append("email", "tester@external.com");
-  formData.append("message", "I want to test your product");
-  formData.append("t", t ?? (Date.now() - 4000).toString());
+  formData.append("message", params?.message ?? "I want to test your product");
+  formData.append("t", params?.t ?? (Date.now() - 4000).toString());
   return formData;
 }
 
@@ -137,7 +137,18 @@ describe("contactMeAction", () => {
   });
 
   test("triggering the timetrap", async () => {
-    const formData = getTestFormData((Date.now() - 1000).toString());
+    const formData = getTestFormData({ t: (Date.now() - 1000).toString() });
+    const result = await contactMeAction({ success: false }, formData);
+    expectFalsifiedSuccess(result);
+  });
+
+  test("triggering the spam heuristics filter", async () => {
+    const message = `
+Check report: https://seo-boost-analytics.net/report
+Book call: https://growth-cal-booking.org/meet
+Unsubscribe: www.optout-digital-marketing.com/unsubscribe
+    `;
+    const formData = getTestFormData({ message });
     const result = await contactMeAction({ success: false }, formData);
     expectFalsifiedSuccess(result);
   });

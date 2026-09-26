@@ -6,6 +6,7 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { createLead, getDb } from "@moralesbuilds/contents-db";
 import { ContactMeActionState, contactMeSchema } from "../schemas";
 import { renderContactNotificationEmail } from "../emails/contact_notification_email";
+import { hasTooManyLinks } from "../utils/spam";
 
 export async function contactMeAction(_prev: ContactMeActionState, formData: FormData): Promise<ContactMeActionState> {
   // Honeypot trap
@@ -21,7 +22,7 @@ export async function contactMeAction(_prev: ContactMeActionState, formData: For
     return { success: true };
   }
   
-  // Validation
+  // Zod Validation
   const form = Object.fromEntries(formData);
   const validationResult = contactMeSchema.safeParse(form);
   if (!validationResult.success) {
@@ -30,6 +31,11 @@ export async function contactMeAction(_prev: ContactMeActionState, formData: For
       form,
       errors: z.flattenError(validationResult.error).fieldErrors
     };
+  }
+
+  // Spam Heuristics
+  if (hasTooManyLinks(validationResult.data.message)) {
+    return { success: true };
   }
 
   const db = getDb(env.CONTENTS_DB);
