@@ -14,19 +14,21 @@ export function PostList({ items, readMoreLabel, emptyTitle, emptyDescritpion }:
 
   return (
     <div className="w-full p-6 bg-base border border-gray-200 rounded-md shadow-sm">
-      {hasItems && <ul className="divide-y divide-gray-200">
-        {items?.map((p) => (<PostItem
-          key={p.id}
-          publishedAt={p.publishedAt}
-          category={p.category}
-          title={p.title}
-          slug={p.slug}
-          summary={p.summary!}
-          readMoreLabel={readMoreLabel}
-        />))}
-      </ul>}
-
-      {!hasItems && <EmptyPostList title={emptyTitle} description={emptyDescritpion} />}
+      {hasItems ? (
+        <ul className="divide-y divide-gray-200">
+          {items?.map((p) => (<PostItem
+            key={p.id}
+            publishedAt={p.publishedAt}
+            category={p.category}
+            title={p.title}
+            slug={p.slug}
+            summary={p.summary!}
+            readMoreLabel={readMoreLabel}
+          />))}
+        </ul>
+      ) : (
+        <EmptyPostList title={emptyTitle} description={emptyDescritpion} />
+      )}
     </div>
   );
 }

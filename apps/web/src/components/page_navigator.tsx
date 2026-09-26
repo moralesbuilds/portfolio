@@ -19,46 +19,38 @@ type NavButtonProps = {
   searchParams: ReadonlyURLSearchParams;
 }
 
-function PreviousButton({ pageIndex, enabled, label, pathname, searchParams }: NavButtonProps) {
-  if (enabled) {
-    const currentParams = new URLSearchParams(searchParams);
-    currentParams.set('page', pageIndex.toString());
+function toPageUrl(pathname: string, searchParams: ReadonlyURLSearchParams, pageIndex: number): string {
+  const currentParams = new URLSearchParams(searchParams);
+  currentParams.set('page', pageIndex.toString());
+  return `${pathname}?${currentParams.toString()}`;
+}
 
-    return (
-      <Link href={`${pathname}?${currentParams.toString()}`} className="inline-flex items-center px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 transition-colors">
-        <LeftArrowIcon />
-        {label}
-      </Link>
-    );
-  } else {
-    return (
-      <span className="inline-flex items-center px-3 py-2 rounded-lg border border-gray-300 text-gray-300">
-        <LeftArrowIcon />
-        {label}
-      </span>
-    );
-  }
+function PreviousButton({ pageIndex, enabled, label, pathname, searchParams }: NavButtonProps) {
+  return enabled ? (
+    <Link href={toPageUrl(pathname, searchParams, pageIndex)} className="inline-flex items-center px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 transition-colors">
+      <LeftArrowIcon />
+      {label}
+    </Link>
+  ) : (
+    <span className="inline-flex items-center px-3 py-2 rounded-lg border border-gray-300 text-gray-300">
+      <LeftArrowIcon />
+      {label}
+    </span>
+  );
 }
 
 function NextButton({ pageIndex, enabled, label, pathname, searchParams }: NavButtonProps) {
-  if (enabled) {
-    const currentParams = new URLSearchParams(searchParams);
-    currentParams.set('page', pageIndex.toString());
-
-    return (
-      <Link href={`${pathname}?${currentParams.toString()}`} className="inline-flex items-center px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 transition-colors">
-        {label}
-        <RightArrowIcon />
-      </Link>
-    );
-  } else {
-    return (
-      <span className="inline-flex items-center px-3 py-2 rounded-lg border border-gray-300 text-gray-300">
-        {label}
-        <RightArrowIcon />
-      </span>
-    );
-  }
+  return enabled ? (
+    <Link href={toPageUrl(pathname, searchParams, pageIndex)} className="inline-flex items-center px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 transition-colors">
+      {label}
+      <RightArrowIcon />
+    </Link>
+  ) : (
+    <span className="inline-flex items-center px-3 py-2 rounded-lg border border-gray-300 text-gray-300">
+      {label}
+      <RightArrowIcon />
+    </span>
+  );
 }
 
 export function PageNavigation({ total, pageIndex, pageSize }: PageNavigationProps) {
@@ -81,13 +73,15 @@ export function PageNavigation({ total, pageIndex, pageSize }: PageNavigationPro
       <div className="hidden sm:flex items-center gap-1">
         {Array.from({ length: totalPages }, (_, index) => {
           const value = index + 1;
-          if (value === pageIndex) {
-            return <span key={value} data-page={value} className="px-3 py-1.5 rounded-md bg-indigo-50 text-indigo-600 font-semibold border border-indigo-100">{value}</span>;
-          } else {
-            const currentParams = new URLSearchParams(searchParams);
-            currentParams.set('page', value.toString());
-            return <Link key={value} data-page={value} href={`${pathname}?${currentParams.toString()}`} className="px-3 py-1.5 rounded-md text-gray-700 hover:bg-gray-100 transition-colors">{value}</Link>
-          }
+          return value === pageIndex ? (
+            <span key={value} data-page={value} className="px-3 py-1.5 rounded-md bg-indigo-50 text-indigo-600 font-semibold border border-indigo-100">
+              {value}
+            </span>
+          ) : (
+            <Link key={value} data-page={value} href={toPageUrl(pathname, searchParams, value)} className="px-3 py-1.5 rounded-md text-gray-700 hover:bg-gray-100 transition-colors">
+              {value}
+            </Link>
+          );
         })}
       </div>
 
