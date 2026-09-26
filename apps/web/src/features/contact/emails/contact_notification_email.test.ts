@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, test } from "vitest";
 import { renderContactNotificationEmail } from './contact_notification_email';
 
 describe('renderContactNotificationEmail', () => {
@@ -9,12 +9,12 @@ describe('renderContactNotificationEmail', () => {
     submittedAt: '2026-09-26T12:00:00Z',
   };
 
-  it('renders the expected HTML layout correctly', () => {
+  test('renders the expected HTML layout correctly', () => {
     const html = renderContactNotificationEmail(baseInput);
     expect(html).toMatchSnapshot();
   });
 
-  it('escapes dynamic input values to prevent XSS vulnerabilities', () => {
+  test('escapes dynamic input values to prevent XSS vulnerabilities', () => {
     const maliciousInput = {
       name: '<script>alert("XSS")</script>',
       email: 'jane+<test>@example.com',
@@ -27,12 +27,12 @@ describe('renderContactNotificationEmail', () => {
     expect(html).not.toContain('<script>');
     expect(html).not.toContain('<img');
     expect(html).not.toContain('<b>');
-    
+
     expect(html).toContain('&lt;script&gt;');
     expect(html).toContain('&lt;img');
   });
 
-  it('correctly populates mailto link attributes and body contents', () => {
+  test('correctly populates mailto link attributes and body contents', () => {
     const html = renderContactNotificationEmail(baseInput);
 
     expect(html).toContain('href="mailto:jane@example.com"');
@@ -41,7 +41,7 @@ describe('renderContactNotificationEmail', () => {
     expect(html).toContain('2026-09-26T12:00:00Z');
   });
 
-  it('handles empty string inputs gracefully', () => {
+  test('handles empty string inputs gracefully', () => {
     const emptyInput = {
       name: '',
       email: '',
