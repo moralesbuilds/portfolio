@@ -66,6 +66,10 @@ describe("ContactForm (unit)", () => {
     expect(websiteInput).toBeInTheDocument();
     expect(websiteInput).toHaveAttribute("aria-hidden", "true");
 
+    const loadedAtInput = screen.getByTestId<HTMLInputElement>("field-loadedat");
+    expect(loadedAtInput).toBeInTheDocument();
+    expect(Number(loadedAtInput.value)).toBeGreaterThan(0);
+
     const submitButton = screen.getByText("Submit");
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).toBeEnabled();

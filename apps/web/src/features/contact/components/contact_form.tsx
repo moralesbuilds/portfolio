@@ -1,12 +1,13 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import React, { useActionState } from "react";
+import React, { useActionState, useState } from "react";
 import { contactMeAction } from "../actions/contact_me";
 import { FieldErrors, SubmitButton } from "@/components";
 
 export function ContactForm() {
   const t = useTranslations("contact");
+  const [loadedAt] = useState(() => Date.now());
   const [state, action, isPending] = useActionState(contactMeAction, { success: false });
   
   const hasNameError = (state.errors?.name?.length ?? 0) > 0;
@@ -90,6 +91,9 @@ export function ContactForm() {
           style={{ position: "absolute", left: "-9999px" }}
           data-testid="field-website"
         />
+
+        {/* Time trap */}
+        <input type="hidden" name="t" value={loadedAt} data-testid="field-loadedat" />
 
         <SubmitButton label={t("submit")} isSubmitting={isPending} />
       </form>
