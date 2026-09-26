@@ -2,7 +2,7 @@ import type { Db } from "../../client";
 import type { LeadStatus, Locale } from "../../types";
 
 type CreateLeadInput = {
-  leadSource: string;
+  leadSource: "website";
   name: string;
   email: string;
   message: string;
