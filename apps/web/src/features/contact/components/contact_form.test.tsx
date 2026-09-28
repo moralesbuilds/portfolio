@@ -25,7 +25,13 @@ const MESSAGES = {
     },
     submit: "Submit",
     success: "Success!",
-    success_message: "You did it"
+    success_message: "You did it",
+    errors: {
+      invalid_name: "Invalid name",
+      invalid_email: "Invalid email",
+      invalid_message: "Invalid message",
+      you_failed: "You failed."
+    }
   }
 };
 
@@ -79,9 +85,9 @@ describe("ContactForm (unit)", () => {
     vi.mocked(contactMeAction).mockResolvedValue({
       success: false,
       errors: {
-        name: ["Invalid name"],
-        email: ["Invalid email"],
-        message: ["Invalid message"]
+        name: ["invalid_name"],
+        email: ["invalid_email"],
+        message: ["invalid_message"]
       }
     });
 
@@ -113,7 +119,7 @@ describe("ContactForm (unit)", () => {
   test("display general error banner after failed submission", async () => {
     vi.mocked(contactMeAction).mockResolvedValue({
       success: false,
-      error: "You failed."
+      error: "you_failed"
     });
 
     renderContactForm();

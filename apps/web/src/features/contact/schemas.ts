@@ -1,14 +1,22 @@
 import { z } from "zod";
 
 export const contactMeSchema = z.object({
-  name: z.string().trim().min(1).max(100),
+  name: z
+    .string({ error: "name_required" })
+    .trim()
+    .min(1, { error: "name_required" })
+    .max(100, { error: "name_too_long" }),
   email: z
-    .string()
+    .string({ error: "email_required" })
     .trim()
     .toLowerCase()
-    .max(100)
-    .pipe(z.email()),
-  message: z.string().trim().min(1).max(2000),
+    .max(100, { error: "email_too_long" })
+    .pipe(z.email({ error: "email_invalid" })),
+  message: z
+    .string({ error: "message_required" })
+    .trim()
+    .min(1, { error: "message_required" })
+    .max(2000, { error: "message_too_long" }),
 });
 
 export type ContactMeActionState = {
