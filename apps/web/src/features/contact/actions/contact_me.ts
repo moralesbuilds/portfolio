@@ -7,8 +7,8 @@ import { createLead, createRateLimitStore, getDb } from "@moralesbuilds/contents
 import { ContactMeActionState, contactMeSchema } from "../schemas";
 import { renderContactNotificationEmail } from "../emails/contact_notification_email";
 import { hasTooManyLinks } from "../utils/spam";
-import { isRateLimited } from "@/utils/rate_limit";
-import { sha256Hex } from "@/utils/crypto";
+import { isRateLimited } from "@/lib/rate_limit";
+import { sha256Hex } from "@/lib/crypto";
 
 async function extractIpAddress(): Promise<string> {
   const headerList = await headers();
