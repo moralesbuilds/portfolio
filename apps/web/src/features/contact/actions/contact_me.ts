@@ -9,6 +9,7 @@ import { renderContactNotificationEmail } from "../emails/contact_notification_e
 import { hasTooManyLinks } from "../utils/spam";
 import { isRateLimited } from "@/lib/rate_limit";
 import { sha256Hex } from "@/lib/crypto";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 async function extractIpAddress(): Promise<string> {
   const headerList = await headers();
@@ -25,13 +26,13 @@ async function extractIpAddress(): Promise<string> {
 const clockSkewToleranceMS = 5000; 
 
 export async function contactMeAction(_prev: ContactMeActionState, formData: FormData): Promise<ContactMeActionState> {
-  // Honeypot trap
+  // Honeypot trap verification
   const website = formData.get("website");
   if (website !== null && website !== "") {
     return { success: true };
   }
 
-  // Timetrap
+  // Timetrap verification
   const { env } = await getCloudflareContext({ async: true });
   const minFormFillMS = Number(env.MIN_FORM_FILL_MS);
   const loadedAt = Number(formData.get("t"));
@@ -71,6 +72,16 @@ export async function contactMeAction(_prev: ContactMeActionState, formData: For
     return {
       success: false,
       error: "Too many attemps. Please try again in a few minutes"
+    };
+  }
+
+  // Turnstile verification
+  const turnstileToken = String(formData.get("turnstileToken") ?? "");
+  const isHuman = await verifyTurnstile(turnstileToken, env.TURNSTILE_SECRET, ipAddress);
+  if (!isHuman) {
+    return {
+      success: false,
+      error: "We couldn't verify you're human. Please try again."
     };
   }
 

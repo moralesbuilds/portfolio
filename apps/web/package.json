@@ -44,6 +44,7 @@
     "tailwindcss": "^4.3.3"
   },
   "dependencies": {
+    "@marsidev/react-turnstile": "^1.6.1",
     "@moralesbuilds/contents-db": "workspace:*",
     "gray-matter": "^4.0.3",
     "next": "^16.3.5",

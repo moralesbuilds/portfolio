@@ -1,19 +1,31 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import React, { useActionState, useState } from "react";
 import { contactMeAction } from "../actions/contact_me";
 import { FieldErrors, SubmitButton } from "@/components";
+import React, { useActionState, useEffect, useRef, useState } from "react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+
+const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITEKEY!;
 
 export function ContactForm() {
   const t = useTranslations("contact");
   const [loadedAt] = useState(() => Date.now());
-  console.log("loadedAt browser:", loadedAt);
   const [state, action, isPending] = useActionState(contactMeAction, { success: false });
-  
+  const [token, setToken] = useState("");
+  const turnstileRef = useRef<TurnstileInstance>(null);
+
   const hasNameError = (state.errors?.name?.length ?? 0) > 0;
   const hasEmailError = (state.errors?.email?.length ?? 0) > 0;
   const hasMessageError = (state.errors?.message?.length ?? 0) > 0;
+  const clearToken = () => setToken("");
+
+  useEffect(() => {
+    if (state) {
+      turnstileRef.current?.reset();
+      setToken("");
+    }
+  }, [state]);
 
   return (
     <div className="w-full max-w-4xl md:p-8">
@@ -25,7 +37,7 @@ export function ContactForm() {
 
         {/* General error banner */}
         {!state.success && state.error && <div className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-md bg-red-200" role="alert">
-          {state.error}  
+          {state.error}
         </div>}
 
         {/* Name Field */}
@@ -100,6 +112,18 @@ export function ContactForm() {
 
         {/* Time trap */}
         <input type="hidden" name="t" value={loadedAt} data-testid="field-loadedat" />
+
+        {/* Turnstile */}
+        <div className="flex justify-center">
+          <Turnstile
+            ref={turnstileRef}
+            siteKey={siteKey}
+            onSuccess={setToken}
+            onExpire={clearToken}
+            onError={clearToken}
+          />
+        </div>
+        <input type="hidden" name="turnstileToken" value={token} />
 
         <SubmitButton label={t("submit")} isSubmitting={isPending} />
       </form>
