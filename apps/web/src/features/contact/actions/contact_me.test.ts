@@ -1,8 +1,9 @@
 import { describe, expect, test, vi } from "vitest";
 import { contactMeAction } from "./contact_me";
-import { createLead } from "@moralesbuilds/contents-db";
+import { createLead, createRateLimitStore } from "@moralesbuilds/contents-db";
 import { headers } from "next/headers";
 import { type ContactMeActionState } from "../schemas";
+import { createInMemoryRateLimitStore } from "../../../../tests/rate_limit_store";
 
 const { mockGetCloudflareContext, mockSend } = vi.hoisted(() => {
   const mockSend = vi.fn();
@@ -28,7 +29,8 @@ vi.mock('@moralesbuilds/contents-db', async (importActual) => {
   const actual = await importActual<typeof import('@moralesbuilds/contents-db')>();
   return {
     ...actual,
-    createLead: vi.fn()
+    createLead: vi.fn(),
+    createRateLimitStore: vi.fn()
   };
 });
 
@@ -114,6 +116,8 @@ describe("contactMeAction", () => {
 
   test("saves valid form submission, save to database and send notificaiton", async () => {
     const formData = getTestFormData();
+    vi.mocked(createRateLimitStore).mockReturnValue(createInMemoryRateLimitStore())
+
     const result = await contactMeAction({ success: false }, formData);
     expectLeadToBeCreatedAndNotificationSent(result, "1.1.1.1");
   });
@@ -123,6 +127,7 @@ describe("contactMeAction", () => {
     const mockHeaders = new Headers();
     mockHeaders.append("x-forwarded-for", "2.2.2.2");
     vi.mocked(headers).mockResolvedValue(mockHeaders);
+    vi.mocked(createRateLimitStore).mockReturnValue(createInMemoryRateLimitStore())
 
     const result = await contactMeAction({ success: false }, formData);
     expectLeadToBeCreatedAndNotificationSent(result, "2.2.2.2");
@@ -134,6 +139,13 @@ describe("contactMeAction", () => {
 
     const result = await contactMeAction({ success: false }, formData);
     expectFalsifiedSuccess(result);
+  });
+
+  test("should not trigger the honeypot trap when website is empty string", async () => {
+    const formData = getTestFormData();
+    formData.append("website", "");
+    const result = await contactMeAction({ success: false }, formData);
+    expectLeadToBeCreatedAndNotificationSent(result, "2.2.2.2");
   });
 
   test("triggering the timetrap", async () => {

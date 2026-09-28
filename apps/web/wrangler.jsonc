@@ -25,7 +25,9 @@
     }
   ],
   "send_email": [
-    { "name": "EMAIL" }
+    {
+      "name": "EMAIL"
+    }
   ],
   "assets": {
     "directory": ".open-next/assets",
@@ -55,6 +57,13 @@
     "X_URL": "https://x.com/moralesbuilds",
     "CONTACT_EMAIL": "luis@moralesbuilds.dev",
     "APP_EMAIL": "portfolio@moralesbuilds.dev",
-    "MIN_FORM_FILL_MS": "3000"
+    "MIN_FORM_FILL_MS": "3000",
+    "RATE_LIMIT_MAX_ATTEMPTS": "3",
+    "RATE_LIMIT_WINDOW_MS": "600000"
+  },
+  "secrets": {
+    "required": [
+      "CONTACT_FORM_SALT"
+    ]
   }
 }

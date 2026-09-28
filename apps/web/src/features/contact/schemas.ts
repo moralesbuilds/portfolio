@@ -14,6 +14,7 @@ export const contactMeSchema = z.object({
 export type ContactMeActionState = {
   success: boolean;
   form?: Partial<z.infer<typeof contactMeSchema>>;
+  error?: string;
   errors?: {
     name?: string[];
     email?: string[];

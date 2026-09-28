@@ -8,6 +8,7 @@ import { FieldErrors, SubmitButton } from "@/components";
 export function ContactForm() {
   const t = useTranslations("contact");
   const [loadedAt] = useState(() => Date.now());
+  console.log("loadedAt browser:", loadedAt);
   const [state, action, isPending] = useActionState(contactMeAction, { success: false });
   
   const hasNameError = (state.errors?.name?.length ?? 0) > 0;
@@ -18,8 +19,13 @@ export function ContactForm() {
     <div className="w-full max-w-4xl md:p-8">
       <form action={action} className="space-y-6" noValidate>
         {/* Success banner */}
-        {state.success && <div className="flex items-center p-4 mb-4 text-sm text-green-800 rounded-md bg-green-50" role="alert">
+        {state.success && <div className="flex items-center p-4 mb-4 text-sm text-green-800 rounded-md bg-green-200" role="alert">
           <span className="font-medium">{t("success")}</span> {t("success_message")}
+        </div>}
+
+        {/* General error banner */}
+        {!state.success && state.error && <div className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-md bg-red-200" role="alert">
+          {state.error}  
         </div>}
 
         {/* Name Field */}
