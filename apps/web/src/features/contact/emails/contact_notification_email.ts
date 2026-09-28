@@ -1,4 +1,4 @@
-import { escapeHtml } from "@/utils/html";
+import { escapeHtml } from "@/lib/html";
 
 type ContactNotificationEmailInput = {
   name: string;

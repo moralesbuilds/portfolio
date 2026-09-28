@@ -1,5 +1,5 @@
 import React from "react";
-import { toLocalDate } from "@/utils/date";
+import { toLocalDate } from "@/lib/date";
 
 interface DateProps extends React.TimeHTMLAttributes<HTMLTimeElement> {
   value: string;
