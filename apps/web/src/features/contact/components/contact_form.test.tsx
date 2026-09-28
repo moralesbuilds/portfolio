@@ -86,9 +86,7 @@ describe("ContactForm (unit)", () => {
     });
 
     renderContactForm();
-
-    const submitButton = screen.getByText("Submit");
-    await userEvent.click(submitButton);
+    await userEvent.click(screen.getByText("Submit"));
 
     const nameInput = screen.getByLabelText("Name");
     expect(nameInput).toHaveAccessibleDescription("Invalid name");
@@ -100,17 +98,27 @@ describe("ContactForm (unit)", () => {
     expect(messageInput).toHaveAccessibleDescription("Invalid message");
   });
 
-  test("render ContactForm after successful submission", async () => {
+  test("display success banner after successful submission", async () => {
     vi.mocked(contactMeAction).mockResolvedValue({
       success: true
     });
 
     renderContactForm();
+    await userEvent.click(screen.getByText("Submit"));
 
-    const submitButton = screen.getByText("Submit");
-    await userEvent.click(submitButton);
+    expect(screen.getByText("Success!")).toBeInTheDocument();
+    expect(screen.getByText("You did it")).toBeInTheDocument();
+  });
 
-    expect(screen.getByText("Success!"));
-    expect(screen.getByText("You did it"));
+  test("display general error banner after failed submission", async () => {
+    vi.mocked(contactMeAction).mockResolvedValue({
+      success: false,
+      error: "You failed."
+    });
+
+    renderContactForm();
+    await userEvent.click(screen.getByText("Submit"));
+
+    expect(screen.getByText("You failed.")).toBeInTheDocument();
   });
 });

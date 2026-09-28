@@ -31,3 +31,9 @@ export type Lead = {
   isSpam: 0 | 1;
   createdAt: string;
 };
+
+export interface RateLimitStore {
+  record(key: string, now: number): Promise<void>;
+  countSince(key: string, since: number): Promise<number>;
+  prune(before: number): Promise<void>;
+};
