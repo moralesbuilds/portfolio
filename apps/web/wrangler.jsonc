@@ -63,7 +63,8 @@
   },
   "secrets": {
     "required": [
-      "CONTACT_FORM_SALT"
+      "CONTACT_FORM_SALT",
+      "TURNSTILE_SECRET"
     ]
   }
 }

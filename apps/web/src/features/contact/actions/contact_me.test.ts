@@ -4,6 +4,7 @@ import { createLead, createRateLimitStore } from "@moralesbuilds/contents-db";
 import { headers } from "next/headers";
 import { type ContactMeActionState } from "../schemas";
 import { createInMemoryRateLimitStore } from "../../../../tests/rate_limit_store";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 const { mockGetCloudflareContext, mockSend } = vi.hoisted(() => {
   const mockSend = vi.fn();
@@ -15,7 +16,11 @@ const { mockGetCloudflareContext, mockSend } = vi.hoisted(() => {
       CONTENTS_DB: {},
       APP_EMAIL: "app@test.com",
       CONTACT_EMAIL: "my_inbox@test.com",
-      MIN_FORM_FILL_MS: "3000"
+      MIN_FORM_FILL_MS: "3000",
+      RATE_LIMIT_MAX_ATTEMPTS: "3",
+      RATE_LIMIT_WINDOW_MS: "60_000",
+      CONTACT_FORM_SALT: "salt",
+      TURNSTILE_SECRET: "my_tt_secret"
     }
   }));
   return { mockSend, mockGetCloudflareContext };
@@ -36,6 +41,10 @@ vi.mock('@moralesbuilds/contents-db', async (importActual) => {
 
 vi.mock('next/headers', async () => {
   return { headers: vi.fn() };
+});
+
+vi.mock('@/lib/turnstile', async () => {
+  return { verifyTurnstile: vi.fn() };
 });
 
 function expectLeadToBeCreatedAndNotificationSent(result: ContactMeActionState, ipAddress: string) {
@@ -72,12 +81,20 @@ function expectFalsifiedSuccess(result: ContactMeActionState) {
   expect(mockSend).not.toHaveBeenCalled();
 }
 
+function expectFailedOperation(result: ContactMeActionState) {
+  expect(result.success).toBeFalsy();
+  expect(result.error).toEqual(expect.stringMatching(/\S/));
+  expect(createLead).not.toHaveBeenCalled();
+  expect(mockSend).not.toHaveBeenCalled();
+}
+
 function getTestFormData(params: { t?: string; message?: string; } | undefined = undefined): FormData {
   const formData = new FormData();
   formData.append("name", "Tester");
   formData.append("email", "tester@external.com");
   formData.append("message", params?.message ?? "I want to test your product");
   formData.append("t", params?.t ?? (Date.now() - 4000).toString());
+  formData.append("turnstileToken", "my_tt_token");
   return formData;
 }
 
@@ -116,9 +133,11 @@ describe("contactMeAction", () => {
 
   test("saves valid form submission, save to database and send notificaiton", async () => {
     const formData = getTestFormData();
-    vi.mocked(createRateLimitStore).mockReturnValue(createInMemoryRateLimitStore())
+    vi.mocked(createRateLimitStore).mockReturnValue(createInMemoryRateLimitStore());
+    vi.mocked(verifyTurnstile).mockResolvedValue(true);
 
     const result = await contactMeAction({ success: false }, formData);
+    expect(verifyTurnstile).toHaveBeenCalledWith("my_tt_token", "my_tt_secret", "1.1.1.1");
     expectLeadToBeCreatedAndNotificationSent(result, "1.1.1.1");
   });
 
@@ -128,8 +147,10 @@ describe("contactMeAction", () => {
     mockHeaders.append("x-forwarded-for", "2.2.2.2");
     vi.mocked(headers).mockResolvedValue(mockHeaders);
     vi.mocked(createRateLimitStore).mockReturnValue(createInMemoryRateLimitStore())
+    vi.mocked(verifyTurnstile).mockResolvedValue(true);
 
     const result = await contactMeAction({ success: false }, formData);
+    expect(verifyTurnstile).toHaveBeenCalledWith("my_tt_token", "my_tt_secret", "2.2.2.2");
     expectLeadToBeCreatedAndNotificationSent(result, "2.2.2.2");
   });
 
@@ -163,5 +184,34 @@ Unsubscribe: www.optout-digital-marketing.com/unsubscribe
     const formData = getTestFormData({ message });
     const result = await contactMeAction({ success: false }, formData);
     expectFalsifiedSuccess(result);
+  });
+
+  test("fails the operation if the call is rate limited", async () => {
+    const formData = getTestFormData();
+    vi.mocked(createRateLimitStore).mockReturnValue({
+      record: async function (key: string, now: number): Promise<void> {
+        // noop
+      },
+      countSince: function (key: string, since: number): Promise<number> {
+        return Promise.resolve(5);
+      },
+      prune: async function (before: number): Promise<void> {
+        // noop
+      }
+    });
+    vi.mocked(verifyTurnstile).mockResolvedValue(true);
+
+    const result = await contactMeAction({ success: false }, formData);
+    expectFailedOperation(result);
+  });
+
+  test("fails the operation if turnstile fails the verification", async () => {
+    const formData = getTestFormData();
+    vi.mocked(createRateLimitStore).mockReturnValue(createInMemoryRateLimitStore());
+    vi.mocked(verifyTurnstile).mockResolvedValue(false);
+
+    const result = await contactMeAction({ success: false }, formData);
+    expectFailedOperation(result);
+    expect(verifyTurnstile).toHaveBeenCalledWith("my_tt_token", "my_tt_secret", "2.2.2.2");
   });
 });
