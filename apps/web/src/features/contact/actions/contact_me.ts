@@ -71,7 +71,7 @@ export async function contactMeAction(_prev: ContactMeActionState, formData: For
   if (limited) {
     return {
       success: false,
-      error: "Too many attemps. Please try again in a few minutes"
+      error: "too_many_attemps"
     };
   }
 
@@ -81,7 +81,7 @@ export async function contactMeAction(_prev: ContactMeActionState, formData: For
   if (!isHuman) {
     return {
       success: false,
-      error: "We couldn't verify you're human. Please try again."
+      error: "turnstile_verify_failed"
     };
   }
 

@@ -37,7 +37,7 @@ export function ContactForm() {
 
         {/* General error banner */}
         {!state.success && state.error && <div className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-md bg-red-200" role="alert">
-          {state.error}
+          {t(`errors.${state.error}`)}
         </div>}
 
         {/* Name Field */}
@@ -57,7 +57,7 @@ export function ContactForm() {
             aria-describedby={hasNameError ? "name-errors" : undefined}
             className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 transition-colors"
           />
-          <FieldErrors id="name-errors" errors={state.errors?.name} />
+          <FieldErrors id="name-errors" errors={state.errors?.name} t={t} />
         </div>
 
         {/* Email Field */}
@@ -77,7 +77,7 @@ export function ContactForm() {
             aria-describedby={hasEmailError ? "email-errors" : undefined}
             className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 transition-colors"
           />
-          <FieldErrors id="email-errors" errors={state.errors?.email} />
+          <FieldErrors id="email-errors" errors={state.errors?.email} t={t} />
         </div>
 
         {/* Message Field */}
@@ -97,7 +97,7 @@ export function ContactForm() {
             aria-describedby={hasMessageError ? "message-errors" : undefined}
             className="w-full rounded-xl border border-slate-300 mb-0 px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 transition-colors"
           />
-          <FieldErrors id="message-errors" errors={state.errors?.message} />
+          <FieldErrors id="message-errors" errors={state.errors?.message} t={t} />
         </div>
 
         {/* Honeypot: Website Field */}
