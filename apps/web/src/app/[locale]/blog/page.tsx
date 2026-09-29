@@ -1,6 +1,6 @@
 import { Breadcrumbs, PageNavigation } from "@/components";
 import { PostList } from "@/features/blog";
-import { queryToNumber, type SearchParams } from "@/utils/query";
+import { queryToNumber, type SearchParams } from "@/lib/query";
 import { fetchBlogPosts, getDb } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getTranslations } from "next-intl/server";
@@ -24,7 +24,7 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
       <header className="space-y-4">
         <Breadcrumbs />
 
-        {/*Page tile & description */}
+        {/* Page tile & description */}
         <div className="space-y-2">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
             {t("title")}

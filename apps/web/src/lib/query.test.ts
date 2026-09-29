@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { queryToNumber, type QueryValue } from "./query";
 
-describe("query utilities fucntions", () => {
+describe("queryToNumber", () => {
   const emptyCases: [string, QueryValue][] = [
     ["undefined", undefined],
     ["empty string", ""],

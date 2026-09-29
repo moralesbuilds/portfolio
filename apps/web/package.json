@@ -44,6 +44,7 @@
     "tailwindcss": "^4.3.3"
   },
   "dependencies": {
+    "@marsidev/react-turnstile": "^1.6.1",
     "@moralesbuilds/contents-db": "workspace:*",
     "gray-matter": "^4.0.3",
     "next": "^16.3.5",
@@ -51,6 +52,7 @@
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-markdown": "^10.1.0",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "zod": "^4.6.5"
   }
 }

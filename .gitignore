@@ -1,6 +1,7 @@
 **/node_modules/
 **/.wrangler/
 .env*
+!.env.example
 .pnpm-store/
 .dev.vars
 **/.next/

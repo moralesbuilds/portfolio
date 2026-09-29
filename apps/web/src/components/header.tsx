@@ -91,7 +91,7 @@ export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, git
             <div className="hidden sm:flex sm:items-center sm:space-x-8">
               <div className="flex space-x-8 h-full">
                 <DesktopLink href="/blog" label={blogLabel} selected={isBlogSelected} data-testid="blog-link" />
-                <DesktopLink href="#" label={contactLabel} selected={isContactSelected} data-testid="contact-link" />
+                <DesktopLink href="/contact" label={contactLabel} selected={isContactSelected} data-testid="contact-link" />
               </div>
 
               <div className="flex items-center space-x-4 border-l border-gray-200 pl-6">
@@ -122,7 +122,7 @@ export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, git
         <div className={mobileMenuOpened ? 'sm:hidden' : 'hidden sm:hidden'} id="mobile-menu">
           <div className="pt-2 pb-3 space-y-1">
             <MobileLink href="/blog" label={blogLabel} selected={isBlogSelected} data-testid="mobile-blog-link" />
-            <MobileLink href="#" label={contactLabel} selected={isContactSelected} data-testid="mobile-contact-link" />
+            <MobileLink href="/contact" label={contactLabel} selected={isContactSelected} data-testid="mobile-contact-link" />
           </div>
         </div>
       </nav>
