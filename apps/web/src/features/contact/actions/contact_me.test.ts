@@ -1,10 +1,11 @@
 import { describe, expect, test, vi } from "vitest";
 import { contactMeAction } from "./contact_me";
-import { createLead, createRateLimitStore } from "@moralesbuilds/contents-db";
+import { createLead, createRateLimitStore, type Locale } from "@moralesbuilds/contents-db";
 import { headers } from "next/headers";
 import { type ContactMeActionState } from "../schemas";
 import { createInMemoryRateLimitStore } from "../../../../tests/rate_limit_store";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { getLocale } from "next-intl/server";
 
 const { mockGetCloudflareContext, mockSend } = vi.hoisted(() => {
   const mockSend = vi.fn();
@@ -47,7 +48,11 @@ vi.mock('@/lib/turnstile', async () => {
   return { verifyTurnstile: vi.fn() };
 });
 
-function expectLeadToBeCreatedAndNotificationSent(result: ContactMeActionState, ipAddress: string) {
+vi.mock('next-intl/server', async () => {
+  return { getLocale: vi.fn() };
+});
+
+function expectLeadToBeCreatedAndNotificationSent(result: ContactMeActionState, ipAddress: string, locale: Locale) {
   expect(result.success).toBeTruthy();
   expect(result.form).toBeNullable();
   expect(result.errors).toBeNullable();
@@ -61,6 +66,7 @@ function expectLeadToBeCreatedAndNotificationSent(result: ContactMeActionState, 
       message: "I want to test your product",
       leadSource: "website",
       ipAddress,
+      locale,
     }
   );
 
@@ -135,10 +141,11 @@ describe("contactMeAction", () => {
     const formData = getTestFormData();
     vi.mocked(createRateLimitStore).mockReturnValue(createInMemoryRateLimitStore());
     vi.mocked(verifyTurnstile).mockResolvedValue(true);
+    vi.mocked(getLocale).mockResolvedValue("en");
 
     const result = await contactMeAction({ success: false }, formData);
     expect(verifyTurnstile).toHaveBeenCalledWith("my_tt_token", "my_tt_secret", "1.1.1.1");
-    expectLeadToBeCreatedAndNotificationSent(result, "1.1.1.1");
+    expectLeadToBeCreatedAndNotificationSent(result, "1.1.1.1", "en");
   });
 
   test("saves valid form submission getting the ip address from x-forwarded-for header", async () => {
@@ -148,10 +155,11 @@ describe("contactMeAction", () => {
     vi.mocked(headers).mockResolvedValue(mockHeaders);
     vi.mocked(createRateLimitStore).mockReturnValue(createInMemoryRateLimitStore())
     vi.mocked(verifyTurnstile).mockResolvedValue(true);
+    vi.mocked(getLocale).mockResolvedValue("es")
 
     const result = await contactMeAction({ success: false }, formData);
     expect(verifyTurnstile).toHaveBeenCalledWith("my_tt_token", "my_tt_secret", "2.2.2.2");
-    expectLeadToBeCreatedAndNotificationSent(result, "2.2.2.2");
+    expectLeadToBeCreatedAndNotificationSent(result, "2.2.2.2", "es");
   });
 
   test("triggering the honeypot trap", async () => {
@@ -165,8 +173,10 @@ describe("contactMeAction", () => {
   test("should not trigger the honeypot trap when website is empty string", async () => {
     const formData = getTestFormData();
     formData.append("website", "");
+    vi.mocked(getLocale).mockResolvedValue("en");
+
     const result = await contactMeAction({ success: false }, formData);
-    expectLeadToBeCreatedAndNotificationSent(result, "2.2.2.2");
+    expectLeadToBeCreatedAndNotificationSent(result, "2.2.2.2", "en");
   });
 
   test("triggering the timetrap", async () => {

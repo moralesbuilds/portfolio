@@ -3,13 +3,14 @@
 import z from "zod";
 import { headers } from "next/headers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { createLead, createRateLimitStore, getDb } from "@moralesbuilds/contents-db";
+import { createLead, createRateLimitStore, getDb, type Locale } from "@moralesbuilds/contents-db";
 import { type ContactMeActionState, type ContactMeFormData, contactMeSchema } from "../schemas";
 import { renderContactNotificationEmail } from "../emails/contact_notification_email";
 import { hasTooManyLinks } from "../utils/spam";
 import { isRateLimited } from "@/lib/rate_limit";
 import { sha256Hex } from "@/lib/crypto";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { getLocale } from "next-intl/server";
 
 async function extractIpAddress(): Promise<string> {
   const headerList = await headers();
@@ -101,10 +102,12 @@ export async function contactMeAction(_prev: ContactMeActionState, formData: For
 
   // The main operations: Save to database and send notification email
   try {
+    const locale = await getLocale() as Locale;
     await createLead(db, {
       ...validationResult.data,
       leadSource: "website",
       ipAddress,
+      locale,
     });
     await sendEmail(env, validationResult.data);
     return { success: true };
