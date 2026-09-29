@@ -5,14 +5,11 @@ import { headers } from "next/headers";
 import { type ContactMeActionState } from "../schemas";
 import { createInMemoryRateLimitStore } from "../../../../tests/rate_limit_store";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { sendEmail } from "@/lib/resend";
 
-const { mockGetCloudflareContext, mockSend } = vi.hoisted(() => {
-  const mockSend = vi.fn();
+const { mockGetCloudflareContext } = vi.hoisted(() => {
   const mockGetCloudflareContext = vi.fn(() => ({
     env: {
-      EMAIL: {
-        send: mockSend
-      },
       CONTENTS_DB: {},
       APP_EMAIL: "app@test.com",
       CONTACT_EMAIL: "my_inbox@test.com",
@@ -20,10 +17,11 @@ const { mockGetCloudflareContext, mockSend } = vi.hoisted(() => {
       RATE_LIMIT_MAX_ATTEMPTS: "3",
       RATE_LIMIT_WINDOW_MS: "60_000",
       CONTACT_FORM_SALT: "salt",
-      TURNSTILE_SECRET: "my_tt_secret"
+      TURNSTILE_SECRET: "my_tt_secret",
+      RESEND_API_KEY: "my_resend_api_key"
     }
   }));
-  return { mockSend, mockGetCloudflareContext };
+  return { mockGetCloudflareContext };
 });
 
 vi.mock('@opennextjs/cloudflare', async () => ({
@@ -47,6 +45,10 @@ vi.mock('@/lib/turnstile', async () => {
   return { verifyTurnstile: vi.fn() };
 });
 
+vi.mock('@/lib/resend', async () => {
+  return { sendEmail: vi.fn() };
+});
+
 function expectLeadToBeCreatedAndNotificationSent(result: ContactMeActionState, ipAddress: string, locale: Locale) {
   expect(result.success).toBeTruthy();
   expect(result.form).toBeNullable();
@@ -66,7 +68,8 @@ function expectLeadToBeCreatedAndNotificationSent(result: ContactMeActionState, 
   );
 
   // Expect the email is sent
-  expect(mockSend).toHaveBeenCalledWith(
+  expect(sendEmail).toHaveBeenCalledWith(
+    "my_resend_api_key",
     expect.objectContaining({
       from: "app@test.com",
       to: "my_inbox@test.com",
@@ -79,14 +82,14 @@ function expectLeadToBeCreatedAndNotificationSent(result: ContactMeActionState, 
 function expectFalsifiedSuccess(result: ContactMeActionState) {
   expect(result.success).toBeTruthy();
   expect(createLead).not.toHaveBeenCalled();
-  expect(mockSend).not.toHaveBeenCalled();
+  expect(sendEmail).not.toHaveBeenCalled();
 }
 
 function expectFailedOperation(result: ContactMeActionState) {
   expect(result.success).toBeFalsy();
   expect(result.error).toEqual(expect.stringMatching(/\S/));
   expect(createLead).not.toHaveBeenCalled();
-  expect(mockSend).not.toHaveBeenCalled();
+  expect(sendEmail).not.toHaveBeenCalled();
 }
 
 function getTestFormData(params: { t?: string; message?: string; } | undefined = undefined): FormData {
@@ -227,6 +230,6 @@ Unsubscribe: www.optout-digital-marketing.com/unsubscribe
     expect(result.success).toBeFalsy();
     expect(result.error).toBe("unexpected_error");
     expect(createLead).toHaveBeenCalled();
-    expect(mockSend).not.toHaveBeenCalled();
+    expect(sendEmail).not.toHaveBeenCalled();
   });
 });

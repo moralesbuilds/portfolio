@@ -10,7 +10,7 @@ import { hasTooManyLinks } from "../utils/spam";
 import { isRateLimited } from "@/lib/rate_limit";
 import { sha256Hex } from "@/lib/crypto";
 import { verifyTurnstile } from "@/lib/turnstile";
-import { getLocale } from "next-intl/server";
+import { sendEmail } from "@/lib/resend";
 
 async function extractIpAddress(): Promise<string> {
   const headerList = await headers();
@@ -24,18 +24,13 @@ async function extractIpAddress(): Promise<string> {
   return "127.0.0.1";
 }
 
-async function sendEmail(env: CloudflareEnv, data: ContactMeFormData) {
-  try {
-    const response = await env.EMAIL.send({
-      from: env.APP_EMAIL,
-      to: env.CONTACT_EMAIL,
-      subject: "Someone is trying to reach you!",
-      html: renderContactNotificationEmail({ ...data, submittedAt: new Date().toLocaleString() })
-    });
-    console.log(response); // Left on purpose to monitoring the response in production
-  } catch (err) {
-    console.error(err);
-  }
+async function sendNewLeadEmail(env: CloudflareEnv, data: ContactMeFormData) {
+  await sendEmail(env.RESEND_API_KEY, {
+    from: env.APP_EMAIL,
+    to: env.CONTACT_EMAIL,
+    subject: "Someone is trying to reach you!",
+    html: renderContactNotificationEmail({ ...data, submittedAt: new Date().toLocaleString() })
+  });
 }
 
 const clockSkewToleranceMS = 5000;
@@ -108,7 +103,7 @@ export async function contactMeAction(locale: Locale, _prev: ContactMeActionStat
       ipAddress,
       locale,
     });
-    await sendEmail(env, validationResult.data);
+    await sendNewLeadEmail(env, validationResult.data);
     return { success: true };
   } catch (err) {
     console.error(err);
