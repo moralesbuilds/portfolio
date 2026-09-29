@@ -24,11 +24,6 @@
       "service": "web"
     }
   ],
-  "send_email": [
-    {
-      "name": "EMAIL"
-    }
-  ],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
@@ -64,7 +59,8 @@
   "secrets": {
     "required": [
       "CONTACT_FORM_SALT",
-      "TURNSTILE_SECRET"
+      "TURNSTILE_SECRET",
+      "RESEND_API_KEY"
     ]
   },
   "observability": {
