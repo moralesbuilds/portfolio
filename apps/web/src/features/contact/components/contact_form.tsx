@@ -1,17 +1,19 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { contactMeAction } from "../actions/contact_me";
 import { FieldErrors, SubmitButton } from "@/components";
 import React, { useActionState, useEffect, useRef, useState } from "react";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { type Locale } from "@moralesbuilds/contents-db";
 
 const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITEKEY!;
 
 export function ContactForm() {
+  const locale = useLocale() as Locale;
   const t = useTranslations("contact");
   const [loadedAt] = useState(() => Date.now());
-  const [state, action, isPending] = useActionState(contactMeAction, { success: false });
+  const [state, action, isPending] = useActionState(contactMeAction.bind(null, locale), { success: false });
   const [token, setToken] = useState("");
   const turnstileRef = useRef<TurnstileInstance>(null);
 
