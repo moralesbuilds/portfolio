@@ -111,8 +111,8 @@ export async function contactMeAction(_prev: ContactMeActionState, formData: For
     });
     await sendEmail(env, validationResult.data);
     return { success: true };
-  } catch (error) {
-    console.error(error);
-    return { success: false };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: "unexpected_error" };
   }
 }
