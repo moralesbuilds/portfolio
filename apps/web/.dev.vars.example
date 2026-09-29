@@ -1,2 +1,3 @@
 TURNSTILE_SECRET=The turnstile secret for moralesbuilds.dev domain
 CONTACT_FORM_SALT=Generate your own using `openssl rand -hex 32`
+RESEND_API_KEY=Copy the api key generated at https://resend.com/onboarding
