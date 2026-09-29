@@ -19,9 +19,11 @@ export const contactMeSchema = z.object({
     .max(2000, { error: "message_too_long" }),
 });
 
+export type ContactMeFormData = z.infer<typeof contactMeSchema>;
+
 export type ContactMeActionState = {
   success: boolean;
-  form?: Partial<z.infer<typeof contactMeSchema>>;
+  form?: Partial<ContactMeFormData>;
   error?: string;
   errors?: {
     name?: string[];

@@ -4,7 +4,7 @@ import z from "zod";
 import { headers } from "next/headers";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { createLead, createRateLimitStore, getDb } from "@moralesbuilds/contents-db";
-import { ContactMeActionState, contactMeSchema } from "../schemas";
+import { type ContactMeActionState, type ContactMeFormData, contactMeSchema } from "../schemas";
 import { renderContactNotificationEmail } from "../emails/contact_notification_email";
 import { hasTooManyLinks } from "../utils/spam";
 import { isRateLimited } from "@/lib/rate_limit";
@@ -14,7 +14,7 @@ import { verifyTurnstile } from "@/lib/turnstile";
 async function extractIpAddress(): Promise<string> {
   const headerList = await headers();
   const cfConnectingIp = headerList.get("cf-connecting-ip");
-  const forwardedFor = headerList.get("x-forwarded-for");  
+  const forwardedFor = headerList.get("x-forwarded-for");
   if (cfConnectingIp) {
     return cfConnectingIp;
   } else if (forwardedFor) {
@@ -23,7 +23,21 @@ async function extractIpAddress(): Promise<string> {
   return "127.0.0.1";
 }
 
-const clockSkewToleranceMS = 5000; 
+async function sendEmail(env: CloudflareEnv, data: ContactMeFormData) {
+  try {
+    const response = await env.EMAIL.send({
+      from: env.APP_EMAIL,
+      to: env.CONTACT_EMAIL,
+      subject: "Someone is trying to reach you!",
+      html: renderContactNotificationEmail({ ...data, submittedAt: new Date().toLocaleString() })
+    });
+    console.log(response);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+const clockSkewToleranceMS = 5000;
 
 export async function contactMeAction(_prev: ContactMeActionState, formData: FormData): Promise<ContactMeActionState> {
   // Honeypot trap verification
@@ -92,14 +106,7 @@ export async function contactMeAction(_prev: ContactMeActionState, formData: For
       leadSource: "website",
       ipAddress,
     });
-    const response = await env.EMAIL.send({
-      from: env.APP_EMAIL,
-      to: env.CONTACT_EMAIL,
-      subject: "Someone is trying to reach you!",
-      html: renderContactNotificationEmail({ ...validationResult.data, submittedAt: new Date().toLocaleString() })
-    });
-    console.log("Email response:", response);
-
+    await sendEmail(env, validationResult.data);
     return { success: true };
   } catch (error) {
     console.error(error);

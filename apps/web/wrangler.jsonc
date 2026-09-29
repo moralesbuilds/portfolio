@@ -1,5 +1,5 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
+  "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "web",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-08-29",
@@ -66,5 +66,8 @@
       "CONTACT_FORM_SALT",
       "TURNSTILE_SECRET"
     ]
+  },
+  "observability": {
+    "enabled": true
   }
 }
