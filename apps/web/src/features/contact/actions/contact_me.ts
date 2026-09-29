@@ -32,7 +32,7 @@ async function sendEmail(env: CloudflareEnv, data: ContactMeFormData) {
       subject: "Someone is trying to reach you!",
       html: renderContactNotificationEmail({ ...data, submittedAt: new Date().toLocaleString() })
     });
-    console.log(response);
+    console.log(response); // Left on purpose to monitoring the response in production
   } catch (err) {
     console.error(err);
   }
@@ -86,7 +86,7 @@ export async function contactMeAction(_prev: ContactMeActionState, formData: For
   if (limited) {
     return {
       success: false,
-      error: "too_many_attemps"
+      error: "too_many_attempts"
     };
   }
 
