@@ -5,7 +5,6 @@ import { headers } from "next/headers";
 import { type ContactMeActionState } from "../schemas";
 import { createInMemoryRateLimitStore } from "../../../../tests/rate_limit_store";
 import { verifyTurnstile } from "@/lib/turnstile";
-import { getLocale } from "next-intl/server";
 
 const { mockGetCloudflareContext, mockSend } = vi.hoisted(() => {
   const mockSend = vi.fn();
@@ -46,10 +45,6 @@ vi.mock('next/headers', async () => {
 
 vi.mock('@/lib/turnstile', async () => {
   return { verifyTurnstile: vi.fn() };
-});
-
-vi.mock('next-intl/server', async () => {
-  return { getLocale: vi.fn() };
 });
 
 function expectLeadToBeCreatedAndNotificationSent(result: ContactMeActionState, ipAddress: string, locale: Locale) {
@@ -117,7 +112,7 @@ describe("contactMeAction", () => {
     mockHeaders.append("cf-connecting-ip", "1.1.1.1");
     vi.mocked(headers).mockResolvedValue(mockHeaders);
 
-    const result = await contactMeAction({ success: false }, formData);
+    const result = await contactMeAction("en", { success: false }, formData);
     expect(result.success).toBeFalsy();
     expect(result.form).toStrictEqual({
       name: "",
@@ -141,9 +136,8 @@ describe("contactMeAction", () => {
     const formData = getTestFormData();
     vi.mocked(createRateLimitStore).mockReturnValue(createInMemoryRateLimitStore());
     vi.mocked(verifyTurnstile).mockResolvedValue(true);
-    vi.mocked(getLocale).mockResolvedValue("en");
 
-    const result = await contactMeAction({ success: false }, formData);
+    const result = await contactMeAction("en", { success: false }, formData);
     expect(verifyTurnstile).toHaveBeenCalledWith("my_tt_token", "my_tt_secret", "1.1.1.1");
     expectLeadToBeCreatedAndNotificationSent(result, "1.1.1.1", "en");
   });
@@ -155,9 +149,8 @@ describe("contactMeAction", () => {
     vi.mocked(headers).mockResolvedValue(mockHeaders);
     vi.mocked(createRateLimitStore).mockReturnValue(createInMemoryRateLimitStore())
     vi.mocked(verifyTurnstile).mockResolvedValue(true);
-    vi.mocked(getLocale).mockResolvedValue("es")
 
-    const result = await contactMeAction({ success: false }, formData);
+    const result = await contactMeAction("es", { success: false }, formData);
     expect(verifyTurnstile).toHaveBeenCalledWith("my_tt_token", "my_tt_secret", "2.2.2.2");
     expectLeadToBeCreatedAndNotificationSent(result, "2.2.2.2", "es");
   });
@@ -166,22 +159,21 @@ describe("contactMeAction", () => {
     const formData = getTestFormData();
     formData.append("website", "This is a trap");
 
-    const result = await contactMeAction({ success: false }, formData);
+    const result = await contactMeAction("en", { success: false }, formData);
     expectFalsifiedSuccess(result);
   });
 
   test("should not trigger the honeypot trap when website is empty string", async () => {
     const formData = getTestFormData();
     formData.append("website", "");
-    vi.mocked(getLocale).mockResolvedValue("en");
 
-    const result = await contactMeAction({ success: false }, formData);
+    const result = await contactMeAction("en", { success: false }, formData);
     expectLeadToBeCreatedAndNotificationSent(result, "2.2.2.2", "en");
   });
 
   test("triggering the timetrap", async () => {
     const formData = getTestFormData({ t: (Date.now() - 1000).toString() });
-    const result = await contactMeAction({ success: false }, formData);
+    const result = await contactMeAction("en", { success: false }, formData);
     expectFalsifiedSuccess(result);
   });
 
@@ -192,7 +184,7 @@ Book call: https://growth-cal-booking.org/meet
 Unsubscribe: www.optout-digital-marketing.com/unsubscribe
     `;
     const formData = getTestFormData({ message });
-    const result = await contactMeAction({ success: false }, formData);
+    const result = await contactMeAction("en", { success: false }, formData);
     expectFalsifiedSuccess(result);
   });
 
@@ -211,7 +203,7 @@ Unsubscribe: www.optout-digital-marketing.com/unsubscribe
     });
     vi.mocked(verifyTurnstile).mockResolvedValue(true);
 
-    const result = await contactMeAction({ success: false }, formData);
+    const result = await contactMeAction("en", { success: false }, formData);
     expectFailedOperation(result);
   });
 
@@ -220,7 +212,7 @@ Unsubscribe: www.optout-digital-marketing.com/unsubscribe
     vi.mocked(createRateLimitStore).mockReturnValue(createInMemoryRateLimitStore());
     vi.mocked(verifyTurnstile).mockResolvedValue(false);
 
-    const result = await contactMeAction({ success: false }, formData);
+    const result = await contactMeAction("en", { success: false }, formData);
     expectFailedOperation(result);
     expect(verifyTurnstile).toHaveBeenCalledWith("my_tt_token", "my_tt_secret", "2.2.2.2");
   });
@@ -231,7 +223,7 @@ Unsubscribe: www.optout-digital-marketing.com/unsubscribe
     vi.mocked(verifyTurnstile).mockResolvedValue(true);
     vi.mocked(createLead).mockRejectedValue(new Error("database error"));
 
-    const result = await contactMeAction({ success: false }, formData);
+    const result = await contactMeAction("en", { success: false }, formData);
     expect(result.success).toBeFalsy();
     expect(result.error).toBe("unexpected_error");
     expect(createLead).toHaveBeenCalled();
