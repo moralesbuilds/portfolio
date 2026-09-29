@@ -40,7 +40,7 @@ async function sendEmail(env: CloudflareEnv, data: ContactMeFormData) {
 
 const clockSkewToleranceMS = 5000;
 
-export async function contactMeAction(_prev: ContactMeActionState, formData: FormData): Promise<ContactMeActionState> {
+export async function contactMeAction(locale: Locale, _prev: ContactMeActionState, formData: FormData): Promise<ContactMeActionState> {
   // Honeypot trap verification
   const website = formData.get("website");
   if (website !== null && website !== "") {
@@ -102,7 +102,6 @@ export async function contactMeAction(_prev: ContactMeActionState, formData: For
 
   // The main operations: Save to database and send notification email
   try {
-    const locale = await getLocale() as Locale;
     await createLead(db, {
       ...validationResult.data,
       leadSource: "website",

@@ -4,6 +4,7 @@ import { describe, expect, test, vi } from "vitest";
 import { ContactForm } from "./contact_form";
 import { contactMeAction } from "../actions/contact_me";
 import userEvent from "@testing-library/user-event";
+import { Locale } from "@moralesbuilds/contents-db";
 
 vi.mock("../actions/contact_me", async () => ({ contactMeAction: vi.fn() }));
 
@@ -35,9 +36,9 @@ const MESSAGES = {
   }
 };
 
-function renderContactForm() {
+function renderContactForm(locale: Locale = "en") {
   render(
-    <NextIntlClientProvider locale="en" messages={MESSAGES}>
+    <NextIntlClientProvider locale={locale} messages={MESSAGES}>
       <ContactForm />
     </NextIntlClientProvider>
   );
@@ -127,4 +128,14 @@ describe("ContactForm (unit)", () => {
 
     expect(screen.getByText("You failed.")).toBeInTheDocument();
   });
+
+  test("submit action with the locale", async () => {
+    vi.mocked(contactMeAction).mockResolvedValue({
+      success: true
+    });
+
+    renderContactForm("es");
+    await userEvent.click(screen.getByText("Submit"));
+    expect(contactMeAction).toHaveBeenCalledWith("es", expect.anything(), expect.anything());
+  })
 });
