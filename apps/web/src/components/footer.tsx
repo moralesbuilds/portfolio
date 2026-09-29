@@ -1,7 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
-import ExternalLink from "./external_link";
 import { CodeIcon, GitHubIcon, LinkedInIcon, XIcon } from "./icons";
+import { ExternalLink } from "./external_link";
 
 type FooterProps = {
   brandLabel: string;
@@ -30,7 +30,11 @@ export async function Footer({ brandLabel, githubUrl, githubLabel, linkedinUrl, 
                 {/* Logo image or SVG goes here */}
                 <CodeIcon />
               </div>
-              <Link href="/" className="text-xl font-bold tracking-tight text-slate-900 hover:text-indigo-600 transition-colors font-mono">
+              <Link
+                href="/"
+                className="text-xl font-bold tracking-tight text-slate-900 hover:text-indigo-600 transition-colors font-mono"
+                data-testid="brand-link"
+              >
                 {brandLabel}<span className="text-indigo-600">.</span>
               </Link>
               <p className="text-sm text-slate-600 leading-relaxed max-w-sm">
@@ -56,7 +60,7 @@ export async function Footer({ brandLabel, githubUrl, githubLabel, linkedinUrl, 
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-indigo-600 transition-colors">
+                <Link href="/contact" className="hover:text-indigo-600 transition-colors">
                   {t("links.contact")}
                 </Link>
               </li>

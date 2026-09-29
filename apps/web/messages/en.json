@@ -97,6 +97,15 @@
     "copyright": "2026 {brand}. All rights reserved"
   },
   "contact": {
+    "title": "[Placeholder]: Tell me about your project",
+    "brief": "[Placeholder]: Whether you need help architecting a complex system, building an edge-native application, or discussing engineering challenges, reach out below to start the conversation.",
+    "success": "Success!",
+    "success_message": "I'll contact you as soon as possible",
+    "response_time": {
+      "title": "Response Time",
+      "delay": "1 to 2 business days",
+      "availability": "Monitored Monday through Friday."
+    },
     "fields": {
       "name": {
         "label": "Name",
@@ -110,6 +119,18 @@
         "label": "Message",
         "placeholder": "Write your message here..."
       }
+    },
+    "errors": {
+      "name_required": "Please enter your name.",
+      "name_too_long": "That name is too long (max 100 characters).",
+      "email_required": "Please enter your email.",
+      "email_invalid": "Please enter a valid email address.",
+      "email_too_long": "That email is too long (max 100 characters).",
+      "message_required": "Please enter a message.",
+      "message_too_long": "That message is too long (max 2000 characters).",
+      "too_many_attempts": "Too many attempts. Please try again in a few minutes.",
+      "turnstile_verify_failed": "We couldn't verify you're human. Please try again.",
+      "unexpected_error": "An unexpected error occurred. Please refresh the page and try again."
     },
     "submit": "Send"
   },
