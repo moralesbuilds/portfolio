@@ -1,18 +1,10 @@
-import { afterEach, describe, expect, type Mock, test, vi } from "vitest";
+import { afterEach, describe, expect, test, vi } from "vitest";
 import { verifyTurnstile } from "./turnstile";
+import { json, mockFetch } from "../../tests/mock_fetch";
 
 afterEach(() => {
   vi.unstubAllGlobals();
 });
-
-function mockFetch(impl: () => Promise<Response>): Mock<() => Promise<Response>> {
-  const fn = vi.fn(impl);
-  vi.stubGlobal("fetch", fn);
-  return fn;
-}
-
-const json = (body: unknown, init?: ResponseInit) =>
-  Promise.resolve(new Response(JSON.stringify(body), init));
 
 describe("verifyTurnstile", () => {
   test("returns true when Cloudflare says success", async () => {
@@ -45,10 +37,14 @@ describe("verifyTurnstile", () => {
     const fn = mockFetch(() => json({ success: true }));
     await verifyTurnstile("token", "secret", "1.1.1.1");
 
-    const body = (fn.mock.calls[0] as unknown as [string, RequestInit])[1].body as string;
+    const requestData = (fn.mock.calls[0] as unknown as [string, RequestInit])[1];
+    const body = requestData.body as string;
     const content = JSON.parse(body);
     expect(content.secret).toBe("secret");
     expect(content.response).toBe("token");
     expect(content.remoteip).toBe("1.1.1.1");
+
+    const headers = requestData.headers as Record<string, string>;
+    expect(headers["Content-Type"]).toBe("application/json");
   });
 });
