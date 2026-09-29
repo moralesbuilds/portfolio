@@ -224,4 +224,17 @@ Unsubscribe: www.optout-digital-marketing.com/unsubscribe
     expectFailedOperation(result);
     expect(verifyTurnstile).toHaveBeenCalledWith("my_tt_token", "my_tt_secret", "2.2.2.2");
   });
+
+  test("fails the operation when unexpected database failure", async () => {
+    const formData = getTestFormData();
+    vi.mocked(createRateLimitStore).mockReturnValue(createInMemoryRateLimitStore());
+    vi.mocked(verifyTurnstile).mockResolvedValue(true);
+    vi.mocked(createLead).mockRejectedValue(new Error("database error"));
+
+    const result = await contactMeAction({ success: false }, formData);
+    expect(result.success).toBeFalsy();
+    expect(result.error).toBe("unexpected_error");
+    expect(createLead).toHaveBeenCalled();
+    expect(mockSend).not.toHaveBeenCalled();
+  });
 });
