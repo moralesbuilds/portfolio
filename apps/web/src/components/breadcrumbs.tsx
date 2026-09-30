@@ -33,7 +33,7 @@ export function Breadcrumbs() {
                 {!isLast ? (
                   <Link href={href} className="hover:text-gray-700 transition-color">{t(segment)}</Link>
                 ) : (
-                  <span className="font-medium text-gray-900" aria-current="page">{title ? title : t(segment)}</span>
+                  <span className="font-medium text-gray-900" aria-current="page">{title ?? (t.has(segment) ? t(segment) : "...")}</span>
                 )}
               </li>
             </React.Fragment>
