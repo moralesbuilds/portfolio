@@ -9,7 +9,7 @@ type ProjectCardProps = {
   viewDetailsLabel: string;
 };
 
-export default function ProjectCard({ image, title, description, tags, viewDetailsLabel }: ProjectCardProps) {
+export function ProjectCard({ image, title, description, tags, viewDetailsLabel }: ProjectCardProps) {
   return (
     <article className="flex flex-col border border-slate-200 bg-base shadow-sm transition-all hover:shadow-md hover:border-slate-300">
       <img src={image} alt={title} className="h-48 w-full object-cover" />

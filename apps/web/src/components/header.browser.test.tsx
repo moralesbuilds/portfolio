@@ -9,6 +9,7 @@ function renderHeader() {
     <NextIntlClientProvider locale="en" messages={{}}>
       <Header
         brandLabel="My brand"
+        projectLabel="Project"
         blogLabel="Blog"
         contactLabel="Contact"
         openMenuLabel=""
@@ -28,6 +29,9 @@ describe("Header", () => {
     const brandLink = page.getByTestId("brand-link");
     await expect.element(brandLink).toBeVisible();
 
+    const projectLink = page.getByTestId("project-link");
+    await expect.element(projectLink).toBeVisible();
+
     const blogLink = page.getByTestId("blog-link");
     await expect.element(blogLink).toBeVisible();
 
@@ -36,6 +40,9 @@ describe("Header", () => {
 
     const githubLink = page.getByTestId("github-link").first();
     await expect.element(githubLink).toBeVisible();
+
+    const mobileProjectLink = page.getByTestId("mobile-project-link");
+    await expect.element(mobileProjectLink).not.toBeVisible();
 
     const mobileBlogLink = page.getByTestId("mobile-blog-link");
     await expect.element(mobileBlogLink).not.toBeVisible();
@@ -58,6 +65,9 @@ describe("Header", () => {
     const brandLink = page.getByTestId("brand-link");
     await expect.element(brandLink).toBeVisible();
 
+    const projectLink = page.getByTestId("project-link");
+    await expect.element(projectLink).not.toBeVisible();
+
     const blogLink = page.getByTestId("blog-link");
     await expect.element(blogLink).not.toBeVisible();
 
@@ -66,6 +76,9 @@ describe("Header", () => {
 
     const githubLink = mobileButtons.getByTestId("github-link");
     await expect.element(githubLink).toBeVisible();
+
+    const mobileProjectLink = page.getByTestId("mobile-project-link");
+    await expect.element(mobileProjectLink).not.toBeVisible();
 
     const mobileBlogLink = page.getByTestId("mobile-blog-link");
     await expect.element(mobileBlogLink).not.toBeVisible();
@@ -79,6 +92,7 @@ describe("Header", () => {
     await expect.element(menu).toHaveAttribute("aria-expanded", "false");
     await userEvent.click(menu);
 
+    await expect.element(mobileProjectLink).toBeVisible();
     await expect.element(mobileBlogLink).toBeVisible();
     await expect.element(mobileContactLink).toBeVisible();
 

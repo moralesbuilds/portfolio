@@ -1,6 +1,7 @@
 {
   "root": {
     "home": "Home",
+    "project": "Projects",
     "blog": "Blog",
     "contact": "Contact",
     "open_menu": "Open main menu",
@@ -43,6 +44,7 @@
     "projects": {
       "title": "Featured Projects / Study cases",
       "view_details": "View Details",
+      "see_all": "See all projects",
       "projects": [
         {
           "key": "htor",
@@ -90,6 +92,7 @@
     "navigation": "navigation",
     "links": {
       "start": "Start",
+      "project": "Projects",
       "blog": "Blog",
       "contact": "Contact"
     },

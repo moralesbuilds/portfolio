@@ -55,6 +55,11 @@ export async function Footer({ brandLabel, githubUrl, githubLabel, linkedinUrl, 
                 </Link>
               </li>
               <li>
+                <Link href="/project" className="hover:text-indigo-600 transition-colors">
+                  {t("links.project")}
+                </Link>
+              </li>
+              <li>
                 <Link href="/blog" className="hover:text-indigo-600 transition-colors">
                   {t("links.blog")}
                 </Link>
