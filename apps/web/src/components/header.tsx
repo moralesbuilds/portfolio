@@ -55,9 +55,10 @@ export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, git
   const [mobileMenuOpened, setMobileMenuOpened] = useState(false);
   const onMobileMenuButtonClicked = () => setMobileMenuOpened((prevValue) => !prevValue);
   const segments = useSelectedLayoutSegments();
+  const activeSegments = segments?.filter((s) => !s.startsWith("("));
 
-  const isBlogSelected = segments?.[0] === "blog";
-  const isContactSelected = segments?.[0] === "contact";
+  const isBlogSelected = activeSegments?.[0] === "blog";
+  const isContactSelected = activeSegments?.[0] === "contact";
 
   const githubLink = (
     <a

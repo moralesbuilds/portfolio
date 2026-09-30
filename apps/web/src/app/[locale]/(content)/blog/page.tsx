@@ -1,4 +1,4 @@
-import { Breadcrumbs, PageNavigation } from "@/components";
+import { FillSlot, PageNavigation } from "@/components";
 import { PostList } from "@/features/blog";
 import { queryToNumber, type SearchParams } from "@/lib/query";
 import { fetchBlogPosts, getDb } from "@moralesbuilds/contents-db";
@@ -19,12 +19,9 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
   const t = await getTranslations("blog");
 
   return (
-    <div className="w-full py-8 space-y-8">
-      {/* Header Section */}
-      <header className="space-y-4">
-        <Breadcrumbs />
-
-        {/* Page tile & description */}
+    <>
+      {/* Page tile & description */}
+      <FillSlot>
         <div className="space-y-2">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
             {t("title")}
@@ -33,7 +30,7 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
             {t("brief")}
           </p>
         </div>
-      </header>
+      </FillSlot>
 
       <PostList
         items={page.items}
@@ -43,6 +40,6 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
       />
 
       <PageNavigation total={page.count} pageIndex={pageIndex} pageSize={page.size} />
-    </div>
+    </>
   );
 }

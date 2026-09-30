@@ -1,4 +1,4 @@
-import { Breadcrumbs, Date, Tag } from "@/components";
+import { Date, FillSlot, Tag } from "@/components";
 import { getBlogPostFilename } from "@/features/blog/utils/contents";
 import { fetchBlogPostDetails, getDb, type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -23,7 +23,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   if (!details) {
     notFound();
   }
-  
+
   const filename = getBlogPostFilename(details);
   const object = await env.BLOG_CONTENTS.get(filename);
   if (!object) {
@@ -35,11 +35,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const hasTags = (details.tags?.length ?? 0) > 0
 
   return (
-    <div className="w-full py-8 space-y-8">
-      {/*Header section */}
-      <header className="space-y-4">
-        <Breadcrumbs overrides={{ [slug]: details.title }} />
-
+    <>
+      {/* Title */}
+      <FillSlot title={details.title}>
         <div className="space-y-2">
           <div>
             <Tag label={details.category} />
@@ -52,7 +50,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <Date value={details.publishedAt} />
           </p>
         </div>
-      </header>
+      </FillSlot>
 
       {/* The content */}
       <article className="prose max-w-none mx-auto">
@@ -71,6 +69,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }

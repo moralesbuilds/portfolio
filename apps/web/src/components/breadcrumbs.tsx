@@ -1,16 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
+import { LayoutPortalContext } from "./layout_portal";
 
-type BreadcrumbsProps = {
-  overrides?: Record<string, string>;
-};
-
-export function Breadcrumbs({ overrides }: BreadcrumbsProps) {
+export function Breadcrumbs() {
   const t = useTranslations("root");
   const pathname = usePathname();
+  const { title } = useContext(LayoutPortalContext);
   const segments = pathname.split('/').filter((segment) => segment);
 
   return (
@@ -25,7 +23,6 @@ export function Breadcrumbs({ overrides }: BreadcrumbsProps) {
         {segments.map((segment, index) => {
           const href = `/${segments.slice(0, index + 1).join('/')}`;
           const isLast = index === segments.length - 1;
-          const title = overrides?.[segment] ?? t(segment);
 
           return (
             <React.Fragment key={href}>
@@ -34,9 +31,9 @@ export function Breadcrumbs({ overrides }: BreadcrumbsProps) {
               </li>
               <li>
                 {!isLast ? (
-                  <Link href={href} className="hover:text-gray-700 transition-color">{title}</Link>
+                  <Link href={href} className="hover:text-gray-700 transition-color">{t(segment)}</Link>
                 ) : (
-                  <span className="font-medium text-gray-900" aria-current="page">{title}</span>
+                  <span className="font-medium text-gray-900" aria-current="page">{title ? title : t(segment)}</span>
                 )}
               </li>
             </React.Fragment>
