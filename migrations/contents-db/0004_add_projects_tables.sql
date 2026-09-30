@@ -12,10 +12,14 @@ CREATE TABLE projects (
 	repository_url TEXT CHECK(LENGTH(name) <= 256),
 	author_id INTEGER NOT NULL,
 	status TEXT NOT NULL CHECK(status IN ('published', 'draft', 'archived')),
+	is_featured INTEGER DEFAULT (FALSE) NOT NULL CHECK (is_featured IN (0, 1)),
 	published_at TEXT,
 	created_at TEXT NOT NULL,
 	updated_at TEXT
 ) STRICT;
+
+CREATE UNIQUE INDEX projects_name_locale_IDX ON projects (name, locale);
+CREATE UNIQUE INDEX projects_slug_locale_IDX ON projects (slug, locale);
 
 -- project_tags definition
 

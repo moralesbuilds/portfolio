@@ -10,6 +10,11 @@
       "label": "Apply content-db migrations locally",
       "type": "shell",
       "command": "pnpm exec --filter web wrangler d1 migrations apply contents-db --local"
+    },
+    {
+      "label": "Wipe local D1 databases",
+      "type": "shell",
+      "command": "rm -rf apps/web/.wrangler/state/v3/d1"
     }
   ],
   "inputs": [
