@@ -8,3 +8,4 @@ export { PageNavigation } from "./page_navigator";
 export { ExternalLink } from "./external_link";
 export { FieldErrors } from "./field_errors";
 export { SubmitButton } from "./submit_button";
+export { LayoutPortalProvider, LayoutSlot, FillSlot } from "./layout_portal";
