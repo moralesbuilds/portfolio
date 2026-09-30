@@ -12,12 +12,11 @@ export async function fetchBlogPosts(db: Db, params?: FetchBlogPostParams): Prom
   const limit = params?.pageSize ?? 10;
   const offset = ((params?.pageIndex ?? 1) - 1) * limit;
 
-  const countResult = await db.prepare(`
-      SELECT COUNT(*) AS count
-      FROM blog_posts p
-      WHERE p.locale = ? AND p.status = 'published'`)
-    .bind(locale)
-    .first<{ count: number }>();
+  const countResult = await db.prepare(
+    `SELECT COUNT(*) AS count FROM blog_posts p WHERE p.locale = ? AND p.status = 'published'`
+  )
+  .bind(locale)
+  .first<{ count: number }>();
 
   const { results } = await db.prepare(`
       SELECT p.id, p.slug, p.title, p.summary, p.published_at AS publishedAt, c.label AS category

@@ -21,10 +21,9 @@ export async function fetchBlogPostDetails(db: Db, params: FetchBlogPostDetailsP
     .bind(slug, locale)
     .first<BlogPostItem & { tags_str?: string }>();
 
-  if (item?.tags_str) {
-    item.tags = JSON.parse(item.tags_str)
-    item.tags_str = undefined;
+  if (!item || !item.tags_str) {
+    return item;
   }
-
-  return item;
+  const { tags_str, ...rest } = item;
+  return { ...rest, tags: JSON.parse(tags_str) };
 }
