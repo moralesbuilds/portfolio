@@ -17,7 +17,7 @@ export async function HeroSection() {
 
       {/* Access buttons */}
       <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-        <Link href="#" className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-inding-600 px-6 py-3.5 bg-primary text-base font-semibold shadow-md hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all">
+        <Link href="/project" className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-inding-600 px-6 py-3.5 bg-primary text-base font-semibold shadow-md hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all">
           {t("projects")}
         </Link>
 

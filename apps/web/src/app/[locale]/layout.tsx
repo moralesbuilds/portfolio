@@ -41,6 +41,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <NextIntlClientProvider>
           <Header
             brandLabel={brandLabel}
+            projectLabel={t("project")}
             blogLabel={t("blog")}
             contactLabel={t("contact")}
             openMenuLabel={t("open_menu")}
