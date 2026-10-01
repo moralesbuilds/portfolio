@@ -11,7 +11,7 @@ type ProjectItem = {
 };
 
 export async function FeaturedProjectsSection() {
-  const t = await getTranslations("home.projects");
+  const t = await getTranslations("project");
   const viewDetailsLabel = t("view_details");
   const projects = t.raw("projects") as ProjectItem[];
 
@@ -20,7 +20,7 @@ export async function FeaturedProjectsSection() {
       {/* Header row */}
       <div className="flex items-center justify-between gap-4 mb-8">
         <h2 className="ttext-sm font-bold tracking-tight text-indigo-600 uppercase">
-          {t("title")}
+          {t("section_title")}
         </h2>
 
         <Link href="/project" className="inline-flex items-center text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors group shrink-0">

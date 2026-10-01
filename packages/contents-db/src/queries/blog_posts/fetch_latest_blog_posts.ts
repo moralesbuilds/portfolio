@@ -12,12 +12,14 @@ export async function fetchLatestBlogPosts(db: Db, params?: FetchLatestBlogPostP
   const locale = params?.locale ?? 'en';
   const limit = params?.limit ?? 3;
 
-  const { results } =  await db.prepare(`
-      SELECT p.id, p.slug, p.title, p.published_at AS publishedAt
+  const { results } = await db
+    .prepare(
+      `SELECT p.id, p.slug, p.title, p.published_at AS publishedAt
       FROM blog_posts p
       WHERE p.locale = ? AND p.status = 'published'
       ORDER BY p.published_at DESC
-      LIMIT ?;`)
+      LIMIT ?;`
+    )
     .bind(locale, limit)
     .all<LatestBlogPost>();
   return results;
