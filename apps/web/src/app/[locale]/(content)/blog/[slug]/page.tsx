@@ -37,7 +37,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <>
       {/* Title */}
-      <FillSlot title={details.title}>
+      <FillSlot name="title" title={details.title}>
         <div className="space-y-2">
           <div>
             <Tag label={details.category} />

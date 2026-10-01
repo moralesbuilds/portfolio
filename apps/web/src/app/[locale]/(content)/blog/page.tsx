@@ -23,7 +23,7 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
   return (
     <>
       {/* Page tile & description */}
-      <FillSlot>
+      <FillSlot name="title">
         <div className="space-y-2">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
             {t("title")}

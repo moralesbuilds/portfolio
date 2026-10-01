@@ -3,8 +3,8 @@ import { routing } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { Inter, JetBrains_Mono } from "next/font/google";
-import { Header, Container, Footer } from "@/components";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { Header, Container, Footer, LayoutPortalProvider, LayoutSlot } from "@/components";
 
 // Title font
 const jetBrainsMono = JetBrains_Mono({
@@ -39,27 +39,30 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" className={`${inter.variable} ${jetBrainsMono.variable}`}>
       <body className="flex flex-col min-h-screen w-full bg-base">
         <NextIntlClientProvider>
-          <Header
-            brandLabel={brandLabel}
-            projectLabel={t("project")}
-            blogLabel={t("blog")}
-            contactLabel={t("contact")}
-            openMenuLabel={t("open_menu")}
-            githubLabel={githubLabel}
-            githubUrl={githubUrl}
-          />
+          <LayoutPortalProvider>
+            <Header
+              brandLabel={brandLabel}
+              projectLabel={t("project")}
+              blogLabel={t("blog")}
+              contactLabel={t("contact")}
+              openMenuLabel={t("open_menu")}
+              githubLabel={githubLabel}
+              githubUrl={githubUrl}
+            />
+            
+            <LayoutSlot name="banner" />
+            <Container>{children}</Container>
 
-          <Container>{children}</Container>
-          
-          <Footer
-            brandLabel={brandLabel}
-            githubLabel={githubLabel}
-            githubUrl={githubUrl}
-            linkedinUrl={linkedinUrl}
-            linkedinLabel={b("linkedin")}
-            xUrl={xUrl}
-            xLabel={b("x")}
-          />
+            <Footer
+              brandLabel={brandLabel}
+              githubLabel={githubLabel}
+              githubUrl={githubUrl}
+              linkedinUrl={linkedinUrl}
+              linkedinLabel={b("linkedin")}
+              xUrl={xUrl}
+              xLabel={b("x")}
+            />
+          </LayoutPortalProvider>
         </NextIntlClientProvider>
       </body>
     </html>
