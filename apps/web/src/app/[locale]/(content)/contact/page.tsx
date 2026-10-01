@@ -18,7 +18,7 @@ export default async function ContactPage() {
   return (
     <>
       {/* Page Title & description (centered) */}
-      <FillSlot>
+      <FillSlot name="title">
         <div className="text-center max-w-2xl mx-auto space-y-3 pt-2">
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
             {t("title")}

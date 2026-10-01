@@ -16,7 +16,7 @@ vi.mock('@/i18n/navigation', async (importActual) => {
 function renderBreadcrumbs(title: string | undefined | null = undefined) {
   render(
     <NextIntlClientProvider locale="en" messages={{ root: { home: "Home", parent: "Parent", leaf: "Leaf" } }}>
-      <LayoutPortalContext value={{ title, setTitle: () => {}, slotContent: null, setSlotContent: () => {} }}>
+      <LayoutPortalContext value={{ title, setTitle: () => {}, slotContents: {}, setSlotContents: () => {} }}>
         <Breadcrumbs />
       </LayoutPortalContext>
     </NextIntlClientProvider>

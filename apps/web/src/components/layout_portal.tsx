@@ -2,52 +2,55 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
+type Slots = Record<string, React.ReactNode>;
+
 export const LayoutPortalContext = createContext<{
   title?: string | null;
   setTitle: (title: string | null | undefined) => void;
-  slotContent: React.ReactNode;
-  setSlotContent: (content: React.ReactNode) => void;
+  slotContents: Slots;
+  setSlotContents: React.Dispatch<React.SetStateAction<Slots>>;
 }>({
   title: null,
   setTitle: () => { },
-  slotContent: null,
-  setSlotContent: () => { }
+  slotContents: {},
+  setSlotContents: () => { }
 });
 
 export function LayoutPortalProvider({ children }: { children: React.ReactNode }) {
   const [title, setTitle] = useState<string | undefined | null>(null);
-  const [slotContent, setSlotContent] = useState<React.ReactNode>(null);
+  const [slotContents, setSlotContents] = useState<Slots>({});
 
   return (
-    <LayoutPortalContext value={{ title, setTitle, slotContent, setSlotContent }}>
+    <LayoutPortalContext value={{ title, setTitle, slotContents, setSlotContents }}>
       {children}
     </LayoutPortalContext>
   );
 }
 
-export function LayoutSlot() {
-  const { slotContent } = useContext(LayoutPortalContext);
+export function LayoutSlot({ name }: { name: string }) {
+  const { slotContents } = useContext(LayoutPortalContext);
   return (
-    <>{slotContent}</>
+    <>{slotContents[name]}</>
   );
 }
 
 type FillSlotProps = {
+  name: string;
   title?: string | null;
   children?: React.ReactNode;
 };
 
-export function FillSlot({ title, children }: FillSlotProps) {
-  const { setTitle, setSlotContent } = useContext(LayoutPortalContext);
+export function FillSlot({ name, title, children }: FillSlotProps) {
+  const { setTitle, setSlotContents } = useContext(LayoutPortalContext);
 
   useEffect(() => {
     setTitle(title);
-    setSlotContent(children);
+    setSlotContents((prevSlots) => ({ ...prevSlots, [name]: children }));
     return () => {
       setTitle(null);
-      setSlotContent(null);
+      setSlotContents((prevSlots) => ({ ...prevSlots, [name]: undefined }));
     };
-  }, [children, setSlotContent, title, setTitle]);
+  }, [children, setSlotContents, title, setTitle]);
 
   return null;
 }
