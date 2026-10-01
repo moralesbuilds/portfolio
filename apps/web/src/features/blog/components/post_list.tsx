@@ -1,6 +1,6 @@
 import { BlogPostItem } from "@moralesbuilds/contents-db";
 import PostItem from "./post_item";
-import { EmptyPostList } from "./empty_post_list";
+import { EmptyListBanner } from "@/components";
 
 type PostListProps = {
   items?: BlogPostItem[] | null;
@@ -27,7 +27,7 @@ export function PostList({ items, readMoreLabel, emptyTitle, emptyDescritpion }:
           />))}
         </ul>
       ) : (
-        <EmptyPostList title={emptyTitle} description={emptyDescritpion} />
+        <EmptyListBanner title={emptyTitle} description={emptyDescritpion} />
       )}
     </div>
   );

@@ -1,22 +1,24 @@
 import { FillSlot, PageNavigation } from "@/components";
 import { PostList } from "@/features/blog";
 import { queryToNumber, type SearchParams } from "@/lib/query";
-import { fetchBlogPosts, getDb } from "@moralesbuilds/contents-db";
+import { fetchBlogPosts, getDb, type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 type BlogListPageProps = {
   searchParams: SearchParams;
 };
 
 export default async function BlogListPage({ searchParams }: BlogListPageProps) {
+  const t = await getTranslations("blog");
+  const locale = await getLocale() as Locale;
+
   const resolvedParams = await searchParams;
   const pageIndex = queryToNumber(resolvedParams.page, 1);
 
   const { env } = await getCloudflareContext({ async: true });
   const db = getDb(env.CONTENTS_DB);
-  const page = await fetchBlogPosts(db, { pageIndex });
-  const t = await getTranslations("blog");
+  const page = await fetchBlogPosts(db, { locale, pageIndex });
 
   return (
     <>
