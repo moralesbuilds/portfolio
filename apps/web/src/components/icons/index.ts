@@ -7,3 +7,4 @@ export { PageIcon } from "./page";
 export { RightArrowIcon } from "./right_arrow";
 export { WarningIcon } from "./warning";
 export { XIcon } from "./x";
+export { ExternalLinkIcon } from "./external_link";
