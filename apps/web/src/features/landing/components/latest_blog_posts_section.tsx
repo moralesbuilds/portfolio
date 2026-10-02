@@ -20,11 +20,13 @@ export async function LatestBlogPostsSection() {
       </h2>
 
       {/* Posts list */}
-      {hasItems && <div className="flex flex-col border border-slate-200 p-6 bg-white shadow-sm space-y-6">
-        {blogPosts.map((b) => (<LatestPostItem key={b.id} title={b.title} publishedAt={b.publishedAt} slug={b.slug} />))}
-      </div>}
-
-      {!hasItems && <EmptyListBanner title={t("empty_title")} description={t("empty_description")} />}
+      {hasItems ? (
+        <div className="flex flex-col border border-slate-200 p-6 bg-white shadow-sm space-y-6">
+          {blogPosts.map((b) => (<LatestPostItem key={b.id} title={b.title} publishedAt={b.publishedAt} slug={b.slug} />))}
+        </div>
+      ) : (
+        <EmptyListBanner title={t("empty_title")} description={t("empty_description")} />
+      )}
     </section>
   );
 }
