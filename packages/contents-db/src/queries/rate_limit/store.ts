@@ -5,14 +5,14 @@ export function createRateLimitStore(db: Db): RateLimitStore {
   return {
     async record(key, now) {
       await db
-        .prepare("INSERT INTO rate_limit_hits (key, created_at) VALUES (?, ?)")
+        .prepare("INSERT INTO rate_limit_hits (key, created_at) VALUES (?1, ?2)")
         .bind(key, now)
         .run();
     },
 
     async countSince(key, since) {
       const row = await db
-        .prepare("SELECT COUNT(*) AS n FROM rate_limit_hits WHERE key = ? AND created_at > ?")
+        .prepare("SELECT COUNT(*) AS n FROM rate_limit_hits WHERE key = ?1 AND created_at > ?2")
         .bind(key, since)
         .first<{ n: number }>();
       return row?.n ?? 0;
@@ -20,7 +20,7 @@ export function createRateLimitStore(db: Db): RateLimitStore {
 
     async prune(before) {
       await db
-        .prepare("DELETE FROM rate_limit_hits WHERE created_at < ?")
+        .prepare("DELETE FROM rate_limit_hits WHERE created_at < ?3")
         .bind(before)
         .run();
     }

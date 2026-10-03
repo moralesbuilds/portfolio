@@ -10,7 +10,8 @@ export async function fetchBlogPostDetails(db: Db, params: FetchBlogPostDetailsP
   const locale = params?.locale ?? 'en';
   const slug = params?.slug || (() => { throw new Error("Slug is required"); })();
 
-  const item = await db.prepare(`
+  const item = await db
+    .prepare(`
       SELECT p.id, p.slug, p.title, p.locale, p.published_at AS publishedAt, c.label AS category, json_group_array(t.label) AS tags_str
       FROM blog_posts p
       JOIN categories c ON p.category_id = c.id
@@ -25,8 +26,8 @@ export async function fetchBlogPostDetails(db: Db, params: FetchBlogPostDetailsP
   }
 
   const { tags_str, ...rest } = item;
-  return { 
-    ...rest, 
+  return {
+    ...rest,
     tags: tags_str ? JSON.parse(tags_str) : undefined,
   };
 }
