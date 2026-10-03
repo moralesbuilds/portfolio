@@ -1,9 +1,14 @@
 import { CodeIcon, ExternalLinkIcon } from "@/components/icons";
 import { LatestPostItem } from "@/features/blog";
+import { getProjectSummaryFilename } from "@/features/project/utils/contents";
 import { fetchProjectDetails } from "@/features/project/utils/db";
 import { getDb, type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import matter from "gray-matter";
 import { getLocale, getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 type ProjectDetailsPageProps = {
   params: Promise<{ slug: string }>;
@@ -17,6 +22,14 @@ export default async function ProjectDetailsPage({ params }: ProjectDetailsPageP
   const locale = await getLocale() as Locale;
   const details = (await fetchProjectDetails(db, { locale, slug }))!;
 
+  const filename = getProjectSummaryFilename(details);
+  const object = await env.BLOG_CONTENTS.get(filename);
+  if (!object) {
+    notFound();
+  }
+
+  const raw = await object.text();
+  const { data: _, content } = matter(raw);
   const hasRelatedBlogPosts = (details.relatedBlogPosts?.length ?? 0) > 0;
 
   return (
@@ -26,11 +39,9 @@ export default async function ProjectDetailsPage({ params }: ProjectDetailsPageP
       <div className="lg:col-span-8 space-y-12">
         {/* Markdown Content */}
         <article className="prose max-w-none mx-auto">
-          <div className="flex items-center justify-center bg-slate-50 border-2 border-dashed border-slate-200 rounded-lg p-6">
-            <p className="text-sm font-mono text-slate-500 text-center">
-              &lt;!-- Insert Markdown Content Renderer Here --&gt;
-            </p>
-          </div>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {content}
+          </ReactMarkdown>
         </article>
 
         {/* Related blog post sections */}
@@ -58,7 +69,7 @@ export default async function ProjectDetailsPage({ params }: ProjectDetailsPageP
             {t("repository")}
           </span>
 
-          <a href="https://github.com/example/project" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-between w-full text-sm font-semibold text-slate-800 hover:text-indigo-600 transition-colors group">
+          <a href={details.repositoryUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-between w-full text-sm font-semibold text-slate-800 hover:text-indigo-600 transition-colors group">
             <span className="inline-flex items-center gap-2">
               <CodeIcon className="h-4 w-4 text-slate-500 group-hover:text-indigo-600 transition-colors" />
               {details.repositoryUrl}
