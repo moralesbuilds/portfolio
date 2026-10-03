@@ -115,6 +115,11 @@
     "section_title": "Featured Projects / Study cases",
     "view_details": "View Details",
     "see_all": "See all projects",
+    "summary": "Summary",
+    "featured": "Featured",
+    "related_blogs": "Related Blog Posts",
+    "details": "Project Details",
+    "repository": "Repository",
     "projects": [
       {
         "key": "htor",
