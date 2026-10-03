@@ -1,7 +1,30 @@
 import React from "react";
+import { notFound } from "next/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
 import { FillSlot, Tab, Tabs, Tag } from "@/components";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { getDb, type Locale } from "@moralesbuilds/contents-db";
+import { fetchProjectDetails } from "@/features/project/utils/db";
 
-export default async function ProjectDetailsLayout({ children }: { children: React.ReactNode }) {
+type ProjectDetailsLayoutProps = {
+  params: Promise<{ slug: string }>;
+  children: React.ReactNode;
+};
+
+export default async function ProjectDetailsLayout({ params, children }: ProjectDetailsLayoutProps) {
+  const t = await getTranslations("project");
+  const { slug } = await params;
+  const { env } = await getCloudflareContext({ async: true });
+  const db = getDb(env.CONTENTS_DB);
+  const locale = await getLocale() as Locale;
+
+  const details = await fetchProjectDetails(db, { locale, slug });
+  if (!details) {
+    notFound();
+  }
+
+  const hasTags = (details.tags?.length ?? 0) > 0;
+
   return (
     <>
       <FillSlot name="banner">
@@ -17,29 +40,28 @@ export default async function ProjectDetailsLayout({ children }: { children: Rea
 
       <FillSlot name="title">
         <div className="space-y-2">
-          <div>
+          {details.isFeatured && <div>
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/60">
-              Featured
+              {t("featured")}
             </span>
-          </div>
+          </div>}
 
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
-            Project tile
+            {details.title}
           </h1>
           <p className="sm:text-lg text-gray-600 leading-relaxed max-w-3xl">
-            Project summary
+            {details.summary}
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-2 pt-2">
-          <Tag label="TypeScript" />
-          <Tag label="Cloudflare Workers" />
-        </div>
+        {hasTags && <div className="flex flex-wrap gap-2 pt-2">
+          {details.tags?.map((t) => (<Tag key={t} label={t} />))}
+        </div>}
       </FillSlot>
 
       {/* Navigation Tabs */}
       <Tabs>
-        <Tab href="#" exact>Summary</Tab>
+        <Tab href="#" exact>{t("summary")}</Tab>
       </Tabs>
 
       {/* Tab content */}

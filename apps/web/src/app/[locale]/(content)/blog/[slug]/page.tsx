@@ -1,6 +1,7 @@
 import { Date, FillSlot, Tag } from "@/components";
 import { getBlogPostFilename } from "@/features/blog/utils/contents";
-import { fetchBlogPostDetails, getDb, type Locale } from "@moralesbuilds/contents-db";
+import { fetchBlogPostDetails } from "@/features/blog/utils/db";
+import { getDb, type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import matter from "gray-matter";
 import { getLocale, getTranslations } from "next-intl/server";
