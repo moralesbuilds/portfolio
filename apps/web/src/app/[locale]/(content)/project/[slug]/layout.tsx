@@ -1,6 +1,5 @@
-import { FillSlot, Tag } from "@/components";
-import { Link } from "@/i18n/navigation";
 import React from "react";
+import { FillSlot, Tab, Tabs, Tag } from "@/components";
 
 export default async function ProjectDetailsLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -39,18 +38,9 @@ export default async function ProjectDetailsLayout({ children }: { children: Rea
       </FillSlot>
 
       {/* Navigation Tabs */}
-      <div className="border-b border-slate-200">
-        <nav className="-mb-px flex space-x-8 text-sm font-semibold" aria-label="Project Tabs">
-          <Link href="#" className="border-b-2 border-indigo-600 py-4 text-indigo-600 flex items-center gap-2" aria-current="page">
-            <span>Summary</span>
-          </Link>
-
-          <Link href="#" className="border-b-2 border-transparent py-4 text-slate-500 hover:border-slate-300 hover:text-slate-700 transition-colors">
-            Details
-          </Link>
-        </nav>
-      </div>
-
+      <Tabs>
+        <Tab href="#" exact>Summary</Tab>
+      </Tabs>
 
       {/* Tab content */}
       {children}
