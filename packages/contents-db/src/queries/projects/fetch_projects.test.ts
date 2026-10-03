@@ -50,4 +50,24 @@ describe("fetchProjects", () => {
     expect(posts.items).toHaveLength(1);
     expect(posts.items?.map((p) => p.slug)).toEqual(["es-project"]);
   });
+
+  test("fetchs only featured projects", async () => {
+    const db = getDb(env.CONTENTS_DB);
+    await seedProject(db, { name: "project-1", slug: "project-1", title: "Project 1", summary: "Summary 1", publishedAt: "2026-10-01T00:00:00.000Z", locale: "en", status: "published" });
+    await seedProject(db, { name: "project-2", slug: "project-2", title: "Project 2", summary: "Summary 2", publishedAt: "2026-10-02T00:00:00.000Z", locale: "en", status: "published", isFeatured: true });
+  
+    const posts = await fetchProjects(db, { locale: "en", pageSize: 3, onlyFeatured: true });
+    expect(posts.count).toBe(1);
+    expect(posts.size).toBe(3);
+    expect(posts.items).toHaveLength(1);
+    expect(posts.items?.map((p) => p.slug)).toEqual(["project-2"]);
+  });
+
+  test("returns empty page when there are not published projects", async () => {
+    const db = getDb(env.CONTENTS_DB);
+    const posts = await fetchProjects(db, { locale: "en", pageSize: 3, onlyFeatured: false });
+    expect(posts.count).toBe(0);
+    expect(posts.size).toBe(3);
+    expect(posts.items).toHaveLength(0);
+  });
 });
