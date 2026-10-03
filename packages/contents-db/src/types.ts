@@ -38,6 +38,8 @@ export interface RateLimitStore {
   prune(before: number): Promise<void>;
 };
 
+export type RelatedBlogPost = Pick<BlogPostItem, "id" | "title" | "publishedAt" | "slug">;
+
 export type Project = {
   id?: number;
   name?: string;
@@ -50,4 +52,5 @@ export type Project = {
   isFeatured?: boolean;
   status?: "published" | "draft" | "archived";
   publishedAt?: string;
+  relatedBlogPosts?: RelatedBlogPost[];
 };

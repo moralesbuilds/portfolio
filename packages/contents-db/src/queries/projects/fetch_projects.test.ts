@@ -2,21 +2,29 @@ import { describe, expect, test } from "vitest";
 import { getDb } from "../../client";
 import { env } from "cloudflare:workers";
 import { fetchProjects } from "./fetch_projects";
-import { seedProject } from "../../../test/seed/projects";
+import { seedProject, seedProjectTag } from "../../../test/seed/projects";
+import { seedTag } from "../../../test/seed/tags";
 
 describe("fetchProjects", () => {
   test("returns published projects for the locale, newest first, respecting the page size", async () => {
     const db = getDb(env.CONTENTS_DB);
     await seedProject(db, { name: "project-1", slug: "project-1", title: "Project 1", summary: "Summary 1", publishedAt: "2026-10-01T00:00:00.000Z", locale: "en", status: "published" });
     await seedProject(db, { name: "project-2", slug: "project-2", title: "Project 2", summary: "Summary 2", publishedAt: "2026-10-02T00:00:00.000Z", locale: "en", status: "published" });
-    await seedProject(db, { name: "project-3", slug: "project-3", title: "Project 3", summary: "Summary 3", publishedAt: "2026-10-03T00:00:00.000Z", locale: "en", status: "published", tags: ["a", "b", "c"] });
+  
+    const projectId = await seedProject(db, { name: "project-3", slug: "project-3", title: "Project 3", summary: "Summary 3", publishedAt: "2026-10-03T00:00:00.000Z", locale: "en", status: "published", tags: ["a", "b", "c"] });
+    const tagAId = await seedTag(db, { name: "a", locale: "en", slug: "a", label: "A" });
+    const tagBId = await seedTag(db, { name: "b", locale: "en", slug: "b", label: "B" });
+    const tagCId = await seedTag(db, { name: "c", locale: "en", slug: "c", label: "C" })
+    await seedProjectTag(db, { projectId, tagId: tagAId });
+    await seedProjectTag(db, { projectId, tagId: tagBId });
+    await seedProjectTag(db, { projectId, tagId: tagCId });
 
     const posts = await fetchProjects(db, { locale: "en", pageSize: 2 });
     expect(posts.count).toBe(3);
     expect(posts.size).toBe(2);
     expect(posts.items).toHaveLength(2);
     expect(posts.items?.map((p) => p.slug)).toEqual(["project-3", "project-2"]);
-    expect(posts.items?.[0].tags).toEqual(["a", "b", "c"]);
+    expect(posts.items?.[0].tags).toEqual(["A", "B", "C"]);
     expect(posts.items?.[1].tags).toBeNullable();
   });
 
