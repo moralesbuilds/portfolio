@@ -8,3 +8,4 @@ export { fetchBlogPostDetails } from "./queries/blog_posts/fetch_blog_post_detai
 export { createLead } from "./queries/leads/create_lead";
 export { createRateLimitStore } from "./queries/rate_limit/store";
 export { fetchProjects } from "./queries/projects/fetch_projects";
+export { fetchProjectDetails } from "./queries/projects/fetch_project_details";

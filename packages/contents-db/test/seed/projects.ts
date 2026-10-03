@@ -1,19 +1,10 @@
 import type { Db, Project } from "../../src";
 
-export async function seedProject(db: Db, project: Project) {
-  let tags: number[] = [];
-  if ((project.tags?.length ?? 0) > 0) {
-    const statements = project.tags?.map((t) => db.prepare(
-      "INSERT INTO tags (name, slug, label, locale) VALUES (?1, ?2, ?3, ?4) RETURNING id"
-    ).bind(t, t, t, project.locale))!;
-    const batchResults = await db.batch<{ id: number }>(statements);
-    tags = batchResults.map((statementResult) => statementResult.results[0].id);
-  }
-
+export async function seedProject(db: Db, project: Project): Promise<number> {
   const result = await db
     .prepare(
       `INSERT INTO projects (name, locale, slug, title, summary, repository_url, status, is_featured, author_id, published_at, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, 1, ?9, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
       RETURNING id`
     )
     .bind(
@@ -28,12 +19,43 @@ export async function seedProject(db: Db, project: Project) {
       project.publishedAt
     )
     .first<{ id: number }>();
+  return result!.id;
+}
 
-  if (tags.length > 0) {
-    const pid = result?.id;
-    const statements = tags.map((tid) => db.prepare(
-      "INSERT INTO project_tags (project_id, tag_id) VALUES (?1, ?2)"
-    ).bind(pid, tid));
-    await db.batch(statements);
+export async function seedProjectTag(
+  db: Db,
+  overrides: {
+    projectId: number;
+    tagId: number;
   }
+) {
+  await db
+    .prepare(
+      `INSERT INTO project_tags (project_id, tag_id)
+      VALUES (?1, ?2)`
+    )
+    .bind(
+      overrides.projectId,
+      overrides.tagId
+    )
+    .run();
+}
+
+export async function seedProjectBlogPost(
+  db: Db,
+  overrides: {
+    projectId: number;
+    blogPostId: number
+  }
+) {
+  await db
+    .prepare(
+      `INSERT INTO project_blog_posts (project_id, blog_post_id)
+      VALUES (?1, ?2)`
+    )
+    .bind(
+      overrides.projectId,
+      overrides.projectId
+    )
+    .run();
 }
