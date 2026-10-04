@@ -5,6 +5,7 @@ import { FillSlot, Tab, Tabs, Tag } from "@/components";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getDb, type Locale } from "@moralesbuilds/contents-db";
 import { fetchProjectDetails } from "@/features/project/utils/db";
+import { getProjectLink } from "@/features/project/utils/link";
 
 type ProjectDetailsLayoutProps = {
   params: Promise<{ slug: string }>;
@@ -24,6 +25,7 @@ export default async function ProjectDetailsLayout({ params, children }: Project
   }
 
   const hasTags = (details.tags?.length ?? 0) > 0;
+  const link = getProjectLink(details.slug!);
 
   return (
     <>
@@ -38,7 +40,7 @@ export default async function ProjectDetailsLayout({ params, children }: Project
         </div>
       </FillSlot>
 
-      <FillSlot name="title">
+      <FillSlot name="title" title={details.title}>
         <div className="space-y-2">
           {details.isFeatured && <div>
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/60">
@@ -61,7 +63,7 @@ export default async function ProjectDetailsLayout({ params, children }: Project
 
       {/* Navigation Tabs */}
       <Tabs>
-        <Tab href="#" exact>{t("summary")}</Tab>
+        <Tab href={link} exact>{t("summary")}</Tab>
       </Tabs>
 
       {/* Tab content */}

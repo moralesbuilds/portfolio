@@ -1,5 +1,5 @@
 import { Tag, Date } from "@/components";
-import { getLink } from "../utils/link";
+import { getBlogPostLink } from "../utils/link";
 import { Link } from "@/i18n/navigation";
 
 type PostItemProps = {
@@ -12,7 +12,7 @@ type PostItemProps = {
 };
 
 export default function PostItem({ publishedAt, category, slug, title, summary, readMoreLabel }: PostItemProps) {
-  const link = getLink(slug);
+  const link = getBlogPostLink(slug);
 
   return (
     <li className="py-6 first:pt-0 last:pb-0 flex flex-col md:flex-row md:items-start gap-4 md:gap-8">

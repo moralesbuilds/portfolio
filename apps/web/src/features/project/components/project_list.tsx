@@ -17,9 +17,10 @@ export function ProjectList({ items, viewDetailsLabel, emptyTitle, emptyDescript
       {items!.map((p) => (
         <ProjectCard
           key={p.id}
+          slug={p.slug!}
           image=""
           title={p.title!}
-          description={p.summary!}
+          summary={p.summary!}
           viewDetailsLabel={viewDetailsLabel}
           tags={p.tags}
         />
