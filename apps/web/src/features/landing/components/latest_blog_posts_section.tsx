@@ -28,13 +28,8 @@ export async function LatestBlogPostsSection() {
 
       {/* Posts list */}
       <div className="w-full p-6 bg-base border border-gray-200 rounded-md shadow-sm">
-        {hasItems ? (
-          <div className="flex flex-col border border-slate-200 p-6 bg-white shadow-sm space-y-6">
-            {blogPosts.map((b) => (<LatestPostItem key={b.id} title={b.title} publishedAt={b.publishedAt} slug={b.slug} />))}
-          </div>
-        ) : (
-          <EmptyListBanner title={t("empty_title")} description={t("empty_description")} />
-        )}
+        {hasItems ? blogPosts.map((b) => (<LatestPostItem key={b.id} title={b.title} publishedAt={b.publishedAt} slug={b.slug} />))
+          : (<EmptyListBanner title={t("empty_title")} description={t("empty_description")} />)}
       </div>
     </section>
   );

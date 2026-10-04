@@ -1,3 +1,3 @@
-export function getLink(slug: string): string {
+export function getBlogPostLink(slug: string): string {
   return `/blog/${slug}`;
 }
