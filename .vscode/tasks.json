@@ -15,6 +15,21 @@
       "label": "Wipe local D1 databases",
       "type": "shell",
       "command": "rm -rf apps/web/.wrangler/state/v3/d1"
+    },
+    {
+      "label": "Create tag",
+      "type": "shell",
+      "command": "./scripts/create_tag.sh ${input:name} ${input:locale} ${input:slug} ${input:label} --${input:local-or-remote}"
+    },
+    {
+      "label": "Upload Project",
+      "type": "shell",
+      "command": "uv run ./scripts/upload_project.py ${input:content-filename} --${input:local-or-remote}"
+    },
+    {
+      "label": "Upload Blog post",
+      "type": "shell",
+      "command": "uv run ./scripts/upload_blog_post.py ${input:content-filename} --${input:local-or-remote}"
     }
   ],
   "inputs": [
@@ -22,6 +37,46 @@
       "id": "migration-name",
       "type": "promptString",
       "description": "Name of the migration file"
+    },
+    {
+      "id": "name",
+      "type": "promptString",
+      "description": "Name of the record"
+    },
+    {
+      "id": "locale",
+      "type": "pickString",
+      "description": "Locale of the record",
+      "options": [
+        "en",
+        "es"
+      ],
+      "default": "en"
+    },
+    {
+      "id": "slug",
+      "type": "promptString",
+      "description": "Slug of the record",
+    },
+    {
+      "id": "label",
+      "type": "promptString",
+      "description": "Human readable text for the record"
+    },
+    {
+      "id": "local-or-remote",
+      "type": "pickString",
+      "description": "Execute the cloudflare task locally or remotely",
+      "options": [
+        "local",
+        "remote"
+      ],
+      "default": "local"
+    },
+    {
+      "id": "content-filename",
+      "type": "promptString",
+      "description": "The filename of the resource to upload"
     }
   ]
 }
