@@ -13,8 +13,9 @@ type ProjectListPageProps = {
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("project");
   return {
-    title: t("short_title")
-  }
+    title: t("short_title"),
+    description: t("brief")
+  };
 }
 
 export default async function ProjectListPage({ searchParams }: ProjectListPageProps) {

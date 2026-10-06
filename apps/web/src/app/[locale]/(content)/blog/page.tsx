@@ -13,8 +13,9 @@ type BlogListPageProps = {
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("blog");
   return {
-    title: t("title")
-  }
+    title: t("title"),
+    description: t("brief")
+  };
 }
 
 export default async function BlogListPage({ searchParams }: BlogListPageProps) {
