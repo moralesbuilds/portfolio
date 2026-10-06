@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useContext } from "react";
-import { Link, usePathname } from "@/i18n/navigation";
+import React from "react";
 import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 
 type BreadcrumbsProps = { title?: string | null };
 

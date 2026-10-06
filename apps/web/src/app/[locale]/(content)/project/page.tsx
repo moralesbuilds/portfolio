@@ -1,5 +1,4 @@
-import { PageNavigation } from "@/components";
-import { PageHeader } from "@/components/page_header";
+import { PageNavigation, PageHeader } from "@/components";
 import { ProjectList } from "@/features/project/components/project_list";
 import { queryToNumber, type SearchParams } from "@/lib/query";
 import { fetchProjects, getDb, type Locale } from "@moralesbuilds/contents-db";
@@ -25,14 +24,12 @@ export default async function ProjectListPage({ searchParams }: ProjectListPageP
     <>
       {/* Page title & description */}
       <PageHeader>
-        <div className="space-y-2">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
-            {t("title")}
-          </h1>
-          <p className="sm:text-lg text-gray-600 leading-relaxed max-w-3xl">
-            {t("brief")}
-          </p>
-        </div>
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
+          {t("title")}
+        </h1>
+        <p className="sm:text-lg text-gray-600 leading-relaxed max-w-3xl">
+          {t("brief")}
+        </p>
       </PageHeader>
 
       <ProjectList

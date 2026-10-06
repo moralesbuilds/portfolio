@@ -1,5 +1,4 @@
-import { PageNavigation } from "@/components";
-import { PageHeader } from "@/components/page_header";
+import { PageNavigation, PageHeader } from "@/components";
 import { PostList } from "@/features/blog";
 import { queryToNumber, type SearchParams } from "@/lib/query";
 import { fetchBlogPosts, getDb, type Locale } from "@moralesbuilds/contents-db";
