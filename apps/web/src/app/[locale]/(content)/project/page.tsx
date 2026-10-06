@@ -3,11 +3,19 @@ import { ProjectList } from "@/features/project/components/project_list";
 import { queryToNumber, type SearchParams } from "@/lib/query";
 import { fetchProjects, getDb, type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { type Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 type ProjectListPageProps = {
   searchParams: SearchParams;
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("project");
+  return {
+    title: t("short_title")
+  }
+}
 
 export default async function ProjectListPage({ searchParams }: ProjectListPageProps) {
   const t = await getTranslations("project");

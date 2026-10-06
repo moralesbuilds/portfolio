@@ -3,11 +3,19 @@ import { PostList } from "@/features/blog";
 import { queryToNumber, type SearchParams } from "@/lib/query";
 import { fetchBlogPosts, getDb, type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { type Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 type BlogListPageProps = {
   searchParams: SearchParams;
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("blog");
+  return {
+    title: t("title")
+  }
+}
 
 export default async function BlogListPage({ searchParams }: BlogListPageProps) {
   const t = await getTranslations("blog");
