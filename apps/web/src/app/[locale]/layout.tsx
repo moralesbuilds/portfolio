@@ -1,6 +1,6 @@
 import "../app.css";
 import { routing } from "@/i18n/routing";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -21,18 +21,23 @@ const inter = Inter({
   display: 'swap'
 });
 
-export const metadata: Metadata = {
-  title: {
-    template: "%s | Moralesbuilds",
-    default: "Moralesbuilds"
-  }
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const b = await getTranslations("brands");
+  const brand = b("own");
+  return {
+    title: {
+      template: `%s | ${brand}`,
+      default: brand
+    }
+  };
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale();
   const t = await getTranslations("root");
   const b = await getTranslations("brands");
   const { env } = await getCloudflareContext({ async: true });
@@ -44,7 +49,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const xUrl = env.X_URL;
 
   return (
-    <html lang="en" className={`${inter.variable} ${jetBrainsMono.variable}`}>
+    <html lang={locale} className={`${inter.variable} ${jetBrainsMono.variable}`}>
       <body className="flex flex-col min-h-screen w-full bg-base">
         <NextIntlClientProvider>
           <Header

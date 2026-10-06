@@ -2,7 +2,7 @@ import { CodeIcon, ExternalLinkIcon } from "@/components/icons";
 import { LatestPostItem } from "@/features/blog";
 import { getProjectSummaryFilename } from "@/features/project/utils/contents";
 import { fetchProjectDetails } from "@/features/project/utils/db";
-import { getDb, type Locale } from "@moralesbuilds/contents-db";
+import { type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import matter from "gray-matter";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -18,9 +18,8 @@ export default async function ProjectDetailsPage({ params }: ProjectDetailsPageP
   const t = await getTranslations("project");
   const { slug } = await params;
   const { env } = await getCloudflareContext({ async: true });
-  const db = getDb(env.CONTENTS_DB);
   const locale = await getLocale() as Locale;
-  const details = await fetchProjectDetails(db, { locale, slug });
+  const details = await fetchProjectDetails(locale, slug);
   if (!details) {
     notFound();
   }
