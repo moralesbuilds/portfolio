@@ -16,11 +16,11 @@ def insert_project_sql(post):
   slug = post.metadata['slug'].replace("'", "''")
   title = post.metadata['title'].replace("'", "''")
   summary = post.metadata['summary'].replace("'", "''")
-  repository_url = post.metadata['repository_url'].replace("'", "''")
-  is_featured = int(post.metadata['is_featured'])
+  repository_url = f"'{post.metadata['repository_url'].replace("'", "''")}'" if "repository_url" in post.metadata else 'NULL'
+  is_featured = int(post.metadata['is_featured']) if "is_featured" in post.metadata else 0
   return (
     "INSERT INTO projects (name, locale, slug, title, summary, repository_url, author_id, status, is_featured, published_at, created_at, updated_at) "
-    f"VALUES ('{name}', '{locale}', '{slug}', '{title}', '{summary}', '{repository_url}', 1, 'published', {is_featured}, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), NULL) "
+    f"VALUES ('{name}', '{locale}', '{slug}', '{title}', '{summary}', {repository_url}, 1, 'published', {is_featured}, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), NULL) "
     "ON CONFLICT (name, locale) "
     "DO UPDATE SET title = excluded.title, summary = excluded.summary, repository_url = excluded.repository_url, is_featured = excluded.is_featured, updated_at = strftime('%Y-%m-%dT%H:%M:%SZ', 'now') "
     "RETURNING id;"
