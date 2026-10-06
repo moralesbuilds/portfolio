@@ -3,12 +3,12 @@
 import React, { useContext } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { LayoutPortalContext } from "./layout_portal";
 
-export function Breadcrumbs() {
+type BreadcrumbsProps = { title?: string | null };
+
+export function Breadcrumbs({ title }: BreadcrumbsProps) {
   const t = useTranslations("root");
   const pathname = usePathname();
-  const { title } = useContext(LayoutPortalContext);
   const segments = pathname.split('/').filter((segment) => segment);
 
   return (
@@ -33,7 +33,7 @@ export function Breadcrumbs() {
                 {!isLast ? (
                   <Link href={href} className="hover:text-gray-700 transition-color">{t(segment)}</Link>
                 ) : (
-                  <span className="font-medium text-gray-900" aria-current="page">{title ?? (t.has(segment) ? t(segment) : "...")}</span>
+                  <span className="font-medium text-gray-900" aria-current="page">{title ?? (t.has(segment) ? t(segment) : segment)}</span>
                 )}
               </li>
             </React.Fragment>

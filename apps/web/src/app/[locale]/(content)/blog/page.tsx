@@ -1,4 +1,5 @@
-import { FillSlot, PageNavigation } from "@/components";
+import { PageNavigation } from "@/components";
+import { PageHeader } from "@/components/page_header";
 import { PostList } from "@/features/blog";
 import { queryToNumber, type SearchParams } from "@/lib/query";
 import { fetchBlogPosts, getDb, type Locale } from "@moralesbuilds/contents-db";
@@ -23,16 +24,14 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
   return (
     <>
       {/* Page tile & description */}
-      <FillSlot name="title">
-        <div className="space-y-2">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
-            {t("title")}
-          </h1>
-          <p className="sm:text-lg text-gray-600 leading-relaxed max-w-3xl">
-            {t("brief")}
-          </p>
-        </div>
-      </FillSlot>
+      <PageHeader>
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
+          {t("title")}
+        </h1>
+        <p className="sm:text-lg text-gray-600 leading-relaxed max-w-3xl">
+          {t("brief")}
+        </p>
+      </PageHeader>
 
       <PostList
         items={page.items}

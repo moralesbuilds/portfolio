@@ -8,7 +8,6 @@ export { PageNavigation } from "./page_navigator";
 export { ExternalLink } from "./external_link";
 export { FieldErrors } from "./field_errors";
 export { SubmitButton } from "./submit_button";
-export { LayoutPortalProvider, LayoutSlot, FillSlot } from "./layout_portal";
 export { EmptyListBanner } from "./empty_list_banner";
 export { Tabs } from "./tabs";
 export { Tab } from "./tab";
