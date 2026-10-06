@@ -31,7 +31,7 @@ export default async function ProjectDetailsLayout({ params, children }: Project
   const { slug } = await params;
   const locale = await getLocale() as Locale;
 
-  const details = await fetchProjectDetails( locale, slug);
+  const details = await fetchProjectDetails(locale, slug);
   if (!details) {
     notFound();
   }

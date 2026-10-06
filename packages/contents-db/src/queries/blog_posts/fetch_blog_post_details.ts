@@ -12,7 +12,7 @@ export async function fetchBlogPostDetails(db: Db, params: FetchBlogPostDetailsP
 
   const item = await db
     .prepare(`
-      SELECT p.id, p.slug, p.title, p.locale, p.published_at AS publishedAt, c.label AS category, NULLIF(json_group_array(t.label), '[null]') AS tags_str
+      SELECT p.id, p.slug, p.title, p.locale, p.published_at AS publishedAt, c.label AS category, p.summary, NULLIF(json_group_array(t.label), '[null]') AS tags_str
       FROM blog_posts p
       JOIN categories c ON p.category_id = c.id
       LEFT JOIN blog_post_tags pbt ON p.id = pbt.blog_post_id
