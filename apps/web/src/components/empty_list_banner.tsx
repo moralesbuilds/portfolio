@@ -1,11 +1,11 @@
-import { PageIcon } from "@/components/icons";
+import { PageIcon } from "./icons";
 
-type EmptyPostList = {
+type EmptyListBannerProps = {
   title: string;
   description: string;
 };
 
-export function EmptyPostList({ title, description }: EmptyPostList) {
+export function EmptyListBanner({ title, description }: EmptyListBannerProps) {
   return (
     <div className="flex flex-col items-center justify-center max-w-sm mx-auto">
       {/* Icon placeholder */}

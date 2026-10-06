@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
-import { getLink } from "./link";
+import { getBlogPostLink } from "./link";
 
-describe("Blog link functions", () => {
+describe("getBlogPostLink", () => {
   test("returns partial link from slug", () => {
-    const link = getLink("some-blog");
+    const link = getBlogPostLink("some-blog");
     expect(link).toBe("/blog/some-blog");
   });
 });

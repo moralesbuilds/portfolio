@@ -17,6 +17,7 @@ function renderHeader() {
     <NextIntlClientProvider locale="en" messages={{}}>
       <Header
         brandLabel="My brand"
+        projectLabel="Project"
         blogLabel="Blog"
         contactLabel="Contact"
         openMenuLabel="Open menu"
@@ -34,6 +35,9 @@ describe("Header (unit)", () => {
     const brand = screen.getByLabelText("My brand");
     expect(brand).toBeInTheDocument();
 
+    const project = screen.getAllByText("Project");
+    expect(project[0]).toBeInTheDocument();
+
     const blog = screen.getAllByText("Blog");
     expect(blog[0]).toBeInTheDocument();
 
@@ -49,6 +53,9 @@ describe("Header (unit)", () => {
     
     renderHeader();
 
+    expect(screen.getByTestId("project-link")).toHaveAttribute("aria-selected", "false");
+    expect(screen.getByTestId("mobile-project-link")).toHaveAttribute("aria-selected", "false");
+
     expect(screen.getByTestId("blog-link")).toHaveAttribute("aria-selected", "false");
     expect(screen.getByTestId("mobile-blog-link")).toHaveAttribute("aria-selected", "false");
 
@@ -61,6 +68,9 @@ describe("Header (unit)", () => {
     
     renderHeader();
 
+    expect(screen.getByTestId("project-link")).toHaveAttribute("aria-selected", "false");
+    expect(screen.getByTestId("mobile-project-link")).toHaveAttribute("aria-selected", "false");
+
     expect(screen.getByTestId("blog-link")).toHaveAttribute("aria-selected", "true");
     expect(screen.getByTestId("mobile-blog-link")).toHaveAttribute("aria-selected", "true");
 
@@ -68,15 +78,48 @@ describe("Header (unit)", () => {
     expect(screen.getByTestId("mobile-contact-link")).toHaveAttribute("aria-selected", "false");
   });
 
-  test("show the blog menu as selected", () => {
+  test("show the contact menu as selected", () => {
     vi.mocked(useSelectedLayoutSegments).mockReturnValue(["contact"]);
     
     renderHeader();
+
+    expect(screen.getByTestId("project-link")).toHaveAttribute("aria-selected", "false");
+    expect(screen.getByTestId("mobile-project-link")).toHaveAttribute("aria-selected", "false");
 
     expect(screen.getByTestId("blog-link")).toHaveAttribute("aria-selected", "false");
     expect(screen.getByTestId("mobile-blog-link")).toHaveAttribute("aria-selected", "false");
 
     expect(screen.getByTestId("contact-link")).toHaveAttribute("aria-selected", "true");
     expect(screen.getByTestId("mobile-contact-link")).toHaveAttribute("aria-selected", "true");
+  });
+
+  test("show the contact menu inside a segment as selected", () => {
+    vi.mocked(useSelectedLayoutSegments).mockReturnValue(["(content)", "contact"]);
+
+    renderHeader();
+
+    expect(screen.getByTestId("project-link")).toHaveAttribute("aria-selected", "false");
+    expect(screen.getByTestId("mobile-project-link")).toHaveAttribute("aria-selected", "false");
+
+    expect(screen.getByTestId("blog-link")).toHaveAttribute("aria-selected", "false");
+    expect(screen.getByTestId("mobile-blog-link")).toHaveAttribute("aria-selected", "false");
+
+    expect(screen.getByTestId("contact-link")).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByTestId("mobile-contact-link")).toHaveAttribute("aria-selected", "true");
+  });
+
+  test("show the project menu as selected", () => {
+    vi.mocked(useSelectedLayoutSegments).mockReturnValue(["project"]);
+    
+    renderHeader();
+
+    expect(screen.getByTestId("project-link")).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByTestId("mobile-project-link")).toHaveAttribute("aria-selected", "true");
+
+    expect(screen.getByTestId("blog-link")).toHaveAttribute("aria-selected", "false");
+    expect(screen.getByTestId("mobile-blog-link")).toHaveAttribute("aria-selected", "false");
+
+    expect(screen.getByTestId("contact-link")).toHaveAttribute("aria-selected", "false");
+    expect(screen.getByTestId("mobile-contact-link")).toHaveAttribute("aria-selected", "false");
   });
 });

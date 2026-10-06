@@ -1,39 +1,36 @@
-import { Breadcrumbs, PageNavigation } from "@/components";
+import { PageNavigation, PageHeader } from "@/components";
 import { PostList } from "@/features/blog";
 import { queryToNumber, type SearchParams } from "@/lib/query";
-import { fetchBlogPosts, getDb } from "@moralesbuilds/contents-db";
+import { fetchBlogPosts, getDb, type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 type BlogListPageProps = {
   searchParams: SearchParams;
 };
 
 export default async function BlogListPage({ searchParams }: BlogListPageProps) {
+  const t = await getTranslations("blog");
+  const locale = await getLocale() as Locale;
+
   const resolvedParams = await searchParams;
   const pageIndex = queryToNumber(resolvedParams.page, 1);
 
   const { env } = await getCloudflareContext({ async: true });
   const db = getDb(env.CONTENTS_DB);
-  const page = await fetchBlogPosts(db, { pageIndex });
-  const t = await getTranslations("blog");
+  const page = await fetchBlogPosts(db, { locale, pageIndex });
 
   return (
-    <div className="w-full py-8 space-y-8">
-      {/* Header Section */}
-      <header className="space-y-4">
-        <Breadcrumbs />
-
-        {/* Page tile & description */}
-        <div className="space-y-2">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
-            {t("title")}
-          </h1>
-          <p className="sm:text-lg text-gray-600 leading-relaxed max-w-3xl">
-            {t("brief")}
-          </p>
-        </div>
-      </header>
+    <>
+      {/* Page tile & description */}
+      <PageHeader>
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
+          {t("title")}
+        </h1>
+        <p className="sm:text-lg text-gray-600 leading-relaxed max-w-3xl">
+          {t("brief")}
+        </p>
+      </PageHeader>
 
       <PostList
         items={page.items}
@@ -43,6 +40,6 @@ export default async function BlogListPage({ searchParams }: BlogListPageProps) 
       />
 
       <PageNavigation total={page.count} pageIndex={pageIndex} pageSize={page.size} />
-    </div>
+    </>
   );
 }

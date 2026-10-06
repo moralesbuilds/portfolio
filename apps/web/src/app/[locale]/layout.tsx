@@ -3,8 +3,8 @@ import { routing } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { Inter, JetBrains_Mono } from "next/font/google";
-import { Header, Container, Footer } from "@/components";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { Header, Footer } from "@/components";
 
 // Title font
 const jetBrainsMono = JetBrains_Mono({
@@ -41,6 +41,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <NextIntlClientProvider>
           <Header
             brandLabel={brandLabel}
+            projectLabel={t("project")}
             blogLabel={t("blog")}
             contactLabel={t("contact")}
             openMenuLabel={t("open_menu")}
@@ -48,8 +49,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             githubUrl={githubUrl}
           />
 
-          <Container>{children}</Container>
-          
+          <main className="grow w-full">{children}</main>
+
           <Footer
             brandLabel={brandLabel}
             githubLabel={githubLabel}

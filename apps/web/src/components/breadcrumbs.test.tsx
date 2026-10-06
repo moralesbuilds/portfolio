@@ -12,10 +12,10 @@ vi.mock('@/i18n/navigation', async (importActual) => {
   };
 });
 
-function renderBreadcrumbs(overrides?: Record<string, string>) {
+function renderBreadcrumbs(title: string | undefined | null = undefined) {
   render(
     <NextIntlClientProvider locale="en" messages={{ root: { home: "Home", parent: "Parent", leaf: "Leaf" } }}>
-      <Breadcrumbs overrides={overrides} />
+      <Breadcrumbs title={title} />
     </NextIntlClientProvider>
   );
 }
@@ -71,7 +71,7 @@ describe("Breadcrumbs (unit)", () => {
   test("display overrided leaf label", () => {
     vi.mocked(usePathname).mockReturnValue("/parent/leaf");
 
-    renderBreadcrumbs({ leaf: "My own title" });
+    renderBreadcrumbs("My own title");
 
     expect(screen.getByText("Home")).toBeInTheDocument();
     expect(screen.getByText("Parent")).toBeInTheDocument();

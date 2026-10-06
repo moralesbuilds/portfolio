@@ -37,3 +37,20 @@ export interface RateLimitStore {
   countSince(key: string, since: number): Promise<number>;
   prune(before: number): Promise<void>;
 };
+
+export type RelatedBlogPost = Pick<BlogPostItem, "id" | "title" | "publishedAt" | "slug">;
+
+export type Project = {
+  id?: number;
+  name?: string;
+  locale?: string;
+  slug?: string;
+  title?: string;
+  summary?: string;
+  repositoryUrl?: string;
+  tags?: string[];
+  isFeatured?: boolean;
+  status?: "published" | "draft" | "archived";
+  publishedAt?: string;
+  relatedBlogPosts?: RelatedBlogPost[];
+};
