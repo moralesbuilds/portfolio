@@ -10,7 +10,9 @@ export function PageHeader({ breadcrumbTitle, children }: PageHeaderProps) {
   return (
     <header className="space-y-4">
       <Breadcrumbs title={breadcrumbTitle} />
-      {children}
+      <div className="space-y-2">
+        {children}
+      </div>
     </header>
   );
 }

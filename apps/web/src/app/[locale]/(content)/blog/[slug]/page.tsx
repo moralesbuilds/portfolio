@@ -1,5 +1,4 @@
-import { Date, Tag } from "@/components";
-import { PageHeader } from "@/components/page_header";
+import { Date, Tag, PageHeader } from "@/components";
 import { getBlogPostFilename } from "@/features/blog/utils/contents";
 import { fetchBlogPostDetails } from "@/features/blog/utils/db";
 import { getDb, type Locale } from "@moralesbuilds/contents-db";
@@ -40,18 +39,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     <>
       {/* Title */}
       <PageHeader breadcrumbTitle={details.title}>
-        <div className="space-y-2">
-          <div>
-            <Tag label={details.category} />
-          </div>
-
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
-            {details.title}
-          </h1>
-          <p className="sm:text-md text-gray-600 leading-relaxed max-w-3xl">
-            <Date value={details.publishedAt} />
-          </p>
+        <div>
+          <Tag label={details.category} />
         </div>
+
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
+          {details.title}
+        </h1>
+        <p className="sm:text-md text-gray-600 leading-relaxed max-w-3xl">
+          <Date value={details.publishedAt} />
+        </p>
       </PageHeader>
 
       {/* The content */}

@@ -1,12 +1,11 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
-import { Container, Tab, Tabs, Tag } from "@/components";
+import { Container, Tab, Tabs, Tag, PageHeader } from "@/components";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getDb, type Locale } from "@moralesbuilds/contents-db";
 import { fetchProjectDetails } from "@/features/project/utils/db";
 import { getProjectLink } from "@/features/project/utils/link";
-import { PageHeader } from "@/components/page_header";
 
 type ProjectDetailsLayoutProps = {
   params: Promise<{ slug: string }>;
@@ -33,7 +32,7 @@ export default async function ProjectDetailsLayout({ params, children }: Project
       <div className="w-full h-64 sm:h-80 md:h-95 bg-slate-900 border-b border-slate-200 relative overflow-hidden">
         <img
           src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1920&q=80"
-          alt="Project Banner Placeholder"
+          alt=""
           className="w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 via-slate-900/40 to-transparent"></div>
@@ -68,7 +67,7 @@ export default async function ProjectDetailsLayout({ params, children }: Project
           {/* Tab content */}
           {children}
         </div>
-      </Container >
+      </Container>
     </>
   );
 }

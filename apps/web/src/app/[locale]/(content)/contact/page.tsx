@@ -1,6 +1,5 @@
-import { ExternalLink } from "@/components";
+import { ExternalLink, PageHeader } from "@/components";
 import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/icons";
-import { PageHeader } from "@/components/page_header";
 import { ContactForm } from "@/features/contact";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getTranslations } from "next-intl/server";
