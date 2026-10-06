@@ -63,7 +63,7 @@ describe("fetchProjects", () => {
     expect(posts.items?.map((p) => p.slug)).toEqual(["project-2"]);
   });
 
-  test("returns empty page when there are not published projects", async () => {
+  test("returns empty page when there are no published projects", async () => {
     const db = getDb(env.CONTENTS_DB);
     const posts = await fetchProjects(db, { locale: "en", pageSize: 3, onlyFeatured: false });
     expect(posts.count).toBe(0);
