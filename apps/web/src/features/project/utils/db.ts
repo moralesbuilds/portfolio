@@ -1,4 +1,8 @@
 import { cache } from "react";
-import { fetchProjectDetails as _fetchProjectDetails } from "@moralesbuilds/contents-db";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { fetchProjectDetails as _fetchProjectDetails, getDb, type Locale } from "@moralesbuilds/contents-db";
 
-export const fetchProjectDetails = cache(_fetchProjectDetails);
+export const fetchProjectDetails = cache(async (locale: Locale, slug: string) => {
+  const { env } = await getCloudflareContext({ async: true });
+  return _fetchProjectDetails(getDb(env.CONTENTS_DB), { locale, slug });
+});

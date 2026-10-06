@@ -21,21 +21,22 @@ describe("fetchBlogPostDetails", () => {
 
   test("returns published blog post details for the locale by slug", async () => {
     const db = getDb(env.CONTENTS_DB);
-    const blogPostId = await seedBlogPost(db, { name: "post-1", slug: "post-1", title: "Post 1", publishedAt: "2026-10-02T00:00:00.000Z", categoryId: categoryEnId });
+    const blogPostId = await seedBlogPost(db, { name: "post-1", slug: "post-1", title: "Post 1", summary: "This summary", publishedAt: "2026-10-02T00:00:00.000Z", categoryId: categoryEnId });
     const tagXId = await seedTag(db, { name: "x", locale: "en", slug: "x", label: "X" });
     const tagYId = await seedTag(db, { name: "y", locale: "en", slug: "y", label: "Y" });
     await seedBlogPostTag(db, { blogPostId, tagId: tagXId });
     await seedBlogPostTag(db, { blogPostId, tagId: tagYId });
 
-    const blogPost = await fetchBlogPostDetails(db, { slug: "post-1", locale: "en" });
+    const blogPost = (await fetchBlogPostDetails(db, { slug: "post-1", locale: "en" }))!;
     expect(blogPost).not.toBeNull();
-    expect(blogPost!.id).toBeGreaterThan(0);
-    expect(blogPost!.category).toBe("Test");
-    expect(blogPost!.locale).toBe("en");
-    expect(blogPost!.publishedAt).toBe("2026-10-02T00:00:00.000Z");
-    expect(blogPost!.slug).toBe("post-1");
-    expect(blogPost!.title).toBe("Post 1");
-    expect(blogPost!.tags).toEqual(["X", "Y"]);
+    expect(blogPost.id).toBeGreaterThan(0);
+    expect(blogPost.category).toBe("Test");
+    expect(blogPost.locale).toBe("en");
+    expect(blogPost.publishedAt).toBe("2026-10-02T00:00:00.000Z");
+    expect(blogPost.slug).toBe("post-1");
+    expect(blogPost.title).toBe("Post 1");
+    expect(blogPost.summary).toBe("This summary");
+    expect(blogPost.tags).toEqual(["X", "Y"]);
   });
 
   test("returns pubished blog post details for the locale by slug and without tags", async () => {

@@ -1,9 +1,10 @@
 import { Date, Tag, PageHeader } from "@/components";
 import { getBlogPostFilename } from "@/features/blog/utils/contents";
 import { fetchBlogPostDetails } from "@/features/blog/utils/db";
-import { getDb, type Locale } from "@moralesbuilds/contents-db";
+import { type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import matter from "gray-matter";
+import { type Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
@@ -13,14 +14,27 @@ type BlogPostPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const locale = await getLocale() as Locale;
+  const details = await fetchBlogPostDetails(locale, slug);
+  if (!details) {
+    notFound();
+  }
+
+  return {
+    title: details.title,
+    description: details.summary
+  };
+}
+
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const t = await getTranslations("root");
   const { env } = await getCloudflareContext({ async: true });
-  const db = getDb(env.CONTENTS_DB);
   const locale = await getLocale() as Locale;
   const { slug } = await params;
 
-  const details = await fetchBlogPostDetails(db, { locale, slug });
+  const details = await fetchBlogPostDetails(locale, slug);
   if (!details) {
     notFound();
   }

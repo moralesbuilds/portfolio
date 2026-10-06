@@ -2,24 +2,36 @@ import React from "react";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Container, Tab, Tabs, Tag, PageHeader } from "@/components";
-import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { getDb, type Locale } from "@moralesbuilds/contents-db";
+import { type Locale } from "@moralesbuilds/contents-db";
 import { fetchProjectDetails } from "@/features/project/utils/db";
 import { getProjectLink } from "@/features/project/utils/link";
+import { type Metadata } from "next";
 
 type ProjectDetailsLayoutProps = {
   params: Promise<{ slug: string }>;
   children: React.ReactNode;
 };
 
+export async function generateMetadata({ params }: ProjectDetailsLayoutProps): Promise<Metadata> {
+  const { slug } = await params;
+  const locale = await getLocale() as Locale;
+  const details = await fetchProjectDetails(locale, slug);
+  if (!details) {
+    notFound();
+  }
+
+  return {
+    title: details.title,
+    description: details.summary
+  };
+}
+
 export default async function ProjectDetailsLayout({ params, children }: ProjectDetailsLayoutProps) {
   const t = await getTranslations("project");
   const { slug } = await params;
-  const { env } = await getCloudflareContext({ async: true });
-  const db = getDb(env.CONTENTS_DB);
   const locale = await getLocale() as Locale;
 
-  const details = await fetchProjectDetails(db, { locale, slug });
+  const details = await fetchProjectDetails(locale, slug);
   if (!details) {
     notFound();
   }

@@ -60,6 +60,7 @@
   },
   "contact": {
     "title": "[Placeholder]: Tell me about your project",
+    "short_title": "Contact me",
     "brief": "[Placeholder]: Whether you need help architecting a complex system, building an edge-native application, or discussing engineering challenges, reach out below to start the conversation.",
     "success": "Success!",
     "success_message": "I'll contact you as soon as possible",
@@ -107,6 +108,7 @@
   },
   "project": {
     "title": "All the projects",
+    "short_title": "Projects",
     "brief": "[Placeholder]: Things that I have built, and what I learned on the way.",
     "empty_title": "No projects found",
     "empty_description": "There are no published projects at the moment. Please check back later for new updates.",
