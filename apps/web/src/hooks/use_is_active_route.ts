@@ -15,7 +15,7 @@ export function useIsActiveRoute(targetPath: string, exact: boolean = false): bo
   }
 
   if (exact || targetNormalized === '/') {
-    return currentNormalized === '/';
+    return false;
   }
 
   return currentNormalized.startsWith(`${targetNormalized}/`);
