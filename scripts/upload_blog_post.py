@@ -12,8 +12,8 @@ import frontmatter
 from utilities import create_tag_records, get_local_flag, parse_wrangler_json, upload_markdown_file
 
 def insert_category_sql(post):
-  label = post.metadata['category']
-  locale = post.metadata['locale']
+  label = post.metadata['category'].replace("'", "''")
+  locale = post.metadata['locale'].replace("'", "''")
   slug = casefy.kebabcase(label)
   name = slug
   return (
@@ -48,11 +48,11 @@ def create_category_record(post, flag):
   
 
 def insert_blog_post_sql(post, category_id):
-  name = post.metadata['name']
-  locale = post.metadata['locale']
-  slug = post.metadata['slug']
-  title = post.metadata['title']
-  summary = post.metadata['summary']
+  name = post.metadata['name'].replace("'", "''")
+  locale = post.metadata['locale'].replace("'", "''")
+  slug = post.metadata['slug'].replace("'", "''")
+  title = post.metadata['title'].replace("'", "''")
+  summary = post.metadata['summary'].replace("'", "''")
   return (
     "INSERT INTO blog_posts (name, locale, slug, title, category_id, status, summary, author_id, published_at, created_at, updated_at) "
     f"VALUES ('{name}', '{locale}', '{slug}', '{title}', {category_id}, 'published', '{summary}', 1, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), NULL) "
@@ -120,6 +120,7 @@ if __name__ == "__main__":
   category_id = create_category_record(post, flag)
   blog_post_id = create_blog_post_record(post, category_id, flag)
   tag_ids = create_tag_records(post, flag)
-  create_blog_post_tag_records(blog_post_id, tag_ids, flag)
+  if tag_ids is not None:
+    create_blog_post_tag_records(blog_post_id, tag_ids, flag)
   upload_markdown_file(markdown_file, "blog_posts", post, flag)
   
