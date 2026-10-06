@@ -48,7 +48,7 @@ describe("fetchProjectDetails", () => {
     expect(relatedBlog.publishedAt).toBe("2026-10-02T00:00:00.000Z");
   });
 
-  test("returns pubished blog post details for the locale by slug and without tags", async () => {
+  test("returns pubished project details for the locale by slug and without tags", async () => {
     const db = getDb(env.CONTENTS_DB);
     await seedProject(db, { name: "project-without-tags", slug: "project-without-tags", title: "Post without tags", summary: "It lacks tags", publishedAt: "2026-10-02T00:00:00.000Z", locale: "en", status: "published" });
 

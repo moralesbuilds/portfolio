@@ -24,12 +24,16 @@ def parse_wrangler_json(output: str):
   return json.loads(json_str)
 
 def insert_tags_sql(post):
+  if "tags" not in post.metadata:
+    return None
+  
   locale = post.metadata['locale'].replace("'", "''")
   tags = post.metadata['tags']
   tag_records = []
   for tag in tags:
     tag_name = casefy.kebabcase(tag)
-    tag_records.append(f"('{tag_name}', '{locale}', '{tag_name}', '{tag}')")
+    tag_label = tag.replace("'", "''")
+    tag_records.append(f"('{tag_name}', '{locale}', '{tag_name}', '{tag_label}')")
     
   if len(tags) == 0:
     return None
@@ -65,8 +69,8 @@ def create_tag_records(post, flag):
   return [tag['id'] for tag in json_result[0]["results"]]
 
 def upload_markdown_file(markdown_file, type, post, flag):
-  locale = post.metadata['locale'].replace("'", "''")
-  slug = post.metadata['slug'].replace("'", "''")
+  locale = post.metadata['locale']
+  slug = post.metadata['slug']
   cmd = [
     "pnpm",
     "--filter",

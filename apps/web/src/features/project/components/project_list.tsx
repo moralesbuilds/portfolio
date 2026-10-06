@@ -18,7 +18,7 @@ export function ProjectList({ items, viewDetailsLabel, emptyTitle, emptyDescript
         <ProjectCard
           key={p.id}
           slug={p.slug!}
-          image=""
+          image={`https://picsum.photos/seed/${encodeURIComponent(p.slug!)}/800/400`}
           title={p.title!}
           summary={p.summary!}
           viewDetailsLabel={viewDetailsLabel}
