@@ -12,7 +12,7 @@ export async function fetchProjectDetails(db: Db, params: FetchProjectDetailsPar
 
   const item = await db
     .prepare(
-      `SELECT p.id, p.slug, p.title, p.summary, p.repository_url AS repositoryUrl, p.is_featured, p.published_at AS publishedAt, json_group_array(t.label) AS tags_str
+      `SELECT p.id, p.slug, p.title, p.summary, p.repository_url AS repositoryUrl, p.is_featured, p.published_at AS publishedAt, NULLIF(json_group_array(t.label), '[null]') AS tags_str, p.locale
       FROM projects p
       LEFT JOIN project_tags pt ON p.id = pt.project_id
       LEFT JOIN tags t ON pt.tag_id = t.id

@@ -55,7 +55,7 @@ export async function seedProjectBlogPost(
     )
     .bind(
       overrides.projectId,
-      overrides.projectId
+      overrides.blogPostId
     )
     .run();
 }

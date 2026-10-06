@@ -20,7 +20,7 @@ export function createRateLimitStore(db: Db): RateLimitStore {
 
     async prune(before) {
       await db
-        .prepare("DELETE FROM rate_limit_hits WHERE created_at < ?3")
+        .prepare("DELETE FROM rate_limit_hits WHERE created_at < ?1")
         .bind(before)
         .run();
     }

@@ -15,7 +15,7 @@ export async function FeaturedProjectsSection() {
     <section className="py-16 md:py-24 border-t border-slate-200">
       {/* Header row */}
       <div className="flex items-center justify-between gap-4 mb-8">
-        <h2 className="ttext-sm font-bold tracking-tight text-indigo-600 uppercase">
+        <h2 className="text-sm font-bold tracking-tight text-indigo-600 uppercase">
           {t("section_title")}
         </h2>
 
