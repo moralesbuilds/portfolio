@@ -20,7 +20,10 @@ export default async function ProjectDetailsPage({ params }: ProjectDetailsPageP
   const { env } = await getCloudflareContext({ async: true });
   const db = getDb(env.CONTENTS_DB);
   const locale = await getLocale() as Locale;
-  const details = (await fetchProjectDetails(db, { locale, slug }))!;
+  const details = await fetchProjectDetails(db, { locale, slug });
+  if (!details) {
+    notFound();
+  }
 
   const filename = getProjectSummaryFilename(details);
   const object = await env.BLOG_CONTENTS.get(filename);

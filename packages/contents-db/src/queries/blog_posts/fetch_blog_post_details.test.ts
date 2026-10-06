@@ -38,6 +38,16 @@ describe("fetchBlogPostDetails", () => {
     expect(blogPost!.tags).toEqual(["X", "Y"]);
   });
 
+  test("returns pubished blog post details for the locale by slug and without tags", async () => {
+    const db = getDb(env.CONTENTS_DB);
+    await seedBlogPost(db, { name: "post-without-tags", slug: "post-without-tags", title: "Post without tags", publishedAt: "2026-10-02T00:00:00.000Z", categoryId: categoryEnId });
+
+    const blogPost = await fetchBlogPostDetails(db, { slug: "post-without-tags", locale: "en" });
+    expect(blogPost).not.toBeNull();
+    expect(blogPost!.id).toBeGreaterThan(0);
+    expect(blogPost!.tags).toBeNullable(); 
+  });
+
   test("returns null when the blog post is not found", async () => {
     const db = getDb(env.CONTENTS_DB);
     const blogPost = await fetchBlogPostDetails(db, { slug: "post-1", locale: "en" });
