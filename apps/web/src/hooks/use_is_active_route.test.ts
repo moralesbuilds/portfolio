@@ -83,4 +83,11 @@ describe("useIsActiveRoute", () => {
     const { result } = renderHook(() => useIsActiveRoute("/parent", true));
     expect(result.current).toBe(false);
   });
+
+  test("returns false for parent route when the page is in root path ('/') and route is exact", () => {
+    vi.mocked(usePathname).mockReturnValue("/");
+
+    const { result } = renderHook(() => useIsActiveRoute("/parent", true));
+    expect(result.current).toBe(false);
+  });
 });
