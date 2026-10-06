@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { Header, Footer } from "@/components";
+import { type Metadata } from "next";
 
 // Title font
 const jetBrainsMono = JetBrains_Mono({
@@ -19,6 +20,13 @@ const inter = Inter({
   variable: '--font-inter',
   display: 'swap'
 });
+
+export const metadata: Metadata = {
+  title: {
+    template: "%s | Moralesbuilds",
+    default: "Moralesbuilds"
+  }
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
