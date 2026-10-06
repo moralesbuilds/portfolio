@@ -1,6 +1,7 @@
 {
   "root": {
     "home": "Home",
+    "project": "Projects",
     "blog": "Blog",
     "contact": "Contact",
     "open_menu": "Open main menu",
@@ -40,46 +41,6 @@
         }
       ]
     },
-    "projects": {
-      "title": "Featured Projects / Study cases",
-      "view_details": "View Details",
-      "projects": [
-        {
-          "key": "htor",
-          "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
-          "title": "High-Throughput Order Engine",
-          "description": "Low-latency order processing and execution architecture designed for high concurrency and sub-millisecond reliability.",
-          "tags": [
-            "C++",
-            "Distributed System"
-          ]
-        },
-        {
-          "key": "db",
-          "image": "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=800&q=80",
-          "title": "Automated DB Migration Pipeline",
-          "description": "Containerized testing framework for relational database schema migrations and automated verification workflows.",
-          "tags": [
-            "Docker",
-            "PostgreSQL",
-            "Liquibase"
-          ]
-        },
-        {
-          "key": "node",
-          "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
-          "title": "Custom Event Node Engine",
-          "description": "Tailored integration node using asynchronous message queues for distributed event stream processing and automation.",
-          "tags": [
-            "ASP.NET Core",
-            "RabbitMQ"
-          ]
-        }
-      ]
-    },
-    "latest_blog_posts": {
-      "title": "Latest Blog Posts"
-    },
     "contact": {
       "title": "Contact Me",
       "subtitle": "[Placeholder]: Let's work together!"
@@ -90,6 +51,7 @@
     "navigation": "navigation",
     "links": {
       "start": "Start",
+      "project": "Projects",
       "blog": "Blog",
       "contact": "Contact"
     },
@@ -136,9 +98,25 @@
   },
   "blog": {
     "title": "Blog",
+    "section_title": "Latest Blog Posts",
     "brief": "[Placeholder]: Brief notes on architecture, infrastructure, and what I am learning while building things.",
     "read_more": "Read more",
     "empty_title": "No posts found",
-    "empty_description": "There are no published blog posts at the moment. Please check back later for new updates."
+    "empty_description": "There are no published blog posts at the moment. Please check back later for new updates.",
+    "see_all": "See all blog posts"
+  },
+  "project": {
+    "title": "All the projects",
+    "brief": "[Placeholder]: Things that I have built, and what I learned on the way.",
+    "empty_title": "No projects found",
+    "empty_description": "There are no published projects at the moment. Please check back later for new updates.",
+    "section_title": "Featured Projects / Study cases",
+    "view_details": "View Details",
+    "see_all": "See all projects",
+    "summary": "Summary",
+    "featured": "Featured",
+    "related_blogs": "Related Blog Posts",
+    "details": "Project Details",
+    "repository": "Repository"
   }
 }

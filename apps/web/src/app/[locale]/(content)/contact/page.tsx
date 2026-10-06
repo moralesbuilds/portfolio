@@ -1,4 +1,4 @@
-import { Breadcrumbs, ExternalLink } from "@/components";
+import { ExternalLink, PageHeader } from "@/components";
 import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/icons";
 import { ContactForm } from "@/features/contact";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -16,21 +16,18 @@ export default async function ContactPage() {
   const contactEmail = env.CONTACT_EMAIL;
 
   return (
-    <div className="w-full py-8 space-y-8">
-      {/* Header Section */}
-      <header className="space-y-4">
-        <Breadcrumbs />
-
-        {/* Page Title & description (centered) */}
+    <>
+      {/* Page Title & description (centered) */}
+      <PageHeader>
         <div className="text-center max-w-2xl mx-auto space-y-3 pt-2">
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
             {t("title")}
           </h1>
           <p className="sm:text-lg text-gray-600 leading-relaxed">
-           {t("brief")}
+            {t("brief")}
           </p>
         </div>
-      </header>
+      </PageHeader>
 
       {/* Contents section */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
@@ -80,6 +77,6 @@ export default async function ContactPage() {
           </div>
         </aside>
       </div>
-    </div>
+    </>
   );
 }

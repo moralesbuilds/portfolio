@@ -43,6 +43,7 @@ function MobileLink({ href, label, selected, ...rest }: LinkProps) {
 
 type HeaderProps = {
   brandLabel: string;
+  projectLabel: string;
   blogLabel: string;
   contactLabel: string;
   openMenuLabel: string;
@@ -51,13 +52,15 @@ type HeaderProps = {
   githubUrl: string;
 };
 
-export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, githubLabel, githubUrl }: HeaderProps) {
+export function Header({ brandLabel, projectLabel, blogLabel, contactLabel, openMenuLabel, githubLabel, githubUrl }: HeaderProps) {
   const [mobileMenuOpened, setMobileMenuOpened] = useState(false);
   const onMobileMenuButtonClicked = () => setMobileMenuOpened((prevValue) => !prevValue);
   const segments = useSelectedLayoutSegments();
+  const activeSegments = segments?.filter((s) => !s.startsWith("("));
 
-  const isBlogSelected = segments?.[0] === "blog";
-  const isContactSelected = segments?.[0] === "contact";
+  const isProjectSelected = activeSegments?.[0] === "project";
+  const isBlogSelected = activeSegments?.[0] === "blog";
+  const isContactSelected = activeSegments?.[0] === "contact";
 
   const githubLink = (
     <a
@@ -90,6 +93,7 @@ export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, git
             {/* Desktop links */}
             <div className="hidden sm:flex sm:items-center sm:space-x-8">
               <div className="flex space-x-8 h-full">
+                <DesktopLink href="/project" label={projectLabel} selected={isProjectSelected} data-testid="project-link" />
                 <DesktopLink href="/blog" label={blogLabel} selected={isBlogSelected} data-testid="blog-link" />
                 <DesktopLink href="/contact" label={contactLabel} selected={isContactSelected} data-testid="contact-link" />
               </div>
@@ -121,6 +125,7 @@ export function Header({ brandLabel, blogLabel, contactLabel, openMenuLabel, git
         {/* Mobile menu links */}
         <div className={mobileMenuOpened ? 'sm:hidden' : 'hidden sm:hidden'} id="mobile-menu">
           <div className="pt-2 pb-3 space-y-1">
+            <MobileLink href="/project" label={projectLabel} selected={isProjectSelected} data-testid="mobile-project-link" />
             <MobileLink href="/blog" label={blogLabel} selected={isBlogSelected} data-testid="mobile-blog-link" />
             <MobileLink href="/contact" label={contactLabel} selected={isContactSelected} data-testid="mobile-contact-link" />
           </div>

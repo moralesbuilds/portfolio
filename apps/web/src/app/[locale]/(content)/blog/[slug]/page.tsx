@@ -1,6 +1,7 @@
-import { Breadcrumbs, Date, Tag } from "@/components";
+import { Date, Tag, PageHeader } from "@/components";
 import { getBlogPostFilename } from "@/features/blog/utils/contents";
-import { fetchBlogPostDetails, getDb, type Locale } from "@moralesbuilds/contents-db";
+import { fetchBlogPostDetails } from "@/features/blog/utils/db";
+import { getDb, type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import matter from "gray-matter";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -23,7 +24,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   if (!details) {
     notFound();
   }
-  
+
   const filename = getBlogPostFilename(details);
   const object = await env.BLOG_CONTENTS.get(filename);
   if (!object) {
@@ -35,24 +36,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const hasTags = (details.tags?.length ?? 0) > 0
 
   return (
-    <div className="w-full py-8 space-y-8">
-      {/*Header section */}
-      <header className="space-y-4">
-        <Breadcrumbs overrides={{ [slug]: details.title }} />
-
-        <div className="space-y-2">
-          <div>
-            <Tag label={details.category} />
-          </div>
-
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
-            {details.title}
-          </h1>
-          <p className="sm:text-md text-gray-600 leading-relaxed max-w-3xl">
-            <Date value={details.publishedAt} />
-          </p>
+    <>
+      {/* Title */}
+      <PageHeader breadcrumbTitle={details.title}>
+        <div>
+          <Tag label={details.category} />
         </div>
-      </header>
+
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
+          {details.title}
+        </h1>
+        <p className="sm:text-md text-gray-600 leading-relaxed max-w-3xl">
+          <Date value={details.publishedAt} />
+        </p>
+      </PageHeader>
 
       {/* The content */}
       <article className="prose max-w-none mx-auto">
@@ -71,6 +68,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
