@@ -108,7 +108,7 @@ describe("Header (unit)", () => {
     expect(screen.getByTestId("mobile-contact-link")).toHaveAttribute("aria-selected", "true");
   });
 
-  test("show the contact menu as selected", () => {
+  test("show the project menu as selected", () => {
     vi.mocked(useSelectedLayoutSegments).mockReturnValue(["project"]);
     
     renderHeader();
