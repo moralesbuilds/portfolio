@@ -2,7 +2,16 @@ import { ExternalLink, PageHeader } from "@/components";
 import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/icons";
 import { ContactForm } from "@/features/contact";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { type Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("contact");
+  return {
+    title: t("short_title"),
+    description: t("brief")
+  };
+}
 
 export default async function ContactPage() {
   const t = await getTranslations("contact");
