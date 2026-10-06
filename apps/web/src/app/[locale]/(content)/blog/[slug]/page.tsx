@@ -1,4 +1,5 @@
-import { Date, FillSlot, Tag } from "@/components";
+import { Date, Tag } from "@/components";
+import { PageHeader } from "@/components/page_header";
 import { getBlogPostFilename } from "@/features/blog/utils/contents";
 import { fetchBlogPostDetails } from "@/features/blog/utils/db";
 import { getDb, type Locale } from "@moralesbuilds/contents-db";
@@ -38,7 +39,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <>
       {/* Title */}
-      <FillSlot name="title" title={details.title}>
+      <PageHeader breadcrumbTitle={details.title}>
         <div className="space-y-2">
           <div>
             <Tag label={details.category} />
@@ -51,7 +52,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             <Date value={details.publishedAt} />
           </p>
         </div>
-      </FillSlot>
+      </PageHeader>
 
       {/* The content */}
       <article className="prose max-w-none mx-auto">

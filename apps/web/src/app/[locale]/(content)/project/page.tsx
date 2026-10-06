@@ -1,4 +1,5 @@
-import { FillSlot, PageNavigation } from "@/components";
+import { PageNavigation } from "@/components";
+import { PageHeader } from "@/components/page_header";
 import { ProjectList } from "@/features/project/components/project_list";
 import { queryToNumber, type SearchParams } from "@/lib/query";
 import { fetchProjects, getDb, type Locale } from "@moralesbuilds/contents-db";
@@ -23,7 +24,7 @@ export default async function ProjectListPage({ searchParams }: ProjectListPageP
   return (
     <>
       {/* Page title & description */}
-      <FillSlot name="title">
+      <PageHeader>
         <div className="space-y-2">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900">
             {t("title")}
@@ -32,7 +33,7 @@ export default async function ProjectListPage({ searchParams }: ProjectListPageP
             {t("brief")}
           </p>
         </div>
-      </FillSlot>
+      </PageHeader>
 
       <ProjectList
         items={page.items}

@@ -3,7 +3,6 @@ import { describe, expect, test, vi } from "vitest";
 import { Breadcrumbs } from "./breadcrumbs";
 import { render, screen } from "@testing-library/react";
 import { usePathname } from "@/i18n/navigation";
-import { LayoutPortalContext } from "./layout_portal";
 
 vi.mock('@/i18n/navigation', async (importActual) => {
   const actual = await importActual<typeof import('@/i18n/navigation')>();
@@ -16,9 +15,7 @@ vi.mock('@/i18n/navigation', async (importActual) => {
 function renderBreadcrumbs(title: string | undefined | null = undefined) {
   render(
     <NextIntlClientProvider locale="en" messages={{ root: { home: "Home", parent: "Parent", leaf: "Leaf" } }}>
-      <LayoutPortalContext value={{ title, setTitle: () => {}, slotContents: {}, setSlotContents: () => {} }}>
-        <Breadcrumbs />
-      </LayoutPortalContext>
+      <Breadcrumbs title={title} />
     </NextIntlClientProvider>
   );
 }

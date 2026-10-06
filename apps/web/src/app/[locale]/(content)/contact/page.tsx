@@ -1,5 +1,6 @@
-import { ExternalLink, FillSlot } from "@/components";
+import { ExternalLink } from "@/components";
 import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/icons";
+import { PageHeader } from "@/components/page_header";
 import { ContactForm } from "@/features/contact";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getTranslations } from "next-intl/server";
@@ -18,7 +19,7 @@ export default async function ContactPage() {
   return (
     <>
       {/* Page Title & description (centered) */}
-      <FillSlot name="title">
+      <PageHeader>
         <div className="text-center max-w-2xl mx-auto space-y-3 pt-2">
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
             {t("title")}
@@ -27,7 +28,7 @@ export default async function ContactPage() {
             {t("brief")}
           </p>
         </div>
-      </FillSlot>
+      </PageHeader>
 
       {/* Contents section */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
