@@ -25,6 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const b = await getTranslations("brands");
   const brand = b("own");
   return {
+    metadataBase: new URL(process.env.BASE_URL!),
     title: {
       template: `%s | ${brand}`,
       default: brand
