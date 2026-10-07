@@ -1,10 +1,8 @@
 import { routing } from "@/i18n/routing";
+import { ogFonts, ogSize } from "@/lib/og";
 import { getTranslations } from "next-intl/server";
 import { ImageResponse } from "next/og";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 
-export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "MoralesBuilds — Luis Morales";
 
@@ -15,11 +13,6 @@ export function generateStaticParams() {
 export default async function Image({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "seo.person" });
-
-  const [mono, inter] = await Promise.all([
-    readFile(join(process.cwd(), "assets/fonts/JetBrainsMono-Bold.ttf")),
-    readFile(join(process.cwd(), "assets/fonts/Inter-Regular.ttf"))
-  ]);
 
   return new ImageResponse(
     (
@@ -41,11 +34,8 @@ export default async function Image({ params }: { params: Promise<{ locale: stri
       </div>
     ),
     {
-      ...size,
-      fonts: [
-        { name: "JetBrains Mono", data: mono, weight: 700 },
-        { name: "Inter", data: inter, weight: 400 }
-      ]
+      ...ogSize,
+      fonts: await ogFonts()
     }
   );
 }
