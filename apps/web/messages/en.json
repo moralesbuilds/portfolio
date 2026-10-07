@@ -9,6 +9,12 @@
     "next": "Next",
     "no_tags": "No tags"
   },
+  "seo": {
+    "person": {
+      "job_title": "Software Engineer",
+      "description": "Software engineer based in Colombia building fast, reliable web applications with TypeScript, React and Next.js. Available for freelance projects and full-time roles."
+    }
+  },
   "home": {
     "hero": {
       "heading": "[Placeholder]: MoralesBuilds, build with Next.js on Cloudflare",
