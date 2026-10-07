@@ -5,6 +5,7 @@ import { Container, Tab, Tabs, Tag, PageHeader } from "@/components";
 import { type Locale } from "@moralesbuilds/contents-db";
 import { fetchProjectDetails, getProjectUrl } from "@/features/project";
 import { type Metadata } from "next";
+import { alternates } from "@/lib/seo";
 
 type ProjectDetailsLayoutProps = {
   params: Promise<{ slug: string }>;
@@ -21,7 +22,8 @@ export async function generateMetadata({ params }: ProjectDetailsLayoutProps): P
 
   return {
     title: details.title,
-    description: details.summary
+    description: details.summary,
+    alternates: alternates(locale, { [locale]: getProjectUrl(slug) })
   };
 }
 
