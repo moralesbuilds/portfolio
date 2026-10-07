@@ -3,8 +3,8 @@ import type { Db, Project } from "../../src";
 export async function seedProject(db: Db, project: Project): Promise<number> {
   const result = await db
     .prepare(
-      `INSERT INTO projects (name, locale, slug, title, summary, repository_url, status, is_featured, author_id, published_at, created_at)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, 1, ?9, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+      `INSERT INTO projects (name, locale, slug, title, summary, repository_url, status, is_featured, author_id, published_at, created_at, updated_at)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, 1, ?9, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), ?10)
       RETURNING id`
     )
     .bind(
@@ -16,7 +16,8 @@ export async function seedProject(db: Db, project: Project): Promise<number> {
       project.repositoryUrl ?? null,
       project.status,
       Number(project.isFeatured ?? 0),
-      project.publishedAt
+      project.publishedAt,
+      project.updatedAt ?? null,
     )
     .first<{ id: number }>();
   return result!.id;

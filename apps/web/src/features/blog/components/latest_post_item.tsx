@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/navigation";
-import { getBlogPostLink } from "../utils/link";
+import { getBlogPostUrl } from "../utils/url";
 import { Date } from "@/components";
 
 type LatestPostItemProps = {
@@ -9,7 +9,7 @@ type LatestPostItemProps = {
 };
 
 export function LatestPostItem({ title, publishedAt, slug }: LatestPostItemProps) {
-  const link = getBlogPostLink(slug);
+  const link = getBlogPostUrl(slug);
 
   return (
     <article className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-6 border-b border-slate-100 last:border-0 last:pb-0">

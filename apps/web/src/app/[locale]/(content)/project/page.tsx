@@ -1,5 +1,5 @@
 import { PageNavigation, PageHeader } from "@/components";
-import { ProjectList } from "@/features/project/components/project_list";
+import { ProjectList } from "@/features/project";
 import { queryToNumber, type SearchParams } from "@/lib/query";
 import { fetchProjects, getDb, type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";

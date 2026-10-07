@@ -1,4 +1,4 @@
-import { ProjectList } from "@/features/project/components/project_list";
+import { ProjectList } from "@/features/project";
 import { Link } from "@/i18n/navigation";
 import { fetchProjects, getDb, type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
