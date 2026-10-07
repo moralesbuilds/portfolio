@@ -36,22 +36,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     {
-      url: process.env.BASE_URL!,
-      lastModified: new Date()
+      url: process.env.BASE_URL!
     },
     {
-      url: `${process.env.BASE_URL}/contact`,
-      lastModified: new Date()
+      url: `${process.env.BASE_URL}/contact`
     },
     {
-      url: `${process.env.BASE_URL}/blog`,
-      lastModified: new Date()
+      url: `${process.env.BASE_URL}/blog`
     },
     ...blogPosts.map((b) => mapSitemapEntry(b, getAbsoluteBlogPostUrl)),
     
     {
-      url: `${process.env.BASE_URL}/project`,
-      lastModified: new Date()
+      url: `${process.env.BASE_URL}/project`
     },
     ...projects.map((p) => mapSitemapEntry(p, getAbsoluteProjectUrl)),
   ];

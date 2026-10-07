@@ -3,6 +3,7 @@ import { ogFonts, ogSize } from "@/lib/og";
 import { getTranslations } from "next-intl/server";
 import { ImageResponse } from "next/og";
 
+export const size = ogSize;
 export const contentType = "image/png";
 export const alt = "MoralesBuilds — Luis Morales";
 
