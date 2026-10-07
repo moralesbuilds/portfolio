@@ -6,10 +6,20 @@ import {
   LatestBlogPostsSection,
   ContactSection
 } from "@/features/landing";
-import { personSchema, websiteSchema } from "@/lib/seo/schema";
+import { alternates, personSchema, websiteSchema } from "@/lib/seo";
+import { type Locale } from "@moralesbuilds/contents-db";
+import { type Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale() as Locale;
+
+  return {
+    alternates: alternates(locale, { en: "/" })
+  };
+}
 
 export default async function HomePage() {
   const locale = await getLocale();

@@ -1,5 +1,6 @@
 import { Date, Tag, PageHeader } from "@/components";
-import { getBlogPostFilename, fetchBlogPostDetails } from "@/features/blog";
+import { getBlogPostFilename, fetchBlogPostDetails, getBlogPostUrl } from "@/features/blog";
+import { alternates } from "@/lib/seo";
 import { type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import matter from "gray-matter";
@@ -23,7 +24,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
   return {
     title: details.title,
-    description: details.summary
+    description: details.summary,
+    alternates: alternates(locale, { [locale]: getBlogPostUrl(slug) })
   };
 }
 
