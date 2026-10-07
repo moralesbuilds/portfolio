@@ -1,0 +1,20 @@
+import type { Db } from "../../client";
+import type { BlogPostSitemapEntry } from "../../types";
+
+export async function fetchBlogPostSitemapEntries(db: Db): Promise<BlogPostSitemapEntry[]> {
+  const { results } = await db
+    .prepare(
+      `SELECT en.slug, COALESCE(en.updated_at, en.published_at) AS lastModified, COALESCE(json_group_object(other.locale, other.slug) FILTER (WHERE other.locale IS NOT NULL), '{}') AS alternates
+      FROM blog_posts en
+      LEFT JOIN blog_posts other ON en.name = other.name AND other.locale != 'en'
+      WHERE en.locale = 'en' AND en.status = 'published'
+      GROUP BY en.name, en.slug
+      ORDER BY en.name`
+    )
+    .all<{ slug: string; lastModified: string; alternates: string; }>();
+
+  return results.map(({ alternates, ...rest }) => ({
+    ...rest,
+    alternates: JSON.parse(alternates)
+  }));
+}

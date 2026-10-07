@@ -1,6 +1,6 @@
 import { Tag } from "@/components";
 import { Link } from "@/i18n/navigation";
-import { getProjectLink } from "../utils/link";
+import { getProjectUrl } from "../utils/url";
 
 type ProjectCardProps = {
   slug: string;
@@ -12,7 +12,7 @@ type ProjectCardProps = {
 };
 
 export function ProjectCard({ slug, image, title, summary, tags, viewDetailsLabel }: ProjectCardProps) {
-  const link = getProjectLink(slug);
+  const link = getProjectUrl(slug);
 
   return (
     <article className="flex flex-col border border-slate-200 bg-base shadow-sm transition-all hover:shadow-md hover:border-slate-300">
