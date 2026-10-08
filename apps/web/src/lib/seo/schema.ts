@@ -13,7 +13,7 @@ export function personSchema(t: { jobTitle: string; description: string; }, loca
     // No image yet
     jobTitle: t.jobTitle,
     description: t.description,
-    knowsAbout: ["Next.js", "TypeScript", "React", "Cloudflare Workers"],
+    knowsAbout: ["Next.js", "TypeScript", "React", "Cloudflare Workers", ".NET", "AWS", "PostgreSQL"],
     address: {
       "@type": "PostalAddress",
       addressCountry: "CO"
