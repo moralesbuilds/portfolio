@@ -48,7 +48,7 @@
     "@marsidev/react-turnstile": "^1.6.1",
     "@moralesbuilds/contents-db": "workspace:*",
     "gray-matter": "^4.0.3",
-    "next": "^16.4.0",
+    "next": "16.3.8",
     "next-intl": "^4.14.9",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
