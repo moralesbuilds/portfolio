@@ -26,7 +26,7 @@
   "license": "MIT",
   "type": "module",
   "devDependencies": {
-    "@opennextjs/cloudflare": "^1.20.8",
+    "@opennextjs/cloudflare": "^1.20.9",
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
@@ -48,7 +48,7 @@
     "@marsidev/react-turnstile": "^1.6.1",
     "@moralesbuilds/contents-db": "workspace:*",
     "gray-matter": "^4.0.3",
-    "next": "^16.3.8",
+    "next": "^16.4.0",
     "next-intl": "^4.14.9",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",

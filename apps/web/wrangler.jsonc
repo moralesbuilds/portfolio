@@ -47,14 +47,15 @@
     }
   ],
   "vars": {
+    "APP_EMAIL": "portfolio@moralesbuilds.dev",
+    "BASE_URL": "https://moralesbuilds.dev",
+    "CONTACT_EMAIL": "luis@moralesbuilds.dev",
     "GITHUB_PORTFOLIO_URL": "https://github.com/moralesbuilds/portfolio",
     "LINKED_IN_URL": "https://www.linkedin.com/in/moralesbuilds",
-    "X_URL": "https://x.com/moralesbuilds",
-    "CONTACT_EMAIL": "luis@moralesbuilds.dev",
-    "APP_EMAIL": "portfolio@moralesbuilds.dev",
     "MIN_FORM_FILL_MS": "3000",
     "RATE_LIMIT_MAX_ATTEMPTS": "3",
-    "RATE_LIMIT_WINDOW_MS": "600000"
+    "RATE_LIMIT_WINDOW_MS": "600000",
+    "X_URL": "https://x.com/moralesbuilds"
   },
   "secrets": {
     "required": [
