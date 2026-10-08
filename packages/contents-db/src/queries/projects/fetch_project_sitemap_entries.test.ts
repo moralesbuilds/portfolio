@@ -15,11 +15,11 @@ describe("fetchProjectSitemapEntries", () => {
     expect(entries).toHaveLength(2);
     expect(entries[0].slug).toBe("project-1");
     expect(entries[0].lastModified).toBe("2026-10-01T00:00:00.000Z");
-    expect(entries[0].alternates).toEqual({ es: "proyecto-1" });
+    expect(entries[0].alternates).toEqual({ en: "project-1", es: "proyecto-1" });
 
     expect(entries[1].slug).toBe("project-2");
     expect(entries[1].lastModified).toBe("2026-10-05T00:00:00.000Z");
-    expect(entries[1].alternates).toEqual({});
+    expect(entries[1].alternates).toEqual({ en: "project-2" });
   });
 
   test("returns empty array for unpublished projects", async () => {

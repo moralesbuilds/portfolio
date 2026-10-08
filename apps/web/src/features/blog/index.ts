@@ -3,4 +3,4 @@ export { LatestPostItem } from "./components/latest_post_item";
 
 export { getBlogPostFilename } from "./utils/contents";
 export { fetchBlogPostDetails } from "./utils/db";
-export { getBlogPostUrl, getAbsoluteBlogPostUrl } from "./utils/url";
+export { getBlogPostUrl } from "./utils/url";

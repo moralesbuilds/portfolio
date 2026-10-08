@@ -1,3 +1,4 @@
+import { getPathname } from "@/i18n/navigation";
 import type { Person, WebSite } from "schema-dts";
 
 export const SITE_URL = process.env.BASE_URL;
@@ -9,7 +10,7 @@ export function personSchema(t: { jobTitle: string; description: string; }, loca
     "@type": "Person",
     "@id": PERSON_ID,
     name: "Luis Morales",
-    url: `${SITE_URL}/${locale}`,
+    url: `${SITE_URL}${getPathname({ locale, href: "/" })}`,
     // No image yet
     jobTitle: t.jobTitle,
     description: t.description,
