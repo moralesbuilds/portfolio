@@ -6,7 +6,7 @@ export async function fetchBlogPostSitemapEntries(db: Db): Promise<BlogPostSitem
     .prepare(
       `SELECT en.slug, COALESCE(en.updated_at, en.published_at) AS lastModified, COALESCE(json_group_object(other.locale, other.slug) FILTER (WHERE other.locale IS NOT NULL), '{}') AS alternates
       FROM blog_posts en
-      LEFT JOIN blog_posts other ON en.name = other.name AND other.locale != 'en'
+      LEFT JOIN blog_posts other ON en.name = other.name AND other.status = 'published'
       WHERE en.locale = 'en' AND en.status = 'published'
       GROUP BY en.name, en.slug
       ORDER BY en.name`

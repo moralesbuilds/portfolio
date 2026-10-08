@@ -30,11 +30,11 @@ describe("fetchBlogPostSitemapEntries", () => {
     expect(entries).toHaveLength(2);
     expect(entries[0].slug).toBe("post-1");
     expect(entries[0].lastModified).toBe("2026-10-01T00:00:00.000Z");
-    expect(entries[0].alternates).toEqual({ es: "publicacion-1" });
+    expect(entries[0].alternates).toEqual({ en: "post-1", es: "publicacion-1" });
 
     expect(entries[1].slug).toBe("post-2");
     expect(entries[1].lastModified).toBe("2026-10-04T00:00:00.000Z");
-    expect(entries[1].alternates).toEqual({});
+    expect(entries[1].alternates).toEqual({ en: "post-2" });
   });
 
   test("returns empty array for unpublished blog posts", async () => {

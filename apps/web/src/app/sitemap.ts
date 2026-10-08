@@ -1,54 +1,53 @@
-import { getAbsoluteBlogPostUrl } from "@/features/blog";
-import { getAbsoluteProjectUrl } from "@/features/project";
-import {
-  type BlogPostSitemapEntry,
-  fetchBlogPostSitemapEntries,
-  fetchProjectSitemapEntries,
-  getDb,
-  type Locale,
-  type ProjectSitemapEntry
-} from "@moralesbuilds/contents-db";
+import { getBlogPostUrl } from "@/features/blog";
+import { getProjectUrl } from "@/features/project";
+import { routing } from "@/i18n/routing";
+import { absoluteUrl, sitemapLanguages } from "@/lib/seo";
+import { fetchBlogPostSitemapEntries, fetchProjectSitemapEntries, getDb, type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import type { MetadataRoute } from "next";
 
-function mapSitemapEntry(
-  entry: BlogPostSitemapEntry | ProjectSitemapEntry,
-  getAbsoluteUrl: (slug: string, locale?: Locale) => string
-): MetadataRoute.Sitemap[number] {
-  let hasLanguages = false;
-  const languages: Record<string, string> = {};
+// Renderizar en cada request: si se prerenderiza, `next build` lee el D1 local y no producción
+export const dynamic = "force-dynamic";
+
+type Entry = MetadataRoute.Sitemap[number];
+
+function staticEntry(href: string): Entry {
+  const hrefs = Object.fromEntries(routing.locales.map((l) => [l, href])) as Record<Locale, string>;
+  return {
+    url: absoluteUrl(routing.defaultLocale, href),
+    alternates: { languages: sitemapLanguages(hrefs) }
+  };
+}
+
+function contentEntry(
+  entry: { slug: string; lastModified: string; alternates: Partial<Record<Locale, string>> },
+  toHref: (slug: string) => string
+): Entry {
+  const hrefs: Partial<Record<Locale, string>> = {};
   for (const [locale, slug] of Object.entries(entry.alternates)) {
-    languages[locale] = getAbsoluteUrl(slug, locale as Locale);
-    hasLanguages = true;
+    hrefs[locale as Locale] = toHref(slug);
   }
   return {
-    url: getAbsoluteUrl(entry.slug),
+    url: absoluteUrl(routing.defaultLocale, toHref(entry.slug)),
     lastModified: entry.lastModified,
-    alternates: hasLanguages ? { languages } : undefined
+    alternates: { languages: sitemapLanguages(hrefs) }
   };
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { env } = await getCloudflareContext({ async: true });
   const db = getDb(env.CONTENTS_DB);
-  const blogPosts = await fetchBlogPostSitemapEntries(db);
-  const projects = await fetchProjectSitemapEntries(db);
+  const [blogPosts, projects] = await Promise.all([
+    fetchBlogPostSitemapEntries(db),
+    fetchProjectSitemapEntries(db)
+  ]);
 
   return [
-    {
-      url: process.env.BASE_URL!
-    },
-    {
-      url: `${process.env.BASE_URL}/contact`
-    },
-    {
-      url: `${process.env.BASE_URL}/blog`
-    },
-    ...blogPosts.map((b) => mapSitemapEntry(b, getAbsoluteBlogPostUrl)),
-    
-    {
-      url: `${process.env.BASE_URL}/project`
-    },
-    ...projects.map((p) => mapSitemapEntry(p, getAbsoluteProjectUrl)),
+    staticEntry("/"),
+    staticEntry("/contact"),
+    staticEntry("/blog"),
+    ...blogPosts.map((b) => contentEntry(b, getBlogPostUrl)),
+    staticEntry("/project"),
+    ...projects.map((p) => contentEntry(p, getProjectUrl))
   ];
 }
