@@ -3,9 +3,9 @@ import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Container, Tab, Tabs, Tag, PageHeader } from "@/components";
 import { type Locale } from "@moralesbuilds/contents-db";
-import { fetchProjectDetails } from "@/features/project/utils/db";
-import { getProjectLink } from "@/features/project/utils/link";
+import { fetchProjectDetails, getProjectUrl } from "@/features/project";
 import { type Metadata } from "next";
+import { alternates } from "@/lib/seo";
 
 type ProjectDetailsLayoutProps = {
   params: Promise<{ slug: string }>;
@@ -22,7 +22,8 @@ export async function generateMetadata({ params }: ProjectDetailsLayoutProps): P
 
   return {
     title: details.title,
-    description: details.summary
+    description: details.summary,
+    alternates: alternates(locale, { [locale]: getProjectUrl(slug) })
   };
 }
 
@@ -37,7 +38,7 @@ export default async function ProjectDetailsLayout({ params, children }: Project
   }
 
   const hasTags = (details.tags?.length ?? 0) > 0;
-  const link = getProjectLink(details.slug!);
+  const link = getProjectUrl(details.slug!);
 
   return (
     <>

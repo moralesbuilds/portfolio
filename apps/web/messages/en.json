@@ -9,45 +9,51 @@
     "next": "Next",
     "no_tags": "No tags"
   },
+  "seo": {
+    "person": {
+      "job_title": "Software Engineer",
+      "description": "Full-stack software engineer based in Colombia building web applications with .NET, Next.js and AWS. Available for freelance projects and remote roles."
+    }
+  },
   "home": {
     "hero": {
-      "heading": "[Placeholder]: MoralesBuilds, build with Next.js on Cloudflare",
-      "subtitle": "[Placeholder]: Build completely by hand from scratch without any scaffolding CLIs.",
+      "heading": "Full-stack software engineer, from idea to production",
+      "subtitle": "I build web applications end to end: database, API, interface, cloud infrastructure and deployment. Writing production software since 2017.",
       "projects": "View Projects",
       "contact": "Contact me"
     },
     "about": {
       "title": "About Me",
-      "heading": "[Placeholder]: Passionate about reliable code and efficient infrastructure.",
-      "content": "[Placeholder]: With years of experience designing enterprise backend services, distributed systems, and low-latency APIs. I focus on building resilient software solutions tailored to scaling requirements and strict operational budgets",
+      "heading": "I care about software that holds up in production, not just in the demo.",
+      "content": "I'm a Systems Engineer from Universidad Nacional de Colombia. Since 2017 I've built integrations, web and mobile apps, and internal tools. Most recently I was the technical lead of a platform for loan officers in the US financial sector: I designed its architecture and AWS infrastructure, built features across ASP.NET Core, PostgreSQL and Next.js, set up CI/CD with GitHub Actions, and led a team of up to three developers through to the pilot phase, including an experimental AI assistant that answered questions about users' accounts.",
       "photo1": "Photo 1",
       "photo2": "Photo 2",
       "services": "Services",
       "service_list": [
         {
-          "key": "arch",
-          "title": "Backend System Architecture",
-          "description": "Designing distributed systems, microservices, and high-throughput data processing pipelines."
+          "key": "fullstack",
+          "title": "Full-Stack Development & Technical Leadership",
+          "description": "Web applications with ASP.NET Core or Next.js and PostgreSQL, from architecture and code reviews to guiding small teams to launch."
         },
         {
           "key": "infra",
-          "title": "Edge & Cloud Infrastructure",
-          "description": "Deploying serverless edge workloads, database integrations, and zero-cost optimized server setups."
+          "title": "Cloud Infrastructure & CI/CD",
+          "description": "AWS deployments with ECS and CloudFormation, Docker-based environments, and GitHub Actions pipelines for development and production."
         },
         {
-          "key": "api",
-          "title": "API Design & Integration",
-          "description": "Building secure RESTful and GraphQL APIs optimized for speed, reliability, and ease of developer access."
+          "key": "integrations",
+          "title": "Third-Party Integrations",
+          "description": "Connecting your product with services like Stripe, Twilio, Google and AWS, with mocked dependencies so end-to-end tests stay reliable."
         }
       ]
     },
     "contact": {
       "title": "Contact Me",
-      "subtitle": "[Placeholder]: Let's work together!"
+      "subtitle": "Have a project or a role in mind? Let's talk."
     }
   },
   "footer": {
-    "description": "Web development freelance",
+    "description": "Full-stack development for freelance projects and remote teams",
     "navigation": "navigation",
     "links": {
       "start": "Start",
@@ -59,9 +65,9 @@
     "copyright": "2026 {brand}. All rights reserved"
   },
   "contact": {
-    "title": "[Placeholder]: Tell me about your project",
+    "title": "Tell me about your project or role",
     "short_title": "Contact me",
-    "brief": "[Placeholder]: Whether you need help architecting a complex system, building an edge-native application, or discussing engineering challenges, reach out below to start the conversation.",
+    "brief": "Whether you need a full-stack developer for a project, help with your cloud infrastructure or integrations, or you're hiring for a remote role, send me a message and I'll get back to you.",
     "success": "Success!",
     "success_message": "I'll contact you as soon as possible",
     "response_time": {
@@ -100,7 +106,7 @@
   "blog": {
     "title": "Blog",
     "section_title": "Latest Blog Posts",
-    "brief": "[Placeholder]: Brief notes on architecture, infrastructure, and what I am learning while building things.",
+    "brief": "Notes on what I learn building and shipping software: architecture, infrastructure, integrations and the problems in between.",
     "read_more": "Read more",
     "empty_title": "No posts found",
     "empty_description": "There are no published blog posts at the moment. Please check back later for new updates.",
@@ -109,10 +115,10 @@
   "project": {
     "title": "All the projects",
     "short_title": "Projects",
-    "brief": "[Placeholder]: Things that I have built, and what I learned on the way.",
+    "brief": "Things I've built, and what I learned along the way.",
     "empty_title": "No projects found",
     "empty_description": "There are no published projects at the moment. Please check back later for new updates.",
-    "section_title": "Featured Projects / Study cases",
+    "section_title": "Featured Projects / Case Studies",
     "view_details": "View Details",
     "see_all": "See all projects",
     "summary": "Summary",

@@ -52,5 +52,18 @@ export type Project = {
   isFeatured?: boolean;
   status?: "published" | "draft" | "archived";
   publishedAt?: string;
+  updatedAt?: string;
   relatedBlogPosts?: RelatedBlogPost[];
+};
+
+export type BlogPostSitemapEntry = {
+  slug: string;
+  lastModified: string;
+  alternates: Record<Locale, string>;
+};
+
+export type ProjectSitemapEntry = {
+  slug: string;
+  lastModified: string;
+  alternates: Record<Locale, string>;
 };

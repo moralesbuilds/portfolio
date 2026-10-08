@@ -20,6 +20,7 @@ jobs:
 
     env:
       WRANGLER_SEND_METRICS: false
+      BASE_URL: ${{ vars.BASE_URL }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       PR_NUMBER: ${{ github.event.pull_request.number }}
       GH_REPO: ${{ github.repository }}

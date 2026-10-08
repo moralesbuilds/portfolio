@@ -1,6 +1,7 @@
 import { PageNavigation, PageHeader } from "@/components";
 import { PostList } from "@/features/blog";
 import { queryToNumber, type SearchParams } from "@/lib/query";
+import { alternates } from "@/lib/seo";
 import { fetchBlogPosts, getDb, type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { type Metadata } from "next";
@@ -12,9 +13,12 @@ type BlogListPageProps = {
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("blog");
+  const locale = await getLocale() as Locale;
+
   return {
     title: t("title"),
-    description: t("brief")
+    description: t("brief"),
+    alternates: alternates(locale, { en: "/blog" })
   };
 }
 

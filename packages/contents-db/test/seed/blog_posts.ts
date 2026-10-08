@@ -32,6 +32,7 @@ export async function seedBlogPost(
     slug: string;
     title: string;
     publishedAt: string;
+    updatedAt?: string;
     locale?: string;
     status?: string;
     summary?: string;
@@ -40,8 +41,8 @@ export async function seedBlogPost(
 ): Promise<number> {
   const result = await db
     .prepare(
-      `INSERT INTO blog_posts (name, slug, title, locale, status, summary, published_at, category_id, author_id, created_at)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, 1, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+      `INSERT INTO blog_posts (name, slug, title, locale, status, summary, published_at, category_id, author_id, created_at, updated_at)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, 1, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), ?9)
       RETURNING id`
     )
     .bind(
@@ -52,7 +53,8 @@ export async function seedBlogPost(
       overrides.status ?? "published",
       overrides.summary ?? "",
       overrides.publishedAt,
-      overrides.categoryId
+      overrides.categoryId,
+      overrides.updatedAt ?? null
     )
     .first<{ id: number; }>();
   return result!.id;
