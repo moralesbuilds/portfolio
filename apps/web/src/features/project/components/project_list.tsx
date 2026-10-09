@@ -1,15 +1,16 @@
-import { Project } from "@moralesbuilds/contents-db"
+import { type ProjectItem } from "@moralesbuilds/contents-db"
 import { ProjectCard } from "./project_card";
 import { EmptyListBanner } from "@/components";
 
 type ProjectListProps = {
-  items?: Project[] | null;
+  items?: ProjectItem[] | null;
+  featuredLabel?: string;
   viewDetailsLabel: string;
   emptyTitle: string;
   emptyDescription: string;
 };
 
-export function ProjectList({ items, viewDetailsLabel, emptyTitle, emptyDescription }: ProjectListProps) {
+export function ProjectList({ items, featuredLabel, viewDetailsLabel, emptyTitle, emptyDescription }: ProjectListProps) {
   const hasItems = (items?.length ?? 0) > 0;
 
   return hasItems ? (
@@ -21,8 +22,11 @@ export function ProjectList({ items, viewDetailsLabel, emptyTitle, emptyDescript
           image={`https://picsum.photos/seed/${encodeURIComponent(p.slug!)}/800/400`}
           title={p.title!}
           summary={p.summary!}
-          viewDetailsLabel={viewDetailsLabel}
           tags={p.tags}
+          isFeatured={p.isFeatured}
+          publishedAt={p.publishedAt}
+          featuredLabel={featuredLabel}
+          viewDetailsLabel={viewDetailsLabel}
         />
       ))}
     </div>

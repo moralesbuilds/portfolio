@@ -6,19 +6,23 @@ export type Page<T> = {
 
 export type Locale = "en" | "es";
 
-export type BlogPostItem = {
+export type BlogPost = {
   id: number;
   slug: string;
   title: string;
   summary?: string;
   publishedAt: string;
+  updatedAt?: string;
   category: string;
   tags?: string[];
-  locale?: Locale;
+  locale: Locale;
 };
 
-export type LeadStatus =  "new" | "read" | "archived";
+export type BlogPostItem = Pick<BlogPost, "id" | "slug" | "title" | "summary" | "publishedAt" | "category">;
+export type LatestBlogPost = Pick<BlogPost, "id" | "title" | "publishedAt" | "slug">;
+export type RelatedBlogPost = Pick<BlogPost, "id" | "title" | "publishedAt" | "slug">;
 
+export type LeadStatus =  "new" | "read" | "archived";
 export type Lead = {
   id: number;
   leadSourceId: number;
@@ -38,23 +42,23 @@ export interface RateLimitStore {
   prune(before: number): Promise<void>;
 };
 
-export type RelatedBlogPost = Pick<BlogPostItem, "id" | "title" | "publishedAt" | "slug">;
-
 export type Project = {
-  id?: number;
-  name?: string;
-  locale?: string;
-  slug?: string;
-  title?: string;
-  summary?: string;
+  id: number;
+  name: string;
+  locale: string;
+  slug: string;
+  title: string;
+  summary: string;
   repositoryUrl?: string;
   tags?: string[];
-  isFeatured?: boolean;
-  status?: "published" | "draft" | "archived";
-  publishedAt?: string;
+  isFeatured: boolean;
+  status: "published" | "draft" | "archived";
+  publishedAt: string;
   updatedAt?: string;
   relatedBlogPosts?: RelatedBlogPost[];
 };
+
+export type ProjectItem = Pick<Project, "id" | "slug" | "title" | "summary" | "publishedAt" | "tags" | "isFeatured">;
 
 export type BlogPostSitemapEntry = {
   slug: string;

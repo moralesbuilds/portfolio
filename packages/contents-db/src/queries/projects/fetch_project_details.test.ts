@@ -23,7 +23,7 @@ describe("fetchProjectDetails", () => {
   test("returns published project details for the locale by slug", async () => {
     const db = getDb(env.CONTENTS_DB);
     const blogPostId = await seedBlogPost(db, { name: "post-1", slug: "post-1", title: "Post 1", publishedAt: "2026-10-02T00:00:00.000Z", categoryId: categoryEnId });
-    const projectId = await seedProject(db, { isFeatured: true, name: "project-1", slug: "project-1", title: "Project 1", repositoryUrl: "https://example.com", summary: "Summary 1", publishedAt: "2026-10-01T00:00:00.000Z", locale: "en", status: "published" });
+    const projectId = await seedProject(db, { isFeatured: true, name: "project-1", slug: "project-1", title: "Project 1", repositoryUrl: "https://example.com", summary: "Summary 1", publishedAt: "2026-10-01T00:00:00.000Z", updatedAt: "2026-10-02T13:10:00.000Z", locale: "en", status: "published" });
     const tagId = await seedTag(db, { name: "testing", locale: "en", slug: "testing", label: "Testing" });
     await seedProjectTag(db, { projectId, tagId });
     await seedProjectBlogPost(db, { blogPostId, projectId });
@@ -39,6 +39,7 @@ describe("fetchProjectDetails", () => {
     expect(project.publishedAt).toBe("2026-10-01T00:00:00.000Z");
     expect(project.tags).toEqual(["Testing"]);
     expect(project.locale).toBe("en");
+    expect(project.updatedAt).toBe("2026-10-02T13:10:00.000Z");
 
     expect(project?.relatedBlogPosts?.length).toBe(1);
     const relatedBlog = project.relatedBlogPosts?.[0]!;

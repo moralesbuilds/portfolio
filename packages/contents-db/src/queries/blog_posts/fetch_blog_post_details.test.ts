@@ -21,7 +21,7 @@ describe("fetchBlogPostDetails", () => {
 
   test("returns published blog post details for the locale by slug", async () => {
     const db = getDb(env.CONTENTS_DB);
-    const blogPostId = await seedBlogPost(db, { name: "post-1", slug: "post-1", title: "Post 1", summary: "This summary", publishedAt: "2026-10-02T00:00:00.000Z", categoryId: categoryEnId });
+    const blogPostId = await seedBlogPost(db, { name: "post-1", slug: "post-1", title: "Post 1", summary: "This summary", publishedAt: "2026-10-02T00:00:00.000Z", updatedAt: "2026-10-03T03:03:03.000Z", categoryId: categoryEnId });
     const tagXId = await seedTag(db, { name: "x", locale: "en", slug: "x", label: "X" });
     const tagYId = await seedTag(db, { name: "y", locale: "en", slug: "y", label: "Y" });
     await seedBlogPostTag(db, { blogPostId, tagId: tagXId });
@@ -37,6 +37,7 @@ describe("fetchBlogPostDetails", () => {
     expect(blogPost.title).toBe("Post 1");
     expect(blogPost.summary).toBe("This summary");
     expect(blogPost.tags).toEqual(["X", "Y"]);
+    expect(blogPost.updatedAt).toBe("2026-10-03T03:03:03.000Z");
   });
 
   test("returns pubished blog post details for the locale by slug and without tags", async () => {

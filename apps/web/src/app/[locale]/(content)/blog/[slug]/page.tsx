@@ -1,6 +1,6 @@
 import { Date, Tag, PageHeader } from "@/components";
 import { getBlogPostFilename, fetchBlogPostDetails, getBlogPostUrl } from "@/features/blog";
-import { alternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 import { type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import matter from "gray-matter";
@@ -22,11 +22,17 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     notFound();
   }
 
-  return {
+  const t = await getTranslations("blog");
+
+  return pageMetadata({
+    locale,
+    hrefs: { [locale]: getBlogPostUrl(slug) },
     title: details.title,
-    description: details.summary,
-    alternates: alternates(locale, { [locale]: getBlogPostUrl(slug) })
-  };
+    description: details.summary ?? t("brief"),
+    type: "article",
+    publishedTime: details.publishedAt,
+    modifiedTime: details.updatedAt,
+  });
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {

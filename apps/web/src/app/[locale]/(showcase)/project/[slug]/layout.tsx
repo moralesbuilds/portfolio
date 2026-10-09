@@ -5,7 +5,7 @@ import { Container, Tab, Tabs, Tag, PageHeader } from "@/components";
 import { type Locale } from "@moralesbuilds/contents-db";
 import { fetchProjectDetails, getProjectUrl } from "@/features/project";
 import { type Metadata } from "next";
-import { alternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 
 type ProjectDetailsLayoutProps = {
   params: Promise<{ slug: string }>;
@@ -20,11 +20,15 @@ export async function generateMetadata({ params }: ProjectDetailsLayoutProps): P
     notFound();
   }
 
-  return {
+  return pageMetadata({
+    locale,
+    hrefs: { [locale]: getProjectUrl(slug) },
     title: details.title,
     description: details.summary,
-    alternates: alternates(locale, { [locale]: getProjectUrl(slug) })
-  };
+    type: "article",
+    publishedTime: details.publishedAt,
+    modifiedTime: details.updatedAt,
+  });
 }
 
 export default async function ProjectDetailsLayout({ params, children }: ProjectDetailsLayoutProps) {

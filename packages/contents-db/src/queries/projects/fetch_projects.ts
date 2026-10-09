@@ -1,5 +1,5 @@
 import type { Db } from "../../client";
-import type { Locale, Page, Project } from "../../types"
+import type { Locale, Page, ProjectItem } from "../../types"
 
 type FetchProjectsParams = {
   locale?: Locale;
@@ -8,7 +8,7 @@ type FetchProjectsParams = {
   onlyFeatured?: boolean;
 };
 
-export async function fetchProjects(db: Db, params?: FetchProjectsParams): Promise<Page<Project>> {
+export async function fetchProjects(db: Db, params?: FetchProjectsParams): Promise<Page<ProjectItem>> {
   const locale = params?.locale ?? 'en';
   const limit = params?.pageSize ?? 10;
   const offset = ((params?.pageIndex ?? 1) - 1) * limit;
@@ -37,7 +37,7 @@ export async function fetchProjects(db: Db, params?: FetchProjectsParams): Promi
       LIMIT ? OFFSET ?`
     )
     .bind(locale, limit, offset)
-    .all<Project & { tags_str?: string; is_featured: number; }>();
+    .all<ProjectItem & { tags_str?: string; is_featured: number; }>();
 
   return {
     items: results.map(({ tags_str, is_featured, ...rest }) => ({

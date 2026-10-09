@@ -14,6 +14,7 @@ type ProjectDetailsPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+
 export default async function ProjectDetailsPage({ params }: ProjectDetailsPageProps) {
   const t = await getTranslations("project");
   const { slug } = await params;
