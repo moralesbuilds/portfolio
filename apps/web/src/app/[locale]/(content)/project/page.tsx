@@ -1,7 +1,7 @@
 import { PageNavigation, PageHeader } from "@/components";
 import { ProjectList } from "@/features/project";
 import { queryToNumber, type SearchParams } from "@/lib/query";
-import { alternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 import { fetchProjects, getDb, type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { type Metadata } from "next";
@@ -15,11 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("project");
   const locale = await getLocale() as Locale;
 
-  return {
-    title: t("short_title"),
-    description: t("brief"),
-    alternates: alternates(locale, { en: "/project" })
-  };
+  return pageMetadata({ locale, hrefs: { en: "/project" }, title: t("short_title"), description: t("brief") });
 }
 
 export default async function ProjectListPage({ searchParams }: ProjectListPageProps) {

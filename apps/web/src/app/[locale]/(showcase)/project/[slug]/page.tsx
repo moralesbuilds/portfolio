@@ -1,10 +1,13 @@
 import { CodeIcon, ExternalLinkIcon } from "@/components/icons";
 import { LatestPostItem } from "@/features/blog";
+import { getProjectUrl } from "@/features/project";
 import { getProjectSummaryFilename } from "@/features/project/utils/contents";
 import { fetchProjectDetails } from "@/features/project/utils/db";
+import { pageMetadata } from "@/lib/seo";
 import { type Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import matter from "gray-matter";
+import { type Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
@@ -13,6 +16,23 @@ import remarkGfm from "remark-gfm";
 type ProjectDetailsPageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export async function generateMetadata({ params }: ProjectDetailsPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const locale = await getLocale() as Locale;
+  const details = await fetchProjectDetails(locale, slug);
+  if (!details) {
+    notFound();
+  }
+
+  return pageMetadata({
+    locale,
+    hrefs: { [locale]: getProjectUrl(slug) },
+    title: details.title,
+    description: details.summary!,
+    type: "article",
+  });
+}
 
 export default async function ProjectDetailsPage({ params }: ProjectDetailsPageProps) {
   const t = await getTranslations("project");

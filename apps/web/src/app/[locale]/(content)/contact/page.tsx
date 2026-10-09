@@ -1,7 +1,7 @@
 import { ExternalLink, PageHeader } from "@/components";
 import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/icons";
 import { ContactForm } from "@/features/contact";
-import { alternates } from "@/lib/seo";
+import { pageMetadata } from "@/lib/seo";
 import type { Locale } from "@moralesbuilds/contents-db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { type Metadata } from "next";
@@ -11,11 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("contact");
   const locale = await getLocale() as Locale;
 
-  return {
-    title: t("short_title"),
-    description: t("brief"),
-    alternates: alternates(locale, { en: "/contact" })
-  };
+  return pageMetadata({ locale, hrefs: { en: "/contact" }, title: t("short_title"), description: t("brief") });
 }
 
 export default async function ContactPage() {
