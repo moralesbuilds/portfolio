@@ -1,7 +1,5 @@
-import type { BlogPostItem, Locale } from "../../types";
+import type { LatestBlogPost, Locale } from "../../types";
 import type { Db } from "../../client";
-
-type LatestBlogPost = Pick<BlogPostItem, "id" | "title" | "publishedAt" | "slug">;
 
 type FetchLatestBlogPostParams = {
   locale?: Locale;

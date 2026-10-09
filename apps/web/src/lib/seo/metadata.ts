@@ -9,9 +9,11 @@ type PageMetadataInput = {
   title?: string;
   description: string;
   type?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
 };
 
-export function pageMetadata({ locale, hrefs, title, description, type = "website" }: PageMetadataInput): Metadata {
+export function pageMetadata({ locale, hrefs, title, description, publishedTime, modifiedTime, type = "website" }: PageMetadataInput): Metadata {
   return {
     ...(title && { title }),
     description,
@@ -22,7 +24,12 @@ export function pageMetadata({ locale, hrefs, title, description, type = "websit
       locale,
       url: getPathname({ locale, href: hrefs[locale]! }),
       ...(title && { title }),
-      description
+      description,
+      ...(type === "article" && {
+        publishedTime,
+        modifiedTime,
+        authors: ["Luis Morales"]
+      })
     }
   };
 }

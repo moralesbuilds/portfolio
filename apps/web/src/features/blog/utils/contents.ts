@@ -1,5 +1,5 @@
-import { type BlogPostItem } from "@moralesbuilds/contents-db";
+import { type BlogPost } from "@moralesbuilds/contents-db";
 
-export function getBlogPostFilename(details: Partial<BlogPostItem>): string {
+export function getBlogPostFilename(details: Partial<BlogPost>): string {
   return `blog_posts/${details.locale ?? 'en'}/${details.slug}.md`;
 }

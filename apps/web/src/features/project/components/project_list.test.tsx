@@ -14,7 +14,9 @@ describe("ProjectList (unit)", () => {
               slug: "project",
               title: "A project",
               summary: "The brief",
-              tags: ["Testing"]
+              tags: ["Testing"],
+              publishedAt: "",
+              isFeatured: false
             }
           ]}
           viewDetailsLabel="View details"

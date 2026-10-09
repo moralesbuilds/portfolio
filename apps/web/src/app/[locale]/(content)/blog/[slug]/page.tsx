@@ -22,12 +22,16 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     notFound();
   }
 
+  const t = await getTranslations("blog");
+
   return pageMetadata({
     locale,
     hrefs: { [locale]: getBlogPostUrl(slug) },
     title: details.title,
-    description: details.summary!,
-    type: "article"
+    description: details.summary ?? t("brief"),
+    type: "article",
+    publishedTime: details.publishedAt,
+    modifiedTime: details.updatedAt,
   });
 }
 

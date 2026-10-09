@@ -1,6 +1,6 @@
 import type { Db, Project } from "../../src";
 
-export async function seedProject(db: Db, project: Project): Promise<number> {
+export async function seedProject(db: Db, project: Partial<Project>): Promise<number> {
   const result = await db
     .prepare(
       `INSERT INTO projects (name, locale, slug, title, summary, repository_url, status, is_featured, author_id, published_at, created_at, updated_at)
