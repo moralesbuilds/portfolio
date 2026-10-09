@@ -30,7 +30,6 @@ export async function FeaturedProjectsSection() {
         viewDetailsLabel={t("view_details")}
         emptyTitle={t("empty_title")}
         emptyDescription={t("empty_description")}
-        featuredLabel={t("featured")}
       />
     </section>
   );
