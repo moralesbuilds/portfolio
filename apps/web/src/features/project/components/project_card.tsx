@@ -20,12 +20,14 @@ export function ProjectCard({ slug, image, title, summary, tags, isFeatured, pub
 
   return (
     <article className="flex flex-col border border-slate-200 bg-base shadow-sm transition-all hover:shadow-md hover:border-slate-300">
-      <img src={image} alt={title} className="h-48 w-full object-cover" />
-      {showFeatured && (
-        <span className="absolute top-3 left-3 inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/60">
-          {featuredLabel}
-        </span>
-      )}
+      <div className="relative">
+        <img src={image} alt={title} className="h-48 w-full object-cover" />
+        {showFeatured && (
+          <span className="absolute top-3 left-3 inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/60">
+            {featuredLabel}
+          </span>
+        )}
+      </div>
 
       <div className="flex flex-1 flex-col p-6">
         {publishedAt && (

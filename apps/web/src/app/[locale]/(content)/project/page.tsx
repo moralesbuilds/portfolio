@@ -46,6 +46,7 @@ export default async function ProjectListPage({ searchParams }: ProjectListPageP
         viewDetailsLabel={t("view_details")}
         emptyTitle={t("empty_title")}
         emptyDescription={t("empty_description")}
+        featuredLabel={t("featured")}
       />
 
       <PageNavigation total={page.count} pageIndex={pageIndex} pageSize={page.size} />

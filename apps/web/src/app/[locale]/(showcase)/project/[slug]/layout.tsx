@@ -31,7 +31,6 @@ export async function generateMetadata({ params }: ProjectDetailsLayoutProps): P
   });
 }
 
-
 export default async function ProjectDetailsLayout({ params, children }: ProjectDetailsLayoutProps) {
   const t = await getTranslations("project");
   const { slug } = await params;
