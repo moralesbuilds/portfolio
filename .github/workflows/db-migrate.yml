@@ -1,0 +1,63 @@
+name: db-migrate
+run-name: Apply D1 Database Migrations
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'migrations/**'
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    name: Apply Cloudflare D1 Migrations
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    env:
+      WRANGLER_SEND_METRICS: false
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Detect Changed Migration Folders
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          list-files: json
+          filters: |
+            migrations:
+              - 'apps/web/migrations/**'
+      
+      - name: Setup pnpm and Node.js
+        uses: pnpm/setup@v1
+        with:
+          runtime: node@26.8.1
+          install: false
+          cache: true
+
+      - name: Install dependencies
+        run: |
+          pnpm install --frozen-lockfile
+
+      - name: Apply Migrations for Changed Databases
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          CHANGED_DBS=$(echo '${{ steps.filter.outputs.migrations_files }}' \
+            | jq -r '.[]' \
+            | grep '^migrations/' \
+            | cut -d'/' -f4 \
+            | sort -u)
+
+          echo "Databases with pending migrations:"
+          echo "$CHANGED_DBS"
+          echo "----------------------------------------"
+          for db in $CHANGED_DBS; do
+            echo "Applying migrations for binding: $db..."
+            
+            pnpm --filter web wrangler d1 migrations apply "$db" --remote --ip-strict=false
+          done
+

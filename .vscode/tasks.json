@@ -2,14 +2,14 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Create content-db migration file",
+      "label": "Create DB migration file",
       "type": "shell",
-      "command": "pnpm exec --filter web wrangler d1 migrations create contents-db ${input:migration-name}"
+      "command": "pnpm exec --filter web wrangler d1 migrations create ${input:target-db} ${input:migration-name}"
     },
     {
-      "label": "Apply content-db migrations locally",
+      "label": "Apply DB migrations locally",
       "type": "shell",
-      "command": "pnpm exec --filter web wrangler d1 migrations apply contents-db --local"
+      "command": "pnpm exec --filter web wrangler d1 migrations apply ${input:target-db} --local"
     },
     {
       "label": "Wipe local D1 databases",
@@ -33,6 +33,15 @@
     }
   ],
   "inputs": [
+    {
+      "id": "target-db",
+      "type": "pickString",
+      "description": "Target database",
+      "options": [
+        "contents-db",
+        "metrics-db"
+      ]
+    },
     {
       "id": "migration-name",
       "type": "promptString",

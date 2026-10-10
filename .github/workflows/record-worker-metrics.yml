@@ -1,0 +1,51 @@
+name: record-worker-metrics
+run-name: Record portfolio metrics
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'pnpm-lock.yaml'
+      - 'apps/**'
+      - 'packages/**'
+  workflow_dispatch:
+
+jobs:
+  record-metrics:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      WRANGLER_SEND_METRICS: false
+      BASE_URL: ${{ vars.BASE_URL }}
+      PROJECT_NAME: portfolio
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Setup pnpm and Node.js
+        uses: pnpm/setup@v1
+        with:
+          runtime: node@26.8.1
+          install: false
+          cache: true
+
+      - name: Instal dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build OpenNext worker
+        run: pnpm --filter web run build:cf
+
+      - name: Measure bundle size
+        run: pnpm --filter web size | tee dry-run.txt
+        
+      - name: Generate SQL
+        run: >
+          node scripts/metrics/worker_size_sql.mjs dry-run.txt "$PROJECT_NAME" "${{ github.sha }}" > samples.sql
+
+      - name: Write samples to metrics-db
+        uses: cloudflare/wrangler-action@v4
+        with:
+          command: d1 execute METRIC_DB --remote --file=../../samples.sql
+          workingDirectory: ./apps/web
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
