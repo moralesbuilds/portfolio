@@ -1,5 +1,5 @@
-name: web-app-checks
-run-name: Portfolio's Web app checks
+name: tests
+run-name: Portfolio's apps and packages tests
 on:
   pull_request:
     branches:
@@ -8,8 +8,9 @@ on:
       - package.json
       - pnpm-lock.yaml
       - pnpm-workspace.yaml
-      - '.github/workflows/web-app-checks.yml'
-      - 'apps/web/**'
+      - '.github/workflows/tests.yml'
+      - 'apps/**'
+      - 'packages/**'
 
 jobs:
   test-build:
@@ -64,18 +65,20 @@ jobs:
 
       - name: Run Typescript checks
         run: |
-          pnpm --filter web ts:check
+          pnpm --filter "...[origin/${{ github.base_ref }}]" ts:check
 
       - name: Run Unit tests
         run: |
-          pnpm --filter web test
+          pnpm --filter "...[origin/${{ github.base_ref }}]" test
 
       - name: Run Browser tests
         run: |
-          pnpm --filter web test:browser
+          pnpm --filter "...[origin/${{ github.base_ref }}]" test:browser
 
       - name: Apply D1 migrations (local)
-        run: pnpm --filter web exec wrangler d1 migrations apply contents-db --local
+        run: |
+          pnpm --filter web exec wrangler d1 migrations apply contents-db --local
+          pnpm --filter web exec wrangler d1 migrations apply metrics-db --local
 
       - name: Build OpenNext worker
         run: |
