@@ -45,7 +45,7 @@ jobs:
       - name: Write samples to metrics-db
         uses: cloudflare/wrangler-action@v4
         with:
-          command: d1 execute METRIC_DB --remote --file=../../samples.sql
+          command: d1 execute METRICS_DB --remote --file=../../samples.sql
           workingDirectory: ./apps/web
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
