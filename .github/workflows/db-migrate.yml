@@ -69,5 +69,5 @@ jobs:
 
           for db in $CHANGED_DBS; do
             echo "Applying migrations for binding: $db..."
-            pnpm --filter web exec wrangler d1 migrations apply "$db" --remote --ip-strict=false
+            pnpm --filter web exec wrangler d1 migrations apply "$db" --remote
           done
