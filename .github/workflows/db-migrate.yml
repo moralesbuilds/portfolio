@@ -28,7 +28,7 @@ jobs:
           list-files: json
           filters: |
             migrations:
-              - 'apps/web/migrations/**'
+              - 'migrations/**'
       
       - name: Setup pnpm and Node.js
         uses: pnpm/setup@v1
