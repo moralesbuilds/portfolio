@@ -30,6 +30,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v7.0.1
 
+      - name: Fetch Target Base Branch
+        run: git fetch origin ${{ github.base_ref }} --depth=10
+
       - name: Setup pnpm and Node.js
         uses: pnpm/setup@v1
         with:
