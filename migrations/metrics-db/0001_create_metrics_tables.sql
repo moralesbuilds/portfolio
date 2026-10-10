@@ -21,6 +21,7 @@ CREATE TABLE project_metrics (
   project_name TEXT NOT NULL CHECK(LENGTH(project_name) <= 100), -- = contents-db projects.name
   metric_definition_id INTEGER NOT NULL,
   is_public INTEGER NOT NULL DEFAULT (TRUE) CHECK(is_public IN (0, 1)),
+  pinned INTEGER NOT NULL DEFAULT (FALSE) CHECK(pinned IN (0, 1)),
   sort_order INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL,
   FOREIGN KEY (metric_definition_id) REFERENCES metric_definitions(id)
