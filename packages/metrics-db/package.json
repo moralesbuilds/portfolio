@@ -13,7 +13,7 @@
   },
   "scripts": {
     "types": "wrangler types --config vitest.wrangler.jsonc",
-    "test": "cross-env TZ=UTC LANG=en-US vitest run",
+    "test": "cross-env TZ=UTC LANG=en-US vitest run --passWithNoTests",
     "ts:check": "tsc --noEmit"
   },
   "devDependencies": {
