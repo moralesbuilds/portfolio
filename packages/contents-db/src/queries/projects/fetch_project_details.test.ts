@@ -25,6 +25,7 @@ describe("fetchProjectDetails", () => {
     const project = (await fetchProjectDetails(db, { locale: "en", slug: "project-1" }))!;
     expect(project).not.toBeNull();
     expect(project.id).toBeGreaterThan(0);
+    expect(project.name).toBe("project-1");
     expect(project.isFeatured).toBe(true);
     expect(project.slug).toBe("project-1");
     expect(project.title).toBe("Project 1");
