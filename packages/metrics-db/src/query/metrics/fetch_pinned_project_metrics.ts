@@ -32,9 +32,9 @@ export async function fetchPinnedProjectMetrics(db: MetricsDb, params: FetchPinn
         rs.timestamp,
         rs.tag
       FROM metric_definitions md
-      JOIN project_metrics pm ON md.id = pm.metric_definition_id
-      JOIN ranked_samples rs ON pm.id = rs.project_metric_id
-      WHERE pm.project_name = ?1 AND pm.is_public = TRUE AND pm.pinned = TRUE AND rs.rn = 1
+      INNER JOIN project_metrics pm ON md.id = pm.metric_definition_id
+      LEFT JOIN ranked_samples rs ON pm.id = rs.project_metric_id AND rs.rn = 1
+      WHERE pm.project_name = ?1 AND pm.is_public = TRUE AND pm.pinned = TRUE
       ORDER BY pm.sort_order
       LIMIT ?2`
     )

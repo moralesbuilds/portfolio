@@ -11,7 +11,7 @@ export type ProjectMetricSummary = {
   better: BetterUnit;
   referenceValue?: number;
   tagType: TagType;
-  value: number;
-  timestamp: number;
+  value?: number;
+  timestamp?: number;
   tag?: string;
 };

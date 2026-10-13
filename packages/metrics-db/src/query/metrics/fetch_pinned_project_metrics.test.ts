@@ -78,5 +78,24 @@ describe("fetchPinnedProjectMetrics", () => {
 
     const summaries = await fetchPinnedProjectMetrics(db, { projectName: "alternative-project" });
     expect(summaries).toHaveLength(0);
-  })
+  });
+
+  test("returns summary row even when there is no metric sample yet", async () => {
+    const db = getDb(env.METRICS_DB);
+    const metricDef1 = await seedMetricDefinition(db, { name: "metric-1", unit: "bytes", better: "higher", tagType: "none" });
+    await seedProjectMetric(db, { projectName: "project-1", metricDefinitionId: metricDef1, isPublic: true, pinned: true, sortOrder: 1 });
+
+    const summaries = await fetchPinnedProjectMetrics(db, { projectName: "project-1" });
+    expect(summaries).toHaveLength(1);
+
+    const metric1 = summaries[0];
+    expect(metric1.id).toBeGreaterThan(0);
+    expect(metric1.name).toBe("metric-1");
+    expect(metric1.referenceValue).toBeNull();
+    expect(metric1.tagType).toBe("none");
+    expect(metric1.unit).toBe("bytes");
+    expect(metric1.timestamp).toBeNull();
+    expect(metric1.value).toBeNull();
+    expect(metric1.tag).toBeNull();
+  });
 });
