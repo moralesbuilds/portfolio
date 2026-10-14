@@ -1,5 +1,5 @@
+import { toLocalDate } from "@/lib/format";
 import React from "react";
-import { toLocalDate } from "@/lib/date";
 
 interface DateProps extends React.TimeHTMLAttributes<HTMLTimeElement> {
   value: string;
@@ -7,6 +7,7 @@ interface DateProps extends React.TimeHTMLAttributes<HTMLTimeElement> {
 
 export function Date({ value, ...rest }: DateProps) {
   const displayValue = toLocalDate(value);
+
   return (
     <time dateTime={value} {...rest}>
       {displayValue}
