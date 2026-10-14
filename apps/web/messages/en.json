@@ -125,6 +125,16 @@
     "featured": "Featured",
     "related_blogs": "Related Blog Posts",
     "details": "Project Details",
-    "repository": "Repository"
+    "repository": "Repository",
+    "no_details": "No details available",
+    "no_value": "No value",
+    "metrics": {
+      "worker": {
+        "size": {
+          "uncompressed": "Uncompressed worker size",
+          "gzip": "Compressed worker size"
+        }
+      }
+    }
   }
 }

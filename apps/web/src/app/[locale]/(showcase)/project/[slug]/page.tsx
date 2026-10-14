@@ -1,5 +1,5 @@
-import { CodeIcon, ExternalLinkIcon } from "@/components/icons";
 import { LatestPostItem } from "@/features/blog";
+import { ProjectDetailsPanel } from "@/features/project";
 import { getProjectSummaryFilename } from "@/features/project/utils/contents";
 import { fetchProjectDetails } from "@/features/project/utils/db";
 import { type Locale } from "@moralesbuilds/contents-db";
@@ -7,6 +7,7 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import matter from "gray-matter";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -60,28 +61,9 @@ export default async function ProjectDetailsPage({ params }: ProjectDetailsPageP
       </div>
 
       {/* Right Column: Details panel (Spans 4 cols on desktop) */}
-      <aside className="lg:col-span-4 bg-white space-y-4 divide-y divide-slate-200 [&>:nth-child(n+2)]:pt-4">
-        <div className="pb-4">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-900">
-            {t("details")}
-          </h2>
-        </div>
-
-        {details.repositoryUrl && <div className="py-4 space-y-2">
-          <span className="block text-xs font-medium text-slate-500">
-            {t("repository")}
-          </span>
-
-          <a href={details.repositoryUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-between w-full text-sm font-semibold text-slate-800 hover:text-indigo-600 transition-colors group">
-            <span className="inline-flex items-center gap-2">
-              <CodeIcon className="h-4 w-4 text-slate-500 group-hover:text-indigo-600 transition-colors" />
-              {details.repositoryUrl}
-            </span>
-
-            <ExternalLinkIcon className="h-4 w-4 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-          </a>
-        </div>}
-      </aside>
+      <Suspense fallback={<p>Loading details...</p>}>
+        <ProjectDetailsPanel details={details} />
+      </Suspense>
     </div>
   );
 }
