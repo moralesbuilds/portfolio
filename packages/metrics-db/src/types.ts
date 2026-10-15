@@ -15,3 +15,9 @@ export type ProjectMetricSummary = {
   timestamp?: number;
   tag?: string;
 };
+
+export type MetricSample = {
+  timestamp: number;
+  value: number;
+  tag?: string;
+};
