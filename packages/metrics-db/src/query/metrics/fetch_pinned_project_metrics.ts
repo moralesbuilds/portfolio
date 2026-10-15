@@ -22,7 +22,7 @@ export async function fetchPinnedProjectMetrics(db: MetricsDb, params: FetchPinn
         FROM metric_samples ms
       )
       SELECT
-        md.id,
+        pm.id,
         md.name,
         md.unit,
         md.better,

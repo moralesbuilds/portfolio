@@ -29,7 +29,7 @@ describe("fetchPinnedProjectMetrics", () => {
     expect(summaries).toHaveLength(2);
     
     const metric1 = summaries[0];
-    expect(metric1.id).toBeGreaterThan(0);
+    expect(metric1.id).toBe(projectMetric2);
     expect(metric1.name).toBe("metric-2");
     expect(metric1.referenceValue).toBe(200);
     expect(metric1.tag).toBe("sha3");
@@ -39,7 +39,7 @@ describe("fetchPinnedProjectMetrics", () => {
     expect(metric1.value).toBe(47);
 
     const metric2 = summaries[1];
-    expect(metric2.id).toBeGreaterThan(0);
+    expect(metric2.id).toBe(projectMetric3);
     expect(metric2.name).toBe("metric-3");
     expect(metric2.referenceValue).toBeNull();
     expect(metric2.tag).toBeNull();
@@ -83,13 +83,13 @@ describe("fetchPinnedProjectMetrics", () => {
   test("returns summary row even when there is no metric sample yet", async () => {
     const db = getDb(env.METRICS_DB);
     const metricDef1 = await seedMetricDefinition(db, { name: "metric-1", unit: "bytes", better: "higher", tagType: "none" });
-    await seedProjectMetric(db, { projectName: "project-1", metricDefinitionId: metricDef1, isPublic: true, pinned: true, sortOrder: 1 });
+    const projectMetricId = await seedProjectMetric(db, { projectName: "project-1", metricDefinitionId: metricDef1, isPublic: true, pinned: true, sortOrder: 1 });
 
     const summaries = await fetchPinnedProjectMetrics(db, { projectName: "project-1" });
     expect(summaries).toHaveLength(1);
 
     const metric1 = summaries[0];
-    expect(metric1.id).toBeGreaterThan(0);
+    expect(metric1.id).toBe(projectMetricId);
     expect(metric1.name).toBe("metric-1");
     expect(metric1.referenceValue).toBeNull();
     expect(metric1.tagType).toBe("none");
