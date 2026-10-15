@@ -3,11 +3,13 @@ import { formatUnit } from "@/lib/format";
 import { type MetricUnit } from "@moralesbuilds/metrics-db";
 
 type MetricFieldProps = {
+  id: number;
   label: string;
   unit: MetricUnit;
   value?: number;
   referenceValue?: number;
   noValueLabel?: string;
+  onChartButtonClicked: (id: number, label: string) => void;
 };
 
 type InternalMetricProps = {
@@ -49,7 +51,7 @@ function ProgressMetricValue({ value, formattedValue, referenceValue, unit }: Pr
   );
 }
 
-export function MetricField({ label, unit, value, referenceValue, noValueLabel }: MetricFieldProps) {
+export function MetricField({ id, label, unit, value, referenceValue, noValueLabel, onChartButtonClicked }: MetricFieldProps) {
   const formattedValue = value ? formatUnit(value, unit) : "";
 
   return (
@@ -60,10 +62,12 @@ export function MetricField({ label, unit, value, referenceValue, noValueLabel }
         </span>
 
         {value && <button
-          type="button"
+          command="show-modal"
+          commandfor="metric-chart-dialog"
+          onClick={() => onChartButtonClicked(id, label)}
           aria-label="View metric graph"
-          data-testid="chart-button"
           className="h-6 w-6 inline-flex items-center justify-center rounded-md text-slate-400 hover:text-indigo-600 hover:bg-slate-100 transition-colors cursor-pointer"
+          data-testid="chart-button"
         >
           <LineChartIcon />
         </button>}
