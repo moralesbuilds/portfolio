@@ -7,7 +7,9 @@
     "open_menu": "Open main menu",
     "prev": "Previous",
     "next": "Next",
-    "no_tags": "No tags"
+    "no_tags": "No tags",
+    "close": "Close",
+    "close_modal": "Close modal"
   },
   "seo": {
     "person": {

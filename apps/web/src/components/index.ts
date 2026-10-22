@@ -13,3 +13,4 @@ export { Tabs } from "./tabs";
 export { Tab } from "./tab";
 export { PageHeader } from "./page_header";
 export { JsonLd } from "./json_ld";
+export { Dialog } from "./dialog";
