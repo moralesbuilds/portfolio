@@ -1,3 +1,5 @@
+import { Loading } from "./loading";
+
 type SubmitButtonProps = {
   label: string;
   isSubmitting?: boolean;
@@ -13,15 +15,7 @@ export function SubmitButton({ label, isSubmitting = false }: SubmitButtonProps)
         : "hover:bg-indigo-500 cursor-pointer"
       }`}
     >
-      {isSubmitting ? (
-        <span className="inline-flex items-center gap-1">
-          <span className="h-1.5 w-1.5 rounded-full bg-white animate-bounce [animation-delay:-0.3s]" />
-          <span className="h-1.5 w-1.5 rounded-full bg-white animate-bounce [animation-delay:-0.15s]" />
-          <span className="h-1.5 w-1.5 rounded-full bg-white animate-bounce" />
-        </span>
-      ) : (
-        <span>{label}</span>
-      )}
+      {isSubmitting ? <Loading size="sm" /> : <span>{label}</span>}
     </button>
   );
 }
