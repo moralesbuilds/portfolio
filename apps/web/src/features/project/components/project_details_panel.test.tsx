@@ -2,6 +2,7 @@ import { describe, test, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import type { Project } from "@moralesbuilds/contents-db";
 import { ProjectDetailsPanel } from "./project_details_panel";
+import { NextIntlClientProvider } from "next-intl";
 
 const mocks = vi.hoisted(() => ({
   fakeDb: { __fake: "db" },
@@ -23,7 +24,7 @@ vi.mock("@moralesbuilds/metrics-db", () => ({
 
 const project = {
   name: "moralesbuilds",
-  repositoryUrl: "https://github.com/lumoralz/moralesbuilds",
+  repositoryUrl: "https://github.com/moralesbuilds/portfolio",
 } as Project;
 
 const projectNoRepo = {
@@ -38,7 +39,14 @@ const metric = {
   referenceValue: 90,
 };
 
-// --- Test ------------------------------------------------------------
+async function renderProjectDetailsPanel(details: Project) {
+  render(
+    <NextIntlClientProvider locale="en" messages={{}}>
+      {await ProjectDetailsPanel({ details })}
+    </NextIntlClientProvider>
+  );
+}
+
 describe("ProjectDetailsPanel", () => {
   beforeEach(() => {
     mocks.fetchPinnedProjectMetrics.mockReset();
@@ -47,7 +55,7 @@ describe("ProjectDetailsPanel", () => {
   test("shows the repository url and the metrics when the project has details", async () => {
     mocks.fetchPinnedProjectMetrics.mockResolvedValue([metric]);
 
-    render(await ProjectDetailsPanel({ details: project }));
+    await renderProjectDetailsPanel(project);
 
     expect(screen.getByRole("heading", { name: "project.details" })).toBeInTheDocument();
     expect(screen.getByText("project.repository")).toBeInTheDocument();
@@ -61,8 +69,8 @@ describe("ProjectDetailsPanel", () => {
 
   test("shows no details when there is no metrics nor repository url", async () => {
     mocks.fetchPinnedProjectMetrics.mockResolvedValue([]);
-
-    render(await ProjectDetailsPanel({ details: projectNoRepo }));
+    
+    await renderProjectDetailsPanel(projectNoRepo);
 
     expect(screen.getByRole("heading", { name: "project.details" })).toBeInTheDocument();
     expect(screen.queryByText("project.repository")).not.toBeInTheDocument();
@@ -73,7 +81,7 @@ describe("ProjectDetailsPanel", () => {
   test("shows repository url field only", async () => {
     mocks.fetchPinnedProjectMetrics.mockResolvedValue([]);
 
-    render(await ProjectDetailsPanel({ details: project }));
+    await renderProjectDetailsPanel(project);
 
     expect(screen.getByRole("heading", { name: "project.details" })).toBeInTheDocument();
     expect(screen.getByText("project.repository")).toBeInTheDocument();
@@ -84,7 +92,7 @@ describe("ProjectDetailsPanel", () => {
   test("shows metric field only", async () => {
     mocks.fetchPinnedProjectMetrics.mockResolvedValue([metric]);
 
-    render(await ProjectDetailsPanel({ details: projectNoRepo }));
+    await renderProjectDetailsPanel(projectNoRepo);
 
     expect(screen.getByRole("heading", { name: "project.details" })).toBeInTheDocument();
     expect(screen.queryByText("project.repository")).not.toBeInTheDocument();
