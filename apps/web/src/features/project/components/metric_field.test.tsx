@@ -102,6 +102,28 @@ describe("MetricField (unit)", () => {
     expectChartButtonToBeInTheDocument();
   });
 
+  test("render metric unit with zero as reference value", () => {
+    render(
+      <MetricField
+        metric={{
+          id: 1,
+          unit: "score",
+          value: 1,
+          referenceValue: 0
+        } as ProjectMetricSummary}
+        label="Example"
+        noValueLabel="Missing value"
+        onChartButtonClicked={() => { }}
+      />
+    );
+
+    expect(screen.getByText("Example")).toBeInTheDocument();
+    expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+    expect(screen.getByText("1")).toBeInTheDocument();
+    expect(screen.getByText("/ 0")).toBeInTheDocument();
+    expectChartButtonToBeInTheDocument();
+  });
+
   test("render metric unit without value and with reference value", () => {
     render(
       <MetricField

@@ -33,16 +33,15 @@ type ProgressMetricProps = InternalMetricProps & {
 };
 
 function ProgressMetricValue({ value, formattedValue, referenceValue, unit }: ProgressMetricProps) {
-  const formattedReference = formatUnit(referenceValue, unit)
-  const progress = value ? `${((value / referenceValue) * 100)}%` : "0%";
+  const progress = value && referenceValue ? `${((value / referenceValue) * 100)}%` : "0%";
 
   return (
     <div className="flex items-center gap-3">
-      <div role="progressbar" className="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden">
+      {referenceValue && <div role="progressbar" className="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden">
         <div data-testid="progress-level" className="bg-indigo-600 h-2 rounded-full transition-all duration-500" style={{ width: progress }} />
-      </div>
+      </div>}
       <span className="text-xs font-semibold text-slate-800">
-        {formattedValue || "?"} <span className="text-slate-400 font-normal">/ {formattedReference}</span>
+        {formattedValue || "?"} <span className="text-slate-400 font-normal">/ {formatUnit(referenceValue, unit)}</span>
       </span>
     </div>
   );
@@ -71,7 +70,7 @@ export function MetricField({ label, metric, noValueLabel, onChartButtonClicked 
         </button>}
       </div>
 
-      {metric.referenceValue ? (
+      {metric.referenceValue != null ? (
         <ProgressMetricValue value={metric.value} unit={metric.unit} formattedValue={formattedValue} referenceValue={metric.referenceValue} />
       ) : (
         <StandaloneMetricValue formattedValue={formattedValue} noValueLabel={noValueLabel} />
