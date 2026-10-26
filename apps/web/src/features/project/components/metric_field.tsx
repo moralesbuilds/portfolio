@@ -49,7 +49,8 @@ function ProgressMetricValue({ value, formattedValue, referenceValue, unit }: Pr
 }
 
 export function MetricField({ label, metric, noValueLabel, onChartButtonClicked }: MetricFieldProps) {
-  const formattedValue = metric.value ? formatUnit(metric.value, metric.unit) : "";
+  const hasValue = metric.value != null;
+  const formattedValue = hasValue ? formatUnit(metric.value!, metric.unit) : "";
 
   return (
     <div className="py-4 space-y-2 mb-0">
@@ -58,7 +59,7 @@ export function MetricField({ label, metric, noValueLabel, onChartButtonClicked 
           {label}
         </span>
 
-        {metric.value && <button
+        {hasValue && <button
           command="show-modal"
           commandfor="metric-chart-dialog"
           onClick={() => onChartButtonClicked(metric, label)}

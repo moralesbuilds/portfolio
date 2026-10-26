@@ -57,6 +57,26 @@ describe("MetricField (unit)", () => {
     expectChartButtonNotToBeInTheDocument();
   });
 
+  test("render metric unit with zero as value", () => {
+    render(
+      <MetricField
+        metric={{
+          id: 1,
+          unit: "count",
+          value: 0,
+        } as ProjectMetricSummary}
+        label="Example"
+        noValueLabel="Missing value"
+        onChartButtonClicked={() => { }}
+      />
+    );
+
+    expect(screen.getByText("Example")).toBeInTheDocument();
+    expect(screen.queryByText("Missing value")).not.toBeInTheDocument();
+    expect(screen.getByText("0")).toBeInTheDocument();
+    expectChartButtonToBeInTheDocument();
+  });
+
   test("render metric unit with value and reference value", () => {
     render(
       <MetricField
