@@ -3,6 +3,7 @@
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 import { Dialog, Loading } from "@/components";
+import { fetchWithStatusHandling, type HTTPError } from "@/lib/fetcher";
 import { type ProjectMetricSummary, type MetricSample } from "@moralesbuilds/metrics-db";
 import { formatUnit, unixTimestampToShortDate, unixTimestampToShortDateTime } from "@/lib/format";
 import { Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -14,11 +15,12 @@ type MetricChartDialogProps = {
   onClose: () => void;
 };
 
-const fetcher = (projectMetricId: number) => fetch(`/api/metrics/${projectMetricId}`).then((res) => res.json<MetricSample[]>());
+const fetcher = (projectMetricId: number) => fetchWithStatusHandling<MetricSample[]>(`/api/metrics/${projectMetricId}`);
 
 export function MetricChartDialog({ repositoryUrl, projectMetric, title, onClose }: MetricChartDialogProps) {
   const t = useTranslations("project");
-  const { data, error, isLoading, mutate } = useSWR(projectMetric?.id ? [projectMetric.id] : null, fetcher, { shouldRetryOnError: false });
+  const { data, error, isLoading, mutate } = useSWR<MetricSample[], HTTPError>(projectMetric?.id ? [projectMetric.id] : null, fetcher, { shouldRetryOnError: false });
+  const isNotFound = error?.status === 404;
 
   return (
     <Dialog id="metric-chart-dialog" onClose={onClose} title={title}>
@@ -31,11 +33,13 @@ export function MetricChartDialog({ repositoryUrl, projectMetric, title, onClose
       {error && !isLoading && (
         <div className="flex flex-col items-center gap-4 w-full">
           <p className="text-red-500">
-            {t("metric_error")}
+            {isNotFound ? t("metric_not_found") : t("metric_error")}
           </p>
-          <button className="w-50 px-4 py-2 text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer" onClick={() => mutate()}>
-            {t("metric_retry")}
-          </button>
+          {!isNotFound && (
+            <button className="w-50 px-4 py-2 text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer" onClick={() => mutate()}>
+              {t("metric_retry")}
+            </button>
+          )}
         </div>
       )}
 

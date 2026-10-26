@@ -131,6 +131,7 @@
     "no_details": "No details available",
     "no_value": "No value",
     "metric_error": "Failed to load project's metric data.",
+    "metric_not_found": "Metric not found.",
     "metric_retry": "Try again",
     "metrics": {
       "worker": {

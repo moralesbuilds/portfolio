@@ -5,6 +5,7 @@ import { MetricChartDialog } from "./metric_chart_dialog";
 import { NextIntlClientProvider } from "next-intl";
 import type { ComponentProps } from "react";
 import { ProjectMetricSummary } from "@moralesbuilds/metrics-db";
+import { HTTPError } from "@/lib/fetcher";
 
 vi.mock("swr", () => ({
   default: vi.fn(),
@@ -22,7 +23,7 @@ vi.mock("recharts", async (importOriginal) => {
 
 function renderMetricChartDialog(projectMetric: ProjectMetricSummary | undefined = undefined, repositoryUrl: string | undefined = undefined) {
   render(
-    <NextIntlClientProvider locale="en" messages={{ project: { metric_error: "A metric error", metric_retry: "Just retry" } }}>
+    <NextIntlClientProvider locale="en" messages={{ project: { metric_error: "A metric error", metric_not_found: "A missing metric", metric_retry: "Just retry" } }}>
       <MetricChartDialog onClose={() => { }} repositoryUrl={repositoryUrl} projectMetric={projectMetric ?? { id: 1, unit: "count", better: "higher", name: "test_count", tagType: "commit_sha" }} />
     </NextIntlClientProvider>
   );
@@ -51,7 +52,7 @@ describe("MetricChartDialog (unit)", () => {
       isLoading: false,
       mutate: vi.fn(),
       data: undefined,
-      error: new Error(),
+      error: new HTTPError("Server error", 500),
       isValidating: false
     });
 
@@ -59,7 +60,42 @@ describe("MetricChartDialog (unit)", () => {
 
     expect(screen.queryByRole("status", { name: "Loading", hidden: true })).not.toBeInTheDocument();
     expect(screen.queryByText("A metric error")).toBeInTheDocument();
+    expect(screen.queryByText("A missing metric")).not.toBeInTheDocument();
     expect(screen.queryByText("Just retry")).toBeInTheDocument();
+    expect(screen.queryByRole("application")).not.toBeInTheDocument();
+  });
+
+  test("retry fetching when clicking the retry button", () => {
+    const mutate = vi.fn();
+    vi.mocked(useSWR).mockReturnValue({
+      isLoading: false,
+      mutate,
+      data: undefined,
+      error: new HTTPError("Server error", 500),
+      isValidating: false
+    });
+
+    renderMetricChartDialog();
+    fireEvent.click(screen.getByText("Just retry"));
+
+    expect(mutate).toHaveBeenCalledOnce();
+  });
+
+  test("render not found state without retry button", () => {
+    vi.mocked(useSWR).mockReturnValue({
+      isLoading: false,
+      mutate: vi.fn(),
+      data: undefined,
+      error: new HTTPError("Not found", 404),
+      isValidating: false
+    });
+
+    renderMetricChartDialog();
+
+    expect(screen.queryByRole("status", { name: "Loading", hidden: true })).not.toBeInTheDocument();
+    expect(screen.queryByText("A missing metric")).toBeInTheDocument();
+    expect(screen.queryByText("A metric error")).not.toBeInTheDocument();
+    expect(screen.queryByText("Just retry")).not.toBeInTheDocument();
     expect(screen.queryByRole("application")).not.toBeInTheDocument();
   });
 
