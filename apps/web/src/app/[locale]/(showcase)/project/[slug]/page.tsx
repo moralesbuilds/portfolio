@@ -1,3 +1,4 @@
+import { Loading } from "@/components";
 import { LatestPostItem } from "@/features/blog";
 import { ProjectDetailsPanel } from "@/features/project";
 import { getProjectSummaryFilename } from "@/features/project/utils/contents";
@@ -14,7 +15,6 @@ import remarkGfm from "remark-gfm";
 type ProjectDetailsPageProps = {
   params: Promise<{ slug: string }>;
 };
-
 
 export default async function ProjectDetailsPage({ params }: ProjectDetailsPageProps) {
   const t = await getTranslations("project");
@@ -61,9 +61,11 @@ export default async function ProjectDetailsPage({ params }: ProjectDetailsPageP
       </div>
 
       {/* Right Column: Details panel (Spans 4 cols on desktop) */}
-      <Suspense fallback={<p>Loading details...</p>}>
-        <ProjectDetailsPanel details={details} />
-      </Suspense>
-    </div>
+      <div className="lg:col-span-4">
+        <Suspense fallback={<div className="w-full flex justify-center"><Loading size="md" /></div>}>
+          <ProjectDetailsPanel details={details} />
+        </Suspense>
+      </div>
+    </div >
   );
 }
