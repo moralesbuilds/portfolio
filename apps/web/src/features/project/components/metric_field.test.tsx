@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, test, expect, vi } from "vitest";
 import { MetricField } from "./metric_field";
 import userEvent from "@testing-library/user-event";
+import { type ProjectMetricSummary } from "@moralesbuilds/metrics-db";
 
 function expectChartButtonToBeInTheDocument() {
   const chartButton = screen.getByTestId("chart-button");
@@ -18,7 +19,16 @@ function expectChartButtonNotToBeInTheDocument() {
 describe("MetricField (unit)", () => {
   test("render metric unit without reference value", () => {
     render(
-      <MetricField id={1} label="Example" unit="count" value={120} noValueLabel="Missing value" onChartButtonClicked={() => {}} />
+      <MetricField
+        metric={{
+          id: 1,
+          unit: "count",
+          value: 120,
+        } as ProjectMetricSummary}
+        label="Example"
+        noValueLabel="Missing value"
+        onChartButtonClicked={() => { }}
+      />
     );
 
     expect(screen.getByText("Example")).toBeInTheDocument();
@@ -30,7 +40,15 @@ describe("MetricField (unit)", () => {
 
   test("render metric unit with no value and no reference value", () => {
     render(
-      <MetricField id={1} label="Example" unit="count" noValueLabel="Missing value" onChartButtonClicked={() => {}} />
+      <MetricField
+        metric={{
+          id: 1,
+          unit: "count"
+        } as ProjectMetricSummary}
+        label="Example"
+        noValueLabel="Missing value"
+        onChartButtonClicked={() => { }}
+      />
     );
 
     expect(screen.getByText("Example")).toBeInTheDocument();
@@ -41,7 +59,17 @@ describe("MetricField (unit)", () => {
 
   test("render metric unit with value and reference value", () => {
     render(
-      <MetricField id={1} label="Example" unit="percent" value={0.5} referenceValue={1} onChartButtonClicked={() => {}} />
+      <MetricField
+        metric={{
+          id: 1,
+          unit: "percent",
+          value: 0.5,
+          referenceValue: 1
+        } as ProjectMetricSummary}
+        label="Example"
+        noValueLabel="Missing value"
+        onChartButtonClicked={() => { }}
+      />
     );
 
     expect(screen.getByText("Example")).toBeInTheDocument();
@@ -56,7 +84,16 @@ describe("MetricField (unit)", () => {
 
   test("render metric unit without value and with reference value", () => {
     render(
-      <MetricField id={1} label="Example" unit="count" referenceValue={1000} onChartButtonClicked={() => {}} />
+      <MetricField
+        metric={{
+          id: 1,
+          unit: "count",
+          referenceValue: 1000
+        } as ProjectMetricSummary}
+        label="Example"
+        noValueLabel="Missing value"
+        onChartButtonClicked={() => { }}
+      />
     );
 
     expect(screen.getByText("Example")).toBeInTheDocument();
@@ -69,14 +106,26 @@ describe("MetricField (unit)", () => {
     expectChartButtonNotToBeInTheDocument();
   });
 
-  test("onChartButtonClicked callback called when the visualize chart button is pressed", async () =>{
+  test("onChartButtonClicked callback called when the visualize chart button is pressed", async () => {
     const fn = vi.fn();
+    const metric = {
+      id: 1,
+      unit: "count",
+      referenceValue: 100,
+      value: 20
+    } as ProjectMetricSummary;
+
     render(
-      <MetricField id={1} label="Example" unit="count" referenceValue={1000} onChartButtonClicked={fn} />
+      <MetricField
+        metric={metric}
+        label="Example"
+        noValueLabel="Missing value"
+        onChartButtonClicked={fn}
+      />
     );
 
     await userEvent.click(screen.getByTestId("chart-button"));
 
-    expect(fn).toHaveBeenNthCalledWith(1, "Example");    
+    expect(fn).toHaveBeenNthCalledWith(1, metric, "Example");
   });
 });

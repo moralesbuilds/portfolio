@@ -1,15 +1,12 @@
 import { LineChartIcon } from "@/components/icons";
 import { formatUnit } from "@/lib/format";
-import { type MetricUnit } from "@moralesbuilds/metrics-db";
+import { type ProjectMetricSummary, type MetricUnit } from "@moralesbuilds/metrics-db";
 
 type MetricFieldProps = {
-  id: number;
   label: string;
-  unit: MetricUnit;
-  value?: number;
-  referenceValue?: number;
-  noValueLabel?: string;
-  onChartButtonClicked: (id: number, label: string) => void;
+  metric: ProjectMetricSummary;
+  noValueLabel: string;
+  onChartButtonClicked: (metric: ProjectMetricSummary, label: string) => void;
 };
 
 type InternalMetricProps = {
@@ -51,8 +48,8 @@ function ProgressMetricValue({ value, formattedValue, referenceValue, unit }: Pr
   );
 }
 
-export function MetricField({ id, label, unit, value, referenceValue, noValueLabel, onChartButtonClicked }: MetricFieldProps) {
-  const formattedValue = value ? formatUnit(value, unit) : "";
+export function MetricField({ label, metric, noValueLabel, onChartButtonClicked }: MetricFieldProps) {
+  const formattedValue = metric.value ? formatUnit(metric.value, metric.unit) : "";
 
   return (
     <div className="py-4 space-y-2 mb-0">
@@ -61,10 +58,10 @@ export function MetricField({ id, label, unit, value, referenceValue, noValueLab
           {label}
         </span>
 
-        {value && <button
+        {metric.value && <button
           command="show-modal"
           commandfor="metric-chart-dialog"
-          onClick={() => onChartButtonClicked(id, label)}
+          onClick={() => onChartButtonClicked(metric, label)}
           aria-label="View metric graph"
           className="h-6 w-6 inline-flex items-center justify-center rounded-md text-slate-400 hover:text-indigo-600 hover:bg-slate-100 transition-colors cursor-pointer"
           data-testid="chart-button"
@@ -73,8 +70,8 @@ export function MetricField({ id, label, unit, value, referenceValue, noValueLab
         </button>}
       </div>
 
-      {referenceValue ? (
-        <ProgressMetricValue value={value} unit={unit} formattedValue={formattedValue} referenceValue={referenceValue} />
+      {metric.referenceValue ? (
+        <ProgressMetricValue value={metric.value} unit={metric.unit} formattedValue={formattedValue} referenceValue={metric.referenceValue} />
       ) : (
         <StandaloneMetricValue formattedValue={formattedValue} noValueLabel={noValueLabel} />
       )}
