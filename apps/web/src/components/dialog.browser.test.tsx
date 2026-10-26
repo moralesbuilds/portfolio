@@ -1,13 +1,14 @@
 import { describe, expect, test, vi } from "vitest";
 import { NextIntlClientProvider } from "next-intl";
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
+import { page, userEvent } from "vitest/browser";
 import { Dialog } from "./dialog";
-import { userEvent } from "vitest/browser";
 
 function renderDialog(title: React.ReactNode, children: React.ReactNode, onClose: (() => void) | undefined = undefined) {
   render(
-    <NextIntlClientProvider locale="en" messages={{}}>
+    <NextIntlClientProvider locale="en" messages={{ root: { close: "Close", close_modal: "Close modal" } }}>
+      <button command="show-modal" commandfor="test-dialog">Open dialog</button>
       <Dialog id="test-dialog" title={title} onClose={onClose}>
         {children}
       </Dialog>
@@ -15,37 +16,86 @@ function renderDialog(title: React.ReactNode, children: React.ReactNode, onClose
   );
 }
 
+async function openDialog() {
+  await userEvent.click(page.getByRole("button", { name: "Open dialog" }));
+  await expect.element(page.getByRole("dialog")).toBeVisible();
+}
+
 describe("Dialog (browser)", () => {
-  test("opening the dialog", async () => {
-    render(
-      <NextIntlClientProvider locale="en" messages={{}}>
-        <button command="show-modal" commandfor="test-dialog">Click me</button>
-        <Dialog id="test-dialog" title="Title">
-          Content
-        </Dialog>
-      </NextIntlClientProvider>
-    );
+  test("is closed until the opener button is clicked", async () => {
+    renderDialog("Title", "Content");
 
-    expect(screen.getByRole("dialog")).not.toBeVisible();
-    await userEvent.click(screen.getByText("Click me"));
-    expect(screen.getByRole("dialog")).toBeVisible();
+    await expect.element(page.getByRole("dialog", { includeHidden: true })).not.toBeVisible();
+
+    await openDialog();
+
+    await expect.element(page.getByRole("dialog")).toHaveAttribute("open");
   });
 
-  test("clicking the title close button", async () => {
-    const fn = vi.fn();
-    renderDialog("T", "C", fn);
+  test("renders the title, content and close buttons", async () => {
+    renderDialog("Metric title", <p>Metric content</p>);
+    await openDialog();
 
-    await userEvent.click(screen.getByTestId("button-close-dialog"));
-
-    expect(fn).toHaveBeenCalled();
+    await expect.element(page.getByRole("heading", { name: "Metric title" })).toBeVisible();
+    await expect.element(page.getByText("Metric content")).toBeVisible();
+    await expect.element(page.getByRole("button", { name: "Close modal" })).toBeVisible();
+    await expect.element(page.getByRole("button", { name: "Close", exact: true })).toBeVisible();
   });
 
-  test("clicking the footer close button", async () => {
-    const fn = vi.fn();
-    renderDialog("T", "C", fn);
+  test("closes and calls onClose when clicking the title close button", async () => {
+    const onClose = vi.fn();
+    renderDialog("Title", "Content", onClose);
+    await openDialog();
 
-    await userEvent.click(screen.getByTestId("button-close-footer"));
+    await userEvent.click(page.getByRole("button", { name: "Close modal" }));
 
-    expect(fn).toHaveBeenCalled();
+    await expect.element(page.getByRole("dialog", { includeHidden: true })).not.toBeVisible();
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
+  test("closes and calls onClose when clicking the footer close button", async () => {
+    const onClose = vi.fn();
+    renderDialog("Title", "Content", onClose);
+    await openDialog();
+
+    await userEvent.click(page.getByRole("button", { name: "Close", exact: true }));
+
+    await expect.element(page.getByRole("dialog", { includeHidden: true })).not.toBeVisible();
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
+  test("closes and calls onClose when pressing Escape", async () => {
+    const onClose = vi.fn();
+    renderDialog("Title", "Content", onClose);
+    await openDialog();
+
+    await userEvent.keyboard("{Escape}");
+
+    await expect.element(page.getByRole("dialog", { includeHidden: true })).not.toBeVisible();
+    expect(onClose).toHaveBeenCalledOnce();
+  });
+
+  test("closes without onClose handler", async () => {
+    renderDialog("Title", "Content");
+    await openDialog();
+
+    await userEvent.click(page.getByRole("button", { name: "Close modal" }));
+
+    await expect.element(page.getByRole("dialog", { includeHidden: true })).not.toBeVisible();
+  });
+
+  test("can be reopened after being closed", async () => {
+    const onClose = vi.fn();
+    renderDialog("Title", "Content", onClose);
+
+    await openDialog();
+    await userEvent.click(page.getByRole("button", { name: "Close modal" }));
+    await expect.element(page.getByRole("dialog", { includeHidden: true })).not.toBeVisible();
+
+    await openDialog();
+    await userEvent.click(page.getByRole("button", { name: "Close", exact: true }));
+
+    await expect.element(page.getByRole("dialog", { includeHidden: true })).not.toBeVisible();
+    expect(onClose).toHaveBeenCalledTimes(2);
   });
 });
