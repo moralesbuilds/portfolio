@@ -7,7 +7,12 @@
     "open_menu": "Open main menu",
     "prev": "Previous",
     "next": "Next",
-    "no_tags": "No tags"
+    "no_tags": "No tags",
+    "close": "Close",
+    "close_modal": "Close modal",
+    "breadcrumb": "Breadcrumb",
+    "loading": "Loading",
+    "pagination": "Pagination"
   },
   "seo": {
     "person": {
@@ -125,6 +130,21 @@
     "featured": "Featured",
     "related_blogs": "Related Blog Posts",
     "details": "Project Details",
-    "repository": "Repository"
+    "repository": "Repository",
+    "no_details": "No details available",
+    "no_value": "No value",
+    "metric_error": "Failed to load project's metric data.",
+    "metric_not_found": "Metric not found.",
+    "metric_retry": "Try again",
+    "tabs_label": "Project Tabs",
+    "graph_button_label": "View metric graph",
+    "metrics": {
+      "worker": {
+        "size": {
+          "uncompressed": "Uncompressed worker size",
+          "gzip": "Compressed worker size"
+        }
+      }
+    }
   }
 }

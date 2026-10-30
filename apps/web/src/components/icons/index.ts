@@ -8,3 +8,5 @@ export { RightArrowIcon } from "./right_arrow";
 export { WarningIcon } from "./warning";
 export { XIcon } from "./x";
 export { ExternalLinkIcon } from "./external_link";
+export { LineChartIcon } from "./line_chart";
+export { CloseIcon } from "./close";
