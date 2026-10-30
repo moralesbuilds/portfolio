@@ -14,7 +14,6 @@ export async function ProjectDetailsPanel({ details }: ProjectDetailsPanelProps)
   const { env } = await getCloudflareContext({ async: true });
   const metricSummaries = await fetchPinnedProjectMetrics(getDb(env.METRICS_DB), { projectName: details.name });
   const hasDetails = !!details.repositoryUrl || metricSummaries.length > 0;
-  const noValueLabel = t("no_value");
 
   return (
     <aside className="bg-white space-y-4 divide-y divide-slate-200 [&>:nth-child(n+2)]:pt-4">
@@ -30,7 +29,14 @@ export async function ProjectDetailsPanel({ details }: ProjectDetailsPanelProps)
 
       {details.repositoryUrl && <UrlField isCode label={t("repository")} url={details.repositoryUrl} />}
 
-      {metricSummaries.length > 0 && <MetricFieldset repositoryUrl={details.repositoryUrl} summaries={metricSummaries} noValueLabel={noValueLabel} />}
+      {metricSummaries.length > 0 && (
+        <MetricFieldset
+          repositoryUrl={details.repositoryUrl}
+          summaries={metricSummaries}
+          noValueLabel={t("no_value")}
+          graphButtonLabel={t("graph_button_label")}
+        />)
+      }
     </aside>
   );
 }

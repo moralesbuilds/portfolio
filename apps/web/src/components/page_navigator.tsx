@@ -60,7 +60,10 @@ export function PageNavigation({ total, pageIndex, pageSize }: PageNavigationPro
   const totalPages = Math.ceil(total / pageSize);
 
   return (
-    <nav className="flex items-center justify-between border-t border-gray-200 pt-6 text-sm font-medium text-gray-600" aria-label="Pagination">
+    <nav
+      className="flex items-center justify-between border-t border-gray-200 pt-6 text-sm font-medium text-gray-600"
+      aria-label={r("pagination")}
+    >
       <PreviousButton
         pageIndex={pageIndex - 1}
         enabled={pageIndex > 1}

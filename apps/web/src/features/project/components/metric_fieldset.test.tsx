@@ -53,7 +53,12 @@ function renderMetricFieldset(summaries: ProjectMetricSummary[], repositoryUrl: 
       locale="en"
       messages={{ project: { metrics: { worker: { size: { gzip: "Compressed size", uncompressed: "Uncompressed size" } } } } }}
     >
-      <MetricFieldset repositoryUrl={repositoryUrl} summaries={summaries} noValueLabel="Missing value" />
+      <MetricFieldset
+        repositoryUrl={repositoryUrl}
+        summaries={summaries}
+        noValueLabel="Missing value"
+        graphButtonLabel="View graph"
+      />
     </NextIntlClientProvider>
   );
 }

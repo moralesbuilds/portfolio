@@ -77,7 +77,7 @@ export default async function ProjectDetailsLayout({ params, children }: Project
           </PageHeader>
 
           {/* Navigation Tabs */}
-          <Tabs>
+          <Tabs aria-label={t("tabs_label")}>
             <Tab href={link} exact>{t("summary")}</Tab>
           </Tabs>
 

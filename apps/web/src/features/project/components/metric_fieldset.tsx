@@ -10,9 +10,10 @@ type MetricFieldsetProps = {
   repositoryUrl?: string;
   summaries: ProjectMetricSummary[];
   noValueLabel: string;
+  graphButtonLabel: string;
 };
 
-export function MetricFieldset({ repositoryUrl, summaries, noValueLabel }: MetricFieldsetProps) {
+export function MetricFieldset({ repositoryUrl, summaries, noValueLabel, graphButtonLabel }: MetricFieldsetProps) {
   const m = useTranslations("project.metrics");
   const [currentMetric, setCurrentMetric] = useState<ProjectMetricSummary | undefined>(undefined);
   const [currentMetricTitle, setCurrentMetricTitle] = useState<string | undefined>(undefined);
@@ -37,6 +38,7 @@ export function MetricFieldset({ repositoryUrl, summaries, noValueLabel }: Metri
           metric={metric}
           label={m(metric.name)}
           noValueLabel={noValueLabel}
+          graphButtonLabel={graphButtonLabel}
           onChartButtonClicked={setCurrentMetricState}
         />
       ))}

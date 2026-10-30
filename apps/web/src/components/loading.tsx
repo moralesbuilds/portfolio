@@ -1,9 +1,16 @@
+"use client";
+
+import { type Size } from "@/types";
+import { useTranslations } from "next-intl";
+
 type LoadingProps = {
-  size?: 'sm' | 'md' | 'lg';
+  size?: Size;
   className?: string;
 };
 
 export function Loading({ size = 'md', className = '' }: LoadingProps) {
+  const t = useTranslations("root");
+
   const wrapperSize =
     size === 'sm' ? 'gap-1' :
     size === 'lg' ? 'gap-3' : 'gap-2';
@@ -18,7 +25,7 @@ export function Loading({ size = 'md', className = '' }: LoadingProps) {
     <span
       className={`inline-flex shrink-0 items-center ${wrapperSize} ${className}`}
       role="status"
-      aria-label="Loading"
+      aria-label={t("loading")}
     >
       <span className={`${dot} [animation-delay:-0.3s]`} />
       <span className={`${dot} [animation-delay:-0.15s]`} />

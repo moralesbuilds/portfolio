@@ -23,7 +23,7 @@ vi.mock("recharts", async (importOriginal) => {
 
 function renderMetricChartDialog(projectMetric: ProjectMetricSummary | undefined = undefined, repositoryUrl: string | undefined = undefined) {
   render(
-    <NextIntlClientProvider locale="en" messages={{ project: { metric_error: "A metric error", metric_not_found: "A missing metric", metric_retry: "Just retry" } }}>
+    <NextIntlClientProvider locale="en" messages={{ root: { loading: "Loading" }, project: { metric_error: "A metric error", metric_not_found: "A missing metric", metric_retry: "Just retry" } }}>
       <MetricChartDialog onClose={() => { }} repositoryUrl={repositoryUrl} projectMetric={projectMetric ?? { id: 1, unit: "count", better: "higher", name: "test_count", tagType: "commit_sha" }} />
     </NextIntlClientProvider>
   );

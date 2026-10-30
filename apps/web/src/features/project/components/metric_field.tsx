@@ -6,6 +6,7 @@ type MetricFieldProps = {
   label: string;
   metric: ProjectMetricSummary;
   noValueLabel: string;
+  graphButtonLabel: string;
   onChartButtonClicked: (metric: ProjectMetricSummary, label: string) => void;
 };
 
@@ -47,7 +48,7 @@ function ProgressMetricValue({ value, formattedValue, referenceValue, unit }: Pr
   );
 }
 
-export function MetricField({ label, metric, noValueLabel, onChartButtonClicked }: MetricFieldProps) {
+export function MetricField({ label, metric, noValueLabel, graphButtonLabel, onChartButtonClicked }: MetricFieldProps) {
   const hasValue = metric.value != null;
   const formattedValue = hasValue ? formatUnit(metric.value!, metric.unit) : "";
 
@@ -62,7 +63,7 @@ export function MetricField({ label, metric, noValueLabel, onChartButtonClicked 
           command="show-modal"
           commandfor="metric-chart-dialog"
           onClick={() => onChartButtonClicked(metric, label)}
-          aria-label="View metric graph"
+          aria-label={graphButtonLabel}
           className="h-6 w-6 inline-flex items-center justify-center rounded-md text-slate-400 hover:text-indigo-600 hover:bg-slate-100 transition-colors cursor-pointer"
           data-testid="chart-button"
         >
