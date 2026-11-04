@@ -84,7 +84,7 @@ describe("MetricFieldset (unit)", () => {
     renderMetricFieldset([]);
 
     expect(screen.queryByTestId("chart-button")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("metric-chart-dialog")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("metric-chart-dialog")).toBeInTheDocument();
   });
 
   test("mount the dialog when there are metrics", () => {

@@ -18,8 +18,6 @@ export function MetricFieldset({ repositoryUrl, summaries, noValueLabel, graphBu
   const [currentMetric, setCurrentMetric] = useState<ProjectMetricSummary | undefined>(undefined);
   const [currentMetricTitle, setCurrentMetricTitle] = useState<string | undefined>(undefined);
 
-  const hasSummaries = (summaries?.length ?? 0) > 0;
-
   function setCurrentMetricState(metric: ProjectMetricSummary, title: string) {
     setCurrentMetric(metric);
     setCurrentMetricTitle(title);
@@ -43,12 +41,12 @@ export function MetricFieldset({ repositoryUrl, summaries, noValueLabel, graphBu
         />
       ))}
 
-      {hasSummaries && <MetricChartDialog
+      <MetricChartDialog
         repositoryUrl={repositoryUrl}
         projectMetric={currentMetric}
         title={currentMetricTitle}
         onClose={unsetCurrentMetricState}
-      />}
+      />
     </>
   )
 }
