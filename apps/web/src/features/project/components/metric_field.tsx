@@ -34,13 +34,21 @@ type ProgressMetricProps = InternalMetricProps & {
 };
 
 function ProgressMetricValue({ value, formattedValue, referenceValue, unit }: ProgressMetricProps) {
-  const progress = value && referenceValue ? `${((value / referenceValue) * 100)}%` : "0%";
+  const pct = value && referenceValue ? Math.min((value / referenceValue) * 100, 100) : 0;
 
   return (
     <div className="flex items-center gap-3">
-      {referenceValue && <div role="progressbar" className="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden">
-        <div data-testid="progress-level" className="bg-indigo-600 h-2 rounded-full transition-all duration-500" style={{ width: progress }} />
-      </div>}
+      {referenceValue && (
+        <div
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(pct)}
+          className="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden"
+        >
+          <div data-testid="progress-level" className="bg-indigo-600 h-2 rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
+        </div>
+      )}
       <span className="text-xs font-semibold text-slate-800">
         {formattedValue || "?"} <span className="text-slate-400 font-normal">/ {formatUnit(referenceValue, unit)}</span>
       </span>

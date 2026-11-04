@@ -58,10 +58,10 @@ describe("MetricField (unit)", () => {
 
   test("render metric unit with zero as value", () => {
     renderMetricField({
-          id: 1,
-          unit: "count",
-          value: 0,
-        });
+      id: 1,
+      unit: "count",
+      value: 0,
+    });
 
     expect(screen.getByText("Example")).toBeInTheDocument();
     expect(screen.queryByText("Missing value")).not.toBeInTheDocument();
@@ -71,29 +71,34 @@ describe("MetricField (unit)", () => {
 
   test("render metric unit with value and reference value", () => {
     renderMetricField({
-          id: 1,
-          unit: "percent",
-          value: 0.5,
-          referenceValue: 1
-        });
+      id: 1,
+      unit: "percent",
+      value: 0.5,
+      referenceValue: 1
+    });
 
     expect(screen.getByText("Example")).toBeInTheDocument();
-    expect(screen.getByRole("progressbar")).toBeInTheDocument();
     expect(screen.getByTestId("progress-level")).toHaveStyle({
       width: '50.0%'
     });
     expect(screen.getByText("50%")).toBeInTheDocument();
     expect(screen.getByText("/ 100%")).toBeInTheDocument();
     expectChartButtonToBeInTheDocument();
+
+    const progressbar = screen.getByRole("progressbar");
+    expect(progressbar).toBeInTheDocument();
+    expect(progressbar).toHaveAttribute("aria-valuemin", "0");
+    expect(progressbar).toHaveAttribute("aria-valuemax", "100");
+    expect(progressbar).toHaveAttribute("aria-valuenow", "50");
   });
 
   test("render metric unit with zero as reference value", () => {
     renderMetricField({
-          id: 1,
-          unit: "score",
-          value: 1,
-          referenceValue: 0
-        });
+      id: 1,
+      unit: "score",
+      value: 1,
+      referenceValue: 0
+    });
 
     expect(screen.getByText("Example")).toBeInTheDocument();
     expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
@@ -104,10 +109,10 @@ describe("MetricField (unit)", () => {
 
   test("render metric unit without value and with reference value", () => {
     renderMetricField({
-          id: 1,
-          unit: "count",
-          referenceValue: 1000
-        });
+      id: 1,
+      unit: "count",
+      referenceValue: 1000
+    });
 
     expect(screen.getByText("Example")).toBeInTheDocument();
     expect(screen.getByRole("progressbar")).toBeInTheDocument();
@@ -121,12 +126,12 @@ describe("MetricField (unit)", () => {
 
   test("onChartButtonClicked callback called when the visualize chart button is pressed", async () => {
     const fn = vi.fn();
-    const metric = {
+    const metric: Partial<ProjectMetricSummary> = {
       id: 1,
       unit: "count",
       referenceValue: 100,
       value: 20
-    } as ProjectMetricSummary;
+    };
 
     renderMetricField(metric, fn);
 
@@ -134,4 +139,19 @@ describe("MetricField (unit)", () => {
 
     expect(fn).toHaveBeenNthCalledWith(1, metric, "Example");
   });
+
+  test("the latest value exceeds the reference value", () => {
+    renderMetricField({
+      id: 1,
+      unit: "count",
+      referenceValue: 2000,
+      value: 3000
+    });
+
+    expect(screen.getByText("3,000")).toBeInTheDocument();
+    expect(screen.getByText("/ 2,000")).toBeInTheDocument();
+    expect(screen.getByTestId("progress-level")).toHaveStyle({
+      width: '100.0%'
+    });
+  })
 });
