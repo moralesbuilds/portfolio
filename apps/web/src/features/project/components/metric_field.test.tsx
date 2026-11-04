@@ -90,6 +90,7 @@ describe("MetricField (unit)", () => {
     expect(progressbar).toHaveAttribute("aria-valuemin", "0");
     expect(progressbar).toHaveAttribute("aria-valuemax", "100");
     expect(progressbar).toHaveAttribute("aria-valuenow", "50");
+    expect(progressbar).toHaveAttribute("aria-label", "Example");
   });
 
   test("render metric unit with zero as reference value", () => {

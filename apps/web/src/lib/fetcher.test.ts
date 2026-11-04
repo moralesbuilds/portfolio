@@ -46,7 +46,7 @@ describe("fetchWithStatusHandling", () => {
     const error = await captureError(fetchWithStatusHandling("/api/metrics/1"));
 
     expect(error).toBeInstanceOf(HTTPError);
-    expect(error.message).toBe("An error ocurred while fetching the data.");
+    expect(error.message).toBe("An error occurred while fetching the data.");
     expect(error.status).toBe(status);
     expect(error.info).toEqual({ message: "Something went wrong" });
   });

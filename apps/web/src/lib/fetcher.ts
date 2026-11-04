@@ -19,7 +19,7 @@ export async function fetchWithStatusHandling<T>(url: string) {
     } catch {
       info = { message: "Failed to parse error response" };
     }
-    throw new HTTPError("An error ocurred while fetching the data.", res.status, info);
+    throw new HTTPError("An error occurred while fetching the data.", res.status, info);
   }
   return res.json<T>();
 }

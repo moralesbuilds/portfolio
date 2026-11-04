@@ -29,11 +29,12 @@ function StandaloneMetricValue({ formattedValue, noValueLabel }: InternalMetricP
 
 type ProgressMetricProps = InternalMetricProps & {
   value?: number;
+  "aria-label": string;
   unit: MetricUnit;
   referenceValue: number
 };
 
-function ProgressMetricValue({ value, formattedValue, referenceValue, unit }: ProgressMetricProps) {
+function ProgressMetricValue({ value, formattedValue, referenceValue, unit, "aria-label": ariaLabel }: ProgressMetricProps) {
   const pct = value && referenceValue ? Math.min((value / referenceValue) * 100, 100) : 0;
 
   return (
@@ -44,6 +45,7 @@ function ProgressMetricValue({ value, formattedValue, referenceValue, unit }: Pr
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(pct)}
+          aria-label={ariaLabel}
           className="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden"
         >
           <div data-testid="progress-level" className="bg-indigo-600 h-2 rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
@@ -80,7 +82,13 @@ export function MetricField({ label, metric, noValueLabel, graphButtonLabel, onC
       </div>
 
       {metric.referenceValue != null ? (
-        <ProgressMetricValue value={metric.value} unit={metric.unit} formattedValue={formattedValue} referenceValue={metric.referenceValue} />
+        <ProgressMetricValue
+          value={metric.value}
+          unit={metric.unit}
+          formattedValue={formattedValue}
+          referenceValue={metric.referenceValue}
+          aria-label={label}
+        />
       ) : (
         <StandaloneMetricValue formattedValue={formattedValue} noValueLabel={noValueLabel} />
       )}

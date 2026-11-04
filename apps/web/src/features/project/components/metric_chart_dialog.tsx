@@ -33,11 +33,13 @@ function activeDotProps(repositoryUrl: string | undefined, projectMetric: Projec
   }
 }
 
-const fetcher = (projectMetricId: number) => fetchWithStatusHandling<MetricSample[]>(`/api/metrics/${projectMetricId}`);
-
 export function MetricChartDialog({ repositoryUrl, projectMetric, title, onClose }: MetricChartDialogProps) {
   const t = useTranslations("project");
-  const { data, error, isLoading, mutate } = useSWR<MetricSample[], HTTPError>(projectMetric?.id ? [projectMetric.id] : null, fetcher, { shouldRetryOnError: false });
+  const { data, error, isLoading, mutate } = useSWR<MetricSample[], HTTPError>(
+    projectMetric?.id ? [`/api/metrics/${projectMetric.id}`] : null,
+    fetchWithStatusHandling<MetricSample[]>,
+    { shouldRetryOnError: false }
+  );
 
   return (
     <Dialog id="metric-chart-dialog" onClose={onClose} title={title}>
