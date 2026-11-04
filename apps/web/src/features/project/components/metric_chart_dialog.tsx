@@ -7,6 +7,7 @@ import { fetchWithStatusHandling, type HTTPError } from "@/lib/fetcher";
 import { type ProjectMetricSummary, type MetricSample } from "@moralesbuilds/metrics-db";
 import { formatUnit, unixTimestampToShortDate, unixTimestampToShortDateTime } from "@/lib/format";
 import { Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import type { ActiveDotType } from "recharts/types/util/types";
 
 type MetricChartDialogProps = {
   repositoryUrl?: string;
@@ -14,6 +15,23 @@ type MetricChartDialogProps = {
   title?: string;
   onClose: () => void;
 };
+
+function activeDotProps(repositoryUrl: string | undefined, projectMetric: ProjectMetricSummary | undefined): ActiveDotType {
+  if (repositoryUrl && projectMetric?.tagType === 'commit_sha') {
+    return {
+      r: 5,
+      cursor: 'pointer',
+      // @ts-expect-error: Recharts pass dot's data props as 2º argument, not at event arg
+      onClick: (_: unknown, dot: { payload: MetricSample }) => {
+        window.open(`${repositoryUrl}/commit/${dot.payload.tag}`, "_blank", "noopener,noreferrer");
+      },
+    }
+  } else {
+    return {
+      r: 5
+    };
+  }
+}
 
 const fetcher = (projectMetricId: number) => fetchWithStatusHandling<MetricSample[]>(`/api/metrics/${projectMetricId}`);
 
@@ -64,16 +82,7 @@ export function MetricChartDialog({ repositoryUrl, projectMetric, title, onClose
               dataKey="value"
               type="monotone"
               stroke="#8884d8"
-              activeDot={{
-                r: 5,
-                cursor: 'pointer',
-                // @ts-expect-error: Recharts pass dot's data props as 2º argument, not at event arg
-                onClick: (_: unknown, dot: { payload: MetricSample }) => {
-                  if (repositoryUrl && projectMetric?.tagType === 'commit_sha') {
-                    window.open(`${repositoryUrl}/commit/${dot.payload.tag}`, "_blank", "noopener,noreferrer")
-                  }
-                },
-              }}
+              activeDot={activeDotProps(repositoryUrl, projectMetric)}
             />
             {projectMetric?.referenceValue && <ReferenceLine
               y={projectMetric?.referenceValue}

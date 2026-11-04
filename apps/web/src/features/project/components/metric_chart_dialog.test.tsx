@@ -131,7 +131,7 @@ describe("MetricChartDialog (unit)", () => {
       isValidating: false
     });
 
-    renderMetricChartDialog({ 
+    renderMetricChartDialog({
       id: 1,
       unit: "count",
       better: "higher",
@@ -194,6 +194,7 @@ describe("MetricChartDialog (unit)", () => {
     const activeDot = await waitFor(() => {
       const dot = document.querySelector(".recharts-active-dot circle");
       expect(dot).toBeInTheDocument();
+      expect(dot).toHaveAttribute("cursor", "pointer");
       return dot!;
     });
     fireEvent.click(activeDot);
@@ -226,6 +227,7 @@ describe("MetricChartDialog (unit)", () => {
     const activeDot = await waitFor(() => {
       const dot = document.querySelector(".recharts-active-dot circle");
       expect(dot).toBeInTheDocument();
+      expect(dot).not.toHaveAttribute("cursor");
       return dot!;
     });
     fireEvent.click(activeDot);
