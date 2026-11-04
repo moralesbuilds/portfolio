@@ -134,4 +134,17 @@ describe("MetricFieldset (unit)", () => {
     expect(screen.getByTestId("dialog-metric-id")).toBeEmptyDOMElement();
     expect(screen.getByTestId("dialog-title")).toBeEmptyDOMElement();
   });
+
+  test("return the raw metric name when the translated name does not exists", () => {
+    const metric: ProjectMetricSummary = {
+      id: 3,
+      name: "site.visits.total",
+      unit: "count",
+      better: "higher",
+      tagType: "none",
+    };
+    renderMetricFieldset([metric]);
+
+    expect(screen.getByText("site.visits.total")).toBeInTheDocument();
+  });
 });

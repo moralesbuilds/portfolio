@@ -66,6 +66,6 @@ export default async function ProjectDetailsPage({ params }: ProjectDetailsPageP
           <ProjectDetailsPanel details={details} />
         </Suspense>
       </div>
-    </div >
+    </div>
   );
 }

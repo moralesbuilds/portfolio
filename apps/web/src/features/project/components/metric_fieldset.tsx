@@ -36,7 +36,7 @@ export function MetricFieldset({ repositoryUrl, summaries, noValueLabel, graphBu
         <MetricField
           key={metric.id}
           metric={metric}
-          label={m(metric.name)}
+          label={m.has(metric.name) ? m(metric.name) : metric.name}
           noValueLabel={noValueLabel}
           graphButtonLabel={graphButtonLabel}
           onChartButtonClicked={setCurrentMetricState}

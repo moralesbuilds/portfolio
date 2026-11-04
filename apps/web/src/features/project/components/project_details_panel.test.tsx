@@ -59,7 +59,7 @@ describe("ProjectDetailsPanel", () => {
 
     expect(screen.getByRole("heading", { name: "project.details" })).toBeInTheDocument();
     expect(screen.getByText("project.repository")).toBeInTheDocument();
-    expect(screen.getByText("project.metrics.lighthouse_performance")).toBeInTheDocument();
+    expect(screen.getByText("lighthouse_performance")).toBeInTheDocument();
     expect(screen.queryByText("project.no_details")).not.toBeInTheDocument();
 
     expect(mocks.fetchPinnedProjectMetrics).toHaveBeenCalledWith(mocks.fakeDb, {
@@ -74,7 +74,7 @@ describe("ProjectDetailsPanel", () => {
 
     expect(screen.getByRole("heading", { name: "project.details" })).toBeInTheDocument();
     expect(screen.queryByText("project.repository")).not.toBeInTheDocument();
-    expect(screen.queryByText("project.metrics.lighthouse_performance")).not.toBeInTheDocument();
+    expect(screen.queryByText("lighthouse_performance")).not.toBeInTheDocument();
     expect(screen.getByText("project.no_details")).toBeInTheDocument();
   });
 
@@ -85,7 +85,7 @@ describe("ProjectDetailsPanel", () => {
 
     expect(screen.getByRole("heading", { name: "project.details" })).toBeInTheDocument();
     expect(screen.getByText("project.repository")).toBeInTheDocument();
-    expect(screen.queryByText("project.metrics.lighthouse_performance")).not.toBeInTheDocument();
+    expect(screen.queryByText("lighthouse_performance")).not.toBeInTheDocument();
     expect(screen.queryByText("project.no_details")).not.toBeInTheDocument();
   });
 
@@ -96,7 +96,7 @@ describe("ProjectDetailsPanel", () => {
 
     expect(screen.getByRole("heading", { name: "project.details" })).toBeInTheDocument();
     expect(screen.queryByText("project.repository")).not.toBeInTheDocument();
-    expect(screen.getByText("project.metrics.lighthouse_performance")).toBeInTheDocument();
+    expect(screen.getByText("lighthouse_performance")).toBeInTheDocument();
     expect(screen.queryByText("project.no_details")).not.toBeInTheDocument();
   });
 });
