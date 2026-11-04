@@ -89,8 +89,8 @@ export function MetricChartDialog({ repositoryUrl, projectMetric, title, onClose
               stroke="#8884d8"
               activeDot={activeDotProps(repositoryUrl, projectMetric)}
             />
-            {projectMetric?.referenceValue && <ReferenceLine
-              y={projectMetric?.referenceValue}
+            {(projectMetric?.referenceValue ?? 0) !== 0 && <ReferenceLine
+              y={projectMetric!.referenceValue!}
               stroke={projectMetric?.better === 'higher' ? 'green' : 'red'}
               strokeDasharray="3 3"
               ifOverflow="extendDomain"

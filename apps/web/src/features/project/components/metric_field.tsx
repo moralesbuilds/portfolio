@@ -38,7 +38,7 @@ function ProgressMetricValue({ value, formattedValue, referenceValue, unit }: Pr
 
   return (
     <div className="flex items-center gap-3">
-      {referenceValue && (
+      {referenceValue > 0 && (
         <div
           role="progressbar"
           aria-valuemin={0}

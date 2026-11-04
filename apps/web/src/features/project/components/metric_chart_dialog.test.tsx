@@ -23,7 +23,7 @@ vi.mock("recharts", async (importOriginal) => {
 
 function renderMetricChartDialog(projectMetric: ProjectMetricSummary | undefined = undefined, repositoryUrl: string | undefined = undefined) {
   render(
-    <NextIntlClientProvider locale="en" messages={{ root: { loading: "Loading" }, project: { empty_metric_data: "This is empty", metric_error: "A metric error", metric_retry: "Just retry" } }}>
+    <NextIntlClientProvider locale="en" messages={{ root: { loading: "Loading", close_modal: "Close", close: "Close" }, project: { empty_metric_data: "This is empty", metric_error: "A metric error", metric_retry: "Just retry" } }}>
       <MetricChartDialog onClose={() => { }} repositoryUrl={repositoryUrl} projectMetric={projectMetric ?? { id: 1, unit: "count", better: "higher", name: "test_count", tagType: "commit_sha" }} />
     </NextIntlClientProvider>
   );
@@ -168,6 +168,34 @@ describe("MetricChartDialog (unit)", () => {
     const referenceLine = document.querySelector(".recharts-reference-line-line");
     expect(referenceLine).toBeInTheDocument();
     expect(referenceLine).toHaveAttribute("stroke", "red");
+  });
+
+  test.each([
+    { referenceValue: null },
+    { referenceValue: undefined },
+    { referenceValue: 0 },
+  ])("do not render reference line when referenceValue is $referenceValue", ({ referenceValue }) => {
+    vi.mocked(useSWR).mockReturnValue({
+      isLoading: false,
+      mutate: vi.fn(),
+      data: [
+        { timestamp: 1, value: 1 },
+      ],
+      error: undefined,
+      isValidating: false
+    });
+
+    renderMetricChartDialog({
+      id: 1,
+      unit: "count",
+      better: "higher",
+      name: "test_count",
+      tagType: "commit_sha",
+      referenceValue: referenceValue
+    });
+
+    expect(screen.queryByRole("application", { hidden: true })).toBeInTheDocument();
+    expect(document.querySelector(".recharts-reference-line-line")).not.toBeInTheDocument();
   });
 
   test("open commit in a new tab when clicking a dot of a commit_sha metric", async () => {

@@ -154,4 +154,42 @@ describe("MetricField (unit)", () => {
       width: '100.0%'
     });
   })
+
+  test.each([
+    { referenceValue: null },
+    { referenceValue: undefined },
+    { referenceValue: 0 },
+  ])("does not render the progressbar when the reference value is $referenceValue", ({ referenceValue }) => {
+    renderMetricField({
+      id: 1,
+      unit: "count",
+      value: 50,
+      referenceValue
+    });
+
+    expect(screen.getByText("Example")).toBeInTheDocument();
+    expect(screen.getByText("50")).toBeInTheDocument();
+    expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("progress-level")).not.toBeInTheDocument();
+    expect(screen.queryByText("0")).not.toBeInTheDocument();
+    expectChartButtonToBeInTheDocument();
+  });
+
+  test.each([
+    { referenceValue: null },
+    { referenceValue: undefined },
+    { referenceValue: 0 },
+  ])("does not render the progressbar when there is no value and the reference value is $referenceValue", ({ referenceValue }) => {
+    renderMetricField({
+      id: 1,
+      unit: "count",
+      referenceValue
+    });
+
+    expect(screen.getByText("Example")).toBeInTheDocument();
+    expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("progress-level")).not.toBeInTheDocument();
+    expect(screen.queryByText("0")).not.toBeInTheDocument();
+    expectChartButtonNotToBeInTheDocument();
+  });
 });

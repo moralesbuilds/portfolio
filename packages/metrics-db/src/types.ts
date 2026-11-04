@@ -9,7 +9,7 @@ export type ProjectMetricSummary = {
   name: string;
   unit: MetricUnit;
   better: BetterUnit;
-  referenceValue?: number;
+  referenceValue?: number | null;
   tagType: TagType;
   value?: number;
   timestamp?: number;
