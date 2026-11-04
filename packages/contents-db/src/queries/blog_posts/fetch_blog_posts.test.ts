@@ -1,5 +1,5 @@
 import { env } from "cloudflare:workers";
-import { afterAll, beforeAll, describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, test } from "vitest";
 import { getDb } from "../../client";
 import { seedBlogPost, seedCategory } from "../../../test/seed/blog_posts";
 import { fetchBlogPosts } from "./fetch_blog_posts";
@@ -8,16 +8,10 @@ describe("fetchBlogPosts", () => {
   let categoryEnId: number;
   let categoryEsId: number;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const db = getDb(env.CONTENTS_DB);
     categoryEnId = await seedCategory(db, { name: "test", slug: "test-category", locale: "en", label: "Test" });
     categoryEsId = await seedCategory(db, { name: "test", slug: "categoria-prueba", locale: "es", label: "Categoria de prueba" });
-  });
-
-  afterAll(async () => {
-    const db = getDb(env.CONTENTS_DB);
-    await db.prepare("DELETE FROM blog_posts").run();
-    await db.prepare("DELETE FROM categories").run();
   });
 
   test("returns published blog posts for the locale, newests first, respecting the page size", async () => {

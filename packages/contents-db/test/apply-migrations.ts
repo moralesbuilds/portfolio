@@ -12,4 +12,5 @@ beforeEach(async () => {
   await db.prepare("DELETE FROM leads").run();
   await db.prepare("DELETE FROM rate_limit_hits").run();
   await db.prepare("DELETE FROM tags").run();
+  await db.prepare("DELETE FROM categories").run();
 });

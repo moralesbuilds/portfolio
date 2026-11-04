@@ -20,7 +20,7 @@ function renderHeader() {
   );
 };
 
-describe("Header", () => {
+describe("Header (browser)", () => {
   test("desktop mode shows all links", async () => {
     await page.viewport(1366, 768); // Desktop
     renderHeader();

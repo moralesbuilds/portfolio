@@ -12,7 +12,7 @@ export function Breadcrumbs({ title }: BreadcrumbsProps) {
   const segments = pathname.split('/').filter((segment) => segment);
 
   return (
-    <nav aria-label="Breadcrumb">
+    <nav aria-label={t("breadcrumb")}>
       <ol className="flex items-center space-x-2 text-sm text-gray-500 font-mono">
         <li>
           <a href="/" className="hover:text-gray-700 transition-colors">

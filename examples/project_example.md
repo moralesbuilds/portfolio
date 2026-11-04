@@ -7,6 +7,7 @@ summary: "A one-line summary of what the project is and what problem it solves."
 is_featured: true
 tags: ["Nextjs", "Cloudflare", "Typescript"]
 repository_url: "https://github.com/username/project-name"
+pinned_metrics: ["worker.size.uncompressed", "worker.size.gzip"]
 ---
 
 ## Context

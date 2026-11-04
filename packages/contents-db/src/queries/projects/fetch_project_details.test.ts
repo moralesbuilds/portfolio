@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, test } from "vitest";
 import { getDb } from "../../client";
 import { env } from "cloudflare:workers";
 import { seedBlogPost, seedCategory } from "../../../test/seed/blog_posts";
@@ -9,15 +9,9 @@ import { fetchProjectDetails } from "./fetch_project_details";
 describe("fetchProjectDetails", () => {
   let categoryEnId: number;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const db = getDb(env.CONTENTS_DB);
     categoryEnId = await seedCategory(db, { name: "test", slug: "test-category", locale: "en", label: "Test" });
-  });
-
-  afterAll(async () => {
-    const db = getDb(env.CONTENTS_DB);
-    await db.prepare("DELETE FROM blog_posts").run();
-    await db.prepare("DELETE FROM categories").run();
   });
 
   test("returns published project details for the locale by slug", async () => {
@@ -31,6 +25,7 @@ describe("fetchProjectDetails", () => {
     const project = (await fetchProjectDetails(db, { locale: "en", slug: "project-1" }))!;
     expect(project).not.toBeNull();
     expect(project.id).toBeGreaterThan(0);
+    expect(project.name).toBe("project-1");
     expect(project.isFeatured).toBe(true);
     expect(project.slug).toBe("project-1");
     expect(project.title).toBe("Project 1");

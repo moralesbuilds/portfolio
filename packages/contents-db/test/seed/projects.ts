@@ -4,7 +4,7 @@ export async function seedProject(db: Db, project: Partial<Project>): Promise<nu
   const result = await db
     .prepare(
       `INSERT INTO projects (name, locale, slug, title, summary, repository_url, status, is_featured, author_id, published_at, created_at, updated_at)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, 1, ?9, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), ?10)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, 1, ?9, COALESCE(?10, strftime('%Y-%m-%dT%H:%M:%SZ', 'now')), ?11)
       RETURNING id`
     )
     .bind(
@@ -17,6 +17,7 @@ export async function seedProject(db: Db, project: Partial<Project>): Promise<nu
       project.status,
       Number(project.isFeatured ?? 0),
       project.publishedAt,
+      project.createdAt ?? null,
       project.updatedAt ?? null,
     )
     .first<{ id: number }>();

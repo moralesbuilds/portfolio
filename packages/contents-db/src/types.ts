@@ -54,6 +54,7 @@ export type Project = {
   isFeatured: boolean;
   status: "published" | "draft" | "archived";
   publishedAt: string;
+  createdAt?: string;
   updatedAt?: string;
   relatedBlogPosts?: RelatedBlogPost[];
 };
