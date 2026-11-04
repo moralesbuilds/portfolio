@@ -134,7 +134,7 @@
     "no_details": "No details available",
     "no_value": "No value",
     "metric_error": "Failed to load project's metric data.",
-    "metric_not_found": "Metric not found.",
+    "empty_metric_data": "The metric does not have any data yet!",
     "metric_retry": "Try again",
     "tabs_label": "Project Tabs",
     "graph_button_label": "View metric graph",

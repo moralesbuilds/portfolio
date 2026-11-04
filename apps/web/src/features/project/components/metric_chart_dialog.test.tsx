@@ -23,7 +23,7 @@ vi.mock("recharts", async (importOriginal) => {
 
 function renderMetricChartDialog(projectMetric: ProjectMetricSummary | undefined = undefined, repositoryUrl: string | undefined = undefined) {
   render(
-    <NextIntlClientProvider locale="en" messages={{ root: { loading: "Loading" }, project: { metric_error: "A metric error", metric_not_found: "A missing metric", metric_retry: "Just retry" } }}>
+    <NextIntlClientProvider locale="en" messages={{ root: { loading: "Loading" }, project: { empty_metric_data: "This is empty", metric_error: "A metric error", metric_retry: "Just retry" } }}>
       <MetricChartDialog onClose={() => { }} repositoryUrl={repositoryUrl} projectMetric={projectMetric ?? { id: 1, unit: "count", better: "higher", name: "test_count", tagType: "commit_sha" }} />
     </NextIntlClientProvider>
   );
@@ -81,19 +81,19 @@ describe("MetricChartDialog (unit)", () => {
     expect(mutate).toHaveBeenCalledOnce();
   });
 
-  test("render not found state without retry button", () => {
+  test("render no data state without retry button", () => {
     vi.mocked(useSWR).mockReturnValue({
       isLoading: false,
       mutate: vi.fn(),
-      data: undefined,
-      error: new HTTPError("Not found", 404),
+      data: [],
+      error: undefined,
       isValidating: false
     });
 
     renderMetricChartDialog();
 
     expect(screen.queryByRole("status", { name: "Loading", hidden: true })).not.toBeInTheDocument();
-    expect(screen.queryByText("A missing metric")).toBeInTheDocument();
+    expect(screen.queryByText("This is empty")).toBeInTheDocument();
     expect(screen.queryByText("A metric error")).not.toBeInTheDocument();
     expect(screen.queryByText("Just retry")).not.toBeInTheDocument();
     expect(screen.queryByRole("application")).not.toBeInTheDocument();
