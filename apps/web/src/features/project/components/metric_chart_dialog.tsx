@@ -36,7 +36,7 @@ function activeDotProps(repositoryUrl: string | undefined, projectMetric: Projec
 export function MetricChartDialog({ repositoryUrl, projectMetric, title, onClose }: MetricChartDialogProps) {
   const t = useTranslations("project");
   const { data, error, isLoading, mutate } = useSWR<MetricSample[], HTTPError>(
-    projectMetric?.id ? [`/api/metrics/${projectMetric.id}`] : null,
+    projectMetric?.id ? `/api/metrics/${projectMetric.id}` : null,
     fetchWithStatusHandling<MetricSample[]>,
     { shouldRetryOnError: false }
   );
