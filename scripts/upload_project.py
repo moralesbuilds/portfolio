@@ -1,14 +1,14 @@
 # /// script
 # dependencies = [
 #   "python-frontmatter",
-#   "casefy"
+#   "casefy",
+#   "python-dotenv"
 # ]
 # ///
 
 import sys
-import subprocess
 import frontmatter
-from utilities import get_local_flag, parse_wrangler_json, create_tag_records, upload_markdown_file
+from utilities import get_local_flag, parse_wrangler_json, create_tag_records, upload_markdown_file, execute_command
 
 def insert_project_sql(post):
   name = post.metadata['name'].replace("'", "''")
@@ -40,9 +40,7 @@ def create_project_record(post, flag):
     insert_project_sql(post),
     flag
   ]
-  result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-  print(result.stdout)
-
+  result = execute_command(cmd)
   json_result = parse_wrangler_json(result.stdout)
   project_id = json_result[0]["results"][0]["id"]
   print(f"Project ID: {project_id}")
@@ -70,8 +68,7 @@ def create_project_tag_records(project_id, tag_ids, flag):
     insert_project_tag_sql(project_id, tag_ids),
     flag
   ]
-  result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-  print(result.stdout)
+  execute_command(cmd)
 
 def insert_project_metrics_sql(post):
   metrics = []
@@ -116,8 +113,7 @@ def create_project_metrics(post, flag):
     sql,
     flag
   ]
-  result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-  print(result.stdout)
+  execute_command(cmd)
 
 if __name__ == "__main__":
   if len(sys.argv) < 2:

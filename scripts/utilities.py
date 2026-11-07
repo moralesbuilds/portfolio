@@ -4,6 +4,18 @@ import sys
 import json
 import casefy
 import subprocess
+from dotenv import load_dotenv
+
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
+
+def execute_command(cmd):
+  result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+  print(result.stdout)
+  if result.returncode != 0:
+    print(result.stderr)
+    sys.exit(result.returncode)
+  else:
+    return result
 
 def get_local_flag():
   try:
@@ -63,8 +75,7 @@ def create_tag_records(post, flag):
     sql,
     flag
   ]
-  result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-  print(result.stdout)
+  result = execute_command(cmd)
   json_result = parse_wrangler_json(result.stdout)
   return [tag['id'] for tag in json_result[0]["results"]]
 
@@ -85,6 +96,4 @@ def upload_markdown_file(markdown_file, type, post, flag):
     os.path.abspath(markdown_file),
     flag
   ]
- 
-  result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-  print(result.stdout)
+  execute_command(cmd)
