@@ -23,7 +23,8 @@ def get_local_flag():
     if flag not in {"--local", "--remote"}:
       print("Not recognized flag")
       sys.exit(1)
-    return flag
+    else:
+      return flag
   except IndexError:
     return "--local"
 
