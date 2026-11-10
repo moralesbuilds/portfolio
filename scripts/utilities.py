@@ -7,6 +7,7 @@ import subprocess
 from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
+default_locale = "en"
 
 def execute_command(cmd):
   result = subprocess.run(cmd, capture_output=True, text=True, check=False)
@@ -28,6 +29,9 @@ def get_local_flag():
   except IndexError:
     return "--local"
 
+def get_locale(post):
+  return post.metadata['locale'] or default_locale if "locale" in post.metadata else default_locale
+
 def parse_wrangler_json(output: str):
   match = re.search(r'(\[|\{)', output)
   if not match:
@@ -40,16 +44,16 @@ def insert_tags_sql(post):
   if "tags" not in post.metadata:
     return None
   
-  locale = post.metadata['locale'].replace("'", "''")
   tags = post.metadata['tags']
+  if len(tags) == 0:
+    return None
+
   tag_records = []
+  locale = get_locale(post).replace("'", "''")
   for tag in tags:
     tag_name = casefy.kebabcase(tag)
     tag_label = tag.replace("'", "''")
     tag_records.append(f"('{tag_name}', '{locale}', '{tag_name}', '{tag_label}')")
-    
-  if len(tags) == 0:
-    return None
 
   return (
     "INSERT INTO tags (name, locale, slug, label) VALUES "
@@ -60,7 +64,7 @@ def insert_tags_sql(post):
   
 def create_tag_records(post, flag):
   sql = insert_tags_sql(post)
-  if sql is None:
+  if sql is None or flag is None:
     return None
   
   cmd = [
@@ -78,11 +82,29 @@ def create_tag_records(post, flag):
   ]
   result = execute_command(cmd)
   json_result = parse_wrangler_json(result.stdout)
-  return [tag['id'] for tag in json_result[0]["results"]]
+
+  if not isinstance(json_result, list) or len(json_result) == 0:
+    return None
+  
+  results = json_result[0]["results"]
+  if not isinstance(results, list) or len(results) == 0:
+    return None
+
+  return [tag['id'] for tag in results]
 
 def upload_markdown_file(markdown_file, type, post, flag):
-  locale = post.metadata['locale']
-  slug = post.metadata['slug']
+  if markdown_file is None:
+    raise ValueError("A markdown file is required.")
+
+  slug = post.metadata.get('slug')
+  if slug is None:
+    raise ValueError("A slug is required.")
+  if type is None:
+    raise ValueError("A type is required")
+  if flag is None:
+    raise ValueError("A flag is required")
+
+  locale = get_locale(post)
   cmd = [
     "pnpm",
     "--filter",

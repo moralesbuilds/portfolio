@@ -34,7 +34,8 @@
     {
       "label": "Run Scripts unit tests",
       "type": "shell",
-      "command": "uv run --with pytest pytest",
+      "command": "uv run --with \"pytest, pytest-mock\" pytest",
+      "group": "test",
       "options": {
         "cwd": "${workspaceFolder}/scripts"
       }
