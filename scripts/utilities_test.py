@@ -2,7 +2,7 @@ import sys
 import types
 import pytest
 import subprocess
-from utilities import execute_command, get_local_flag, parse_wrangler_json, insert_tags_sql, create_tag_records, get_locale, upload_markdown_file
+from utilities import execute_command, get_local_flag, parse_wrangler_json, insert_tags_sql, create_tag_records, get_locale, upload_markdown_file, get_optional, get_required
 
 def test_execute_command_success(mocker):
   mock_run = mocker.patch("subprocess.run")
@@ -67,6 +67,38 @@ def test_get_locale_present_value():
   post = types.SimpleNamespace(metadata = { "locale": "es" })
   result = get_locale(post)
   assert result == "es"
+
+@pytest.mark.parametrize(
+  "metadata", [{}, { "example": None }]
+)
+def test_get_required_raises_error(metadata):
+  post = types.SimpleNamespace(metadata = metadata)
+  with pytest.raises(ValueError, match="The field example is required."):
+    get_required(post, "example")
+
+@pytest.mark.parametrize(
+  "metadata,expected", [
+  ({ "example": "value" }, "value"),
+  ({ "example": "'value'" }, "''value''")
+])
+def test_get_required_success(metadata, expected):
+  post = types.SimpleNamespace(metadata = metadata)
+  value = get_required(post, "example")
+  assert value == expected
+
+@pytest.mark.parametrize(
+  "metadata,default_val,expected", [
+  ({ "example": "value" }, None, "value"),
+  ({ "example": "value'" }, None, "value''"),
+  ({ "example": None }, "hello", "hello"),
+  ({ }, None, None),
+  ({ }, "result", "result"),
+  ({ "example": None }, None, None)
+])
+def test_get_optional_success(metadata, default_val, expected):
+  post = types.SimpleNamespace(metadata = metadata)
+  value = get_optional(post, "example", default_val=default_val)
+  assert value == expected
 
 def test_parse_wrangler_json_success():
   output = parse_wrangler_json("""
@@ -204,7 +236,19 @@ def test_create_tag_records_success_no_tag_results(mocker, json):
 
   result = create_tag_records(post, "--local")
   assert result is None
-  mock_execute_command.assert_called_once()
+  mock_execute_command.assert_called_once_with([
+    "pnpm",
+    "--filter",
+    "web",
+    "exec",
+    "wrangler",
+    "d1",
+    "execute",
+    "contents-db",
+    "--command",
+    "INSERT INTO tags (name) VALUES ('Test') RETURNING id;",
+    "--local"
+  ])
 
 def test_upload_markdown_file_success(mocker):
   post = types.SimpleNamespace(metadata = { "locale": "en", "slug": "test-content" })
@@ -248,6 +292,6 @@ def test_upload_markdown_file_missing_slug(mocker, metadata):
   post = types.SimpleNamespace(metadata = metadata)
   mock_execute_command = mocker.patch("utilities.execute_command")
 
-  with pytest.raises(ValueError, match="A slug is required."):
+  with pytest.raises(ValueError, match="The field slug is required."):
     upload_markdown_file("b/content.md", "content", post, "--remote")
   mock_execute_command.assert_not_called()

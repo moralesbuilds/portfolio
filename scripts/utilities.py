@@ -29,8 +29,18 @@ def get_local_flag():
   except IndexError:
     return "--local"
 
+def get_required(post, field):
+  val = post.metadata.get(field)
+  if val is None:
+    raise ValueError(f"The field {field} is required.")
+  return val.replace("'", "''")
+
+def get_optional(post, field, default_val=None):
+  val = post.metadata.get(field) or default_val
+  return val.replace("'", "''") if val is not None else None
+
 def get_locale(post):
-  return post.metadata['locale'] or default_locale if "locale" in post.metadata else default_locale
+  return get_optional(post, "locale", default_val=default_locale)
 
 def parse_wrangler_json(output: str):
   match = re.search(r'(\[|\{)', output)
@@ -49,7 +59,7 @@ def insert_tags_sql(post):
     return None
 
   tag_records = []
-  locale = get_locale(post).replace("'", "''")
+  locale = get_locale(post)
   for tag in tags:
     tag_name = casefy.kebabcase(tag)
     tag_label = tag.replace("'", "''")
@@ -96,9 +106,7 @@ def upload_markdown_file(markdown_file, type, post, flag):
   if markdown_file is None:
     raise ValueError("A markdown file is required.")
 
-  slug = post.metadata.get('slug')
-  if slug is None:
-    raise ValueError("A slug is required.")
+  slug = get_required(post, "slug")
   if type is None:
     raise ValueError("A type is required")
   if flag is None:

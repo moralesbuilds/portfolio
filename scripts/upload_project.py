@@ -8,16 +8,20 @@
 
 import sys
 import frontmatter
-from utilities import get_local_flag, parse_wrangler_json, create_tag_records, upload_markdown_file, execute_command
+from utilities import get_local_flag, parse_wrangler_json, create_tag_records, upload_markdown_file, execute_command, get_locale, get_required, get_optional
 
 def insert_project_sql(post):
-  name = post.metadata['name'].replace("'", "''")
-  locale = post.metadata['locale'].replace("'", "''")
-  slug = post.metadata['slug'].replace("'", "''")
-  title = post.metadata['title'].replace("'", "''")
-  summary = post.metadata['summary'].replace("'", "''")
-  repository_url = f"'{post.metadata['repository_url'].replace("'", "''")}'" if "repository_url" in post.metadata else 'NULL'
-  is_featured = int(post.metadata['is_featured']) if "is_featured" in post.metadata else 0
+  name = get_required(post, "name")
+  locale = get_locale(post)
+  slug = get_required(post, "slug")
+  title = get_required(post, "title")
+  summary =  get_required(post, "summary")
+  repository_url = get_optional(post, "repository_url")
+  repository_url = f"'{repository_url}'" if repository_url is not None else 'NULL'
+  is_featured = post.metadata.get("is_featured")
+  if is_featured is not None:
+    is_featured = is_featured.lower()
+  is_featured = 1 if is_featured == "true" else 0
   return (
     "INSERT INTO projects (name, locale, slug, title, summary, repository_url, author_id, status, is_featured, published_at, created_at, updated_at) "
     f"VALUES ('{name}', '{locale}', '{slug}', '{title}', '{summary}', {repository_url}, 1, 'published', {is_featured}, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), NULL) "
