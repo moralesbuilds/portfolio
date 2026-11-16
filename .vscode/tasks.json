@@ -30,6 +30,15 @@
       "label": "Upload Blog post",
       "type": "shell",
       "command": "uv run ./scripts/upload_blog_post.py ${input:content-filename} --${input:local-or-remote}"
+    },
+    {
+      "label": "Run Scripts unit tests",
+      "type": "shell",
+      "command": "uv run --with \"pytest, pytest-mock\" pytest",
+      "group": "test",
+      "options": {
+        "cwd": "${workspaceFolder}/scripts"
+      }
     }
   ],
   "inputs": [

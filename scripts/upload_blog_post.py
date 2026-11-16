@@ -1,19 +1,19 @@
 # /// script
 # dependencies = [
 #   "python-frontmatter",
-#   "casefy"
+#   "casefy",
+#   "python-dotenv"
 # ]
 # ///
 
 import sys
 import casefy
-import subprocess
 import frontmatter
-from utilities import create_tag_records, get_local_flag, parse_wrangler_json, upload_markdown_file
+from utilities import create_tag_records, get_local_flag, parse_wrangler_json, upload_markdown_file, execute_command, get_required, get_locale
 
 def insert_category_sql(post):
-  label = post.metadata['category'].replace("'", "''")
-  locale = post.metadata['locale'].replace("'", "''")
+  label = get_required(post, "category")
+  locale = get_locale(post)
   slug = casefy.kebabcase(label)
   name = slug
   return (
@@ -38,9 +38,7 @@ def create_category_record(post, flag):
     insert_category_sql(post),
     flag
   ]
-  result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-  print(result.stdout)
-  
+  result = execute_command(cmd) 
   json_result = parse_wrangler_json(result.stdout)
   category_id = json_result[0]["results"][0]["id"]
   print(f"Category ID: {category_id}")
@@ -48,11 +46,11 @@ def create_category_record(post, flag):
   
 
 def insert_blog_post_sql(post, category_id):
-  name = post.metadata['name'].replace("'", "''")
-  locale = post.metadata['locale'].replace("'", "''")
-  slug = post.metadata['slug'].replace("'", "''")
-  title = post.metadata['title'].replace("'", "''")
-  summary = post.metadata['summary'].replace("'", "''")
+  name = get_required(post, "name")
+  locale = get_locale(post)
+  slug = get_required(post, "slug")
+  title = get_required(post, "title")
+  summary = get_required(post, "summary")
   return (
     "INSERT INTO blog_posts (name, locale, slug, title, category_id, status, summary, author_id, published_at, created_at, updated_at) "
     f"VALUES ('{name}', '{locale}', '{slug}', '{title}', {category_id}, 'published', '{summary}', 1, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), NULL) "
@@ -75,9 +73,7 @@ def create_blog_post_record(post, category_id, flag):
     insert_blog_post_sql(post, category_id),
     flag
   ]
-  result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-  print(result.stdout)
-
+  result = execute_command(cmd)
   json_result = parse_wrangler_json(result.stdout)
   blog_post_id = json_result[0]["results"][0]["id"]
   print(f"Blog Post ID: {blog_post_id}")
@@ -105,8 +101,7 @@ def create_blog_post_tag_records(blog_post_id, tag_ids, flag):
     insert_blog_post_tag_sql(blog_post_id, tag_ids),
     flag
   ]
-  result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-  print(result.stdout)
+  execute_command(cmd)
   
 if __name__ == "__main__":
   if len(sys.argv) < 2:
