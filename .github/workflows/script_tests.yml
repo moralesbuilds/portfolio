@@ -1,7 +1,7 @@
 name: script-tests
 run-name: Moralesbuilds Portfolio's script tests
 on:
-  pull_requests:
+  pull_request:
     branches:
       - main
     paths:
