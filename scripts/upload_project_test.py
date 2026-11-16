@@ -196,6 +196,7 @@ def test_main_uploads_everything(mocker):
 
   databases = [call.args[0][7] for call in mocks.execute_command.call_args_list]
   assert databases == ["contents-db", "contents-db", "metrics-db"]
+
   project_tags_cmd = mocks.execute_command.call_args_list[1].args[0]
   assert project_tags_cmd[9] == (
     "INSERT INTO project_tags (project_id, tag_id) VALUES "
@@ -203,6 +204,7 @@ def test_main_uploads_everything(mocker):
     "ON CONFLICT (project_id, tag_id) DO NOTHING;"
   )
   assert all(call.args[0][-1] == "--local" for call in mocks.execute_command.call_args_list)
+
   mocks.create_tag_records.assert_called_once_with(post, "--local")
   mocks.upload_markdown_file.assert_called_once_with("projects/example.md", "projects", post, "--local")
 
@@ -213,4 +215,5 @@ def test_main_skips_tags_and_metrics_when_missing(mocker):
 
   databases = [call.args[0][7] for call in mocks.execute_command.call_args_list]
   assert databases == ["contents-db"]
+  
   mocks.upload_markdown_file.assert_called_once_with("projects/example.md", "projects", post, "--local")
