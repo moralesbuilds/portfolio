@@ -2,7 +2,7 @@ import sys
 import types
 import pytest
 import subprocess
-from utilities import execute_command, get_local_flag, parse_wrangler_json, insert_tags_sql, create_tag_records, get_locale, upload_markdown_file, get_optional, get_required
+from utilities import execute_command, get_local_flag, parse_wrangler_json, insert_tags_sql, create_tag_records, get_locale, upload_markdown_file, get_optional, get_required, get_bool
 
 def test_execute_command_success(mocker):
   mock_run = mocker.patch("subprocess.run")
@@ -54,6 +54,25 @@ def test_get_local_flag_default(mocker):
   mocker.patch.object(sys, "argv", ["main.py", "file.md"])
   result = get_local_flag()
   assert result == "--local"
+
+@pytest.mark.parametrize(
+  "metadata,expected", [
+    ({}, False),
+    ({ "field": None }, False),
+    ({ "field": False }, False),
+    ({ "field": True }, True),
+    ({ "field": "False" }, False),
+    ({ "field": "true" }, True),
+    ({ "field": "True" }, True),
+    ({ "field": "truE" }, True),
+    ({ "field": "TRUE" }, True),
+    ({ "field": {} }, False)
+  ] 
+)
+def test_get_bool(metadata, expected):
+  post = types.SimpleNamespace(metadata = metadata)
+  result = get_bool(post, "field")
+  assert result == expected
 
 @pytest.mark.parametrize(
   "metadata", [{}, { "locale": None }]

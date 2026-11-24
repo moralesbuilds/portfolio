@@ -8,7 +8,7 @@
 
 import sys
 import frontmatter
-from utilities import get_local_flag, parse_wrangler_json, create_tag_records, upload_markdown_file, execute_command, get_locale, get_required, get_optional
+from utilities import get_local_flag, parse_wrangler_json, create_tag_records, upload_markdown_file, execute_command, get_locale, get_required, get_optional, get_bool
 
 def insert_project_sql(post):
   name = get_required(post, "name")
@@ -18,10 +18,7 @@ def insert_project_sql(post):
   summary =  get_required(post, "summary")
   repository_url = get_optional(post, "repository_url")
   repository_url = f"'{repository_url}'" if repository_url is not None else 'NULL'
-  is_featured = post.metadata.get("is_featured")
-  if is_featured is not None:
-    is_featured = is_featured.lower()
-  is_featured = 1 if is_featured == "true" else 0
+  is_featured = 1 if get_bool(post, "is_featured") else 0
   return (
     "INSERT INTO projects (name, locale, slug, title, summary, repository_url, author_id, status, is_featured, published_at, created_at, updated_at) "
     f"VALUES ('{name}', '{locale}', '{slug}', '{title}', '{summary}', {repository_url}, 1, 'published', {is_featured}, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), NULL) "

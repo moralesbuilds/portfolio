@@ -42,6 +42,16 @@ def get_optional(post, field, default_val=None):
 def get_locale(post):
   return get_optional(post, "locale", default_val=default_locale)
 
+def get_bool(post, field):
+  val = post.metadata.get(field)
+  if isinstance(val, bool):
+    return val
+
+  if isinstance(val, str):
+    return val.lower() == "true"
+
+  return False
+
 def parse_wrangler_json(output: str):
   match = re.search(r'(\[|\{)', output)
   if not match:
