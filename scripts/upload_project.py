@@ -8,7 +8,7 @@
 
 import sys
 import frontmatter
-from utilities import get_local_flag, parse_wrangler_json, create_tag_records, upload_markdown_file, execute_command, get_locale, get_required, get_optional, get_bool
+from utilities import get_local_flag, parse_wrangler_json, create_tag_records, upload_markdown_file, get_locale, get_required, get_optional, get_bool, execute_sql_command
 
 def insert_project_sql(post):
   name = get_required(post, "name")
@@ -28,20 +28,7 @@ def insert_project_sql(post):
   )
 
 def create_project_record(post, flag):
-  cmd = [
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
-    "wrangler",
-    "d1",
-    "execute",
-    "contents-db",
-    "--command",
-    insert_project_sql(post),
-    flag
-  ]
-  result = execute_command(cmd)
+  result = execute_sql_command("contents-db", insert_project_sql(post), flag)
   json_result = parse_wrangler_json(result.stdout)
   project_id = json_result[0]["results"][0]["id"]
   print(f"Project ID: {project_id}")
@@ -56,20 +43,7 @@ def insert_project_tag_sql(project_id, tag_ids):
   )
 
 def create_project_tag_records(project_id, tag_ids, flag):
-  cmd = [
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
-    "wrangler",
-    "d1",
-    "execute",
-    "contents-db",
-    "--command",
-    insert_project_tag_sql(project_id, tag_ids),
-    flag
-  ]
-  execute_command(cmd)
+  execute_sql_command("contents-db", insert_project_tag_sql(project_id, tag_ids), flag)
 
 def insert_project_metrics_sql(post):
   metrics = []
@@ -100,21 +74,7 @@ def create_project_metrics(post, flag):
   sql = insert_project_metrics_sql(post)
   if sql is None:
     return None
-    
-  cmd = [
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
-    "wrangler",
-    "d1",
-    "execute",
-    "metrics-db",
-    "--command",
-    sql,
-    flag
-  ]
-  execute_command(cmd)
+  execute_sql_command("metrics-db", sql, flag)
 
 if __name__ == "__main__":
   if len(sys.argv) < 2:

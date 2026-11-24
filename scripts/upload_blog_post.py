@@ -9,7 +9,7 @@
 import sys
 import casefy
 import frontmatter
-from utilities import create_tag_records, get_local_flag, parse_wrangler_json, upload_markdown_file, execute_command, get_required, get_locale
+from utilities import create_tag_records, get_local_flag, parse_wrangler_json, upload_markdown_file, get_required, get_locale, execute_sql_command
 
 def insert_category_sql(post):
   label = get_required(post, "category")
@@ -25,25 +25,11 @@ def insert_category_sql(post):
   )
   
 def create_category_record(post, flag):
-  cmd = [
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
-    "wrangler",
-    "d1",
-    "execute",
-    "contents-db",
-    "--command",
-    insert_category_sql(post),
-    flag
-  ]
-  result = execute_command(cmd) 
+  result = execute_sql_command("contents-db", insert_category_sql(post), flag)
   json_result = parse_wrangler_json(result.stdout)
   category_id = json_result[0]["results"][0]["id"]
   print(f"Category ID: {category_id}")
   return category_id
-  
 
 def insert_blog_post_sql(post, category_id):
   name = get_required(post, "name")
@@ -60,20 +46,7 @@ def insert_blog_post_sql(post, category_id):
   )
 
 def create_blog_post_record(post, category_id, flag):
-  cmd = [
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
-    "wrangler",
-    "d1",
-    "execute",
-    "contents-db",
-    "--command",
-    insert_blog_post_sql(post, category_id),
-    flag
-  ]
-  result = execute_command(cmd)
+  result = execute_sql_command("contents-db", insert_blog_post_sql(post, category_id), flag)
   json_result = parse_wrangler_json(result.stdout)
   blog_post_id = json_result[0]["results"][0]["id"]
   print(f"Blog Post ID: {blog_post_id}")
@@ -88,20 +61,7 @@ def insert_blog_post_tag_sql(blog_post_id, tag_ids):
   )
 
 def create_blog_post_tag_records(blog_post_id, tag_ids, flag):
-  cmd = [
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
-    "wrangler",
-    "d1",
-    "execute",
-    "contents-db",
-    "--command",
-    insert_blog_post_tag_sql(blog_post_id, tag_ids),
-    flag
-  ]
-  execute_command(cmd)
+  execute_sql_command("contents-db", insert_blog_post_tag_sql(blog_post_id, tag_ids), flag)
   
 if __name__ == "__main__":
   if len(sys.argv) < 2:

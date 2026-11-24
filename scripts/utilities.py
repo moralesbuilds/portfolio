@@ -18,6 +18,22 @@ def execute_command(cmd):
   else:
     return result
 
+def execute_sql_command(database, sql, flag):
+  cmd = [
+    "pnpm",
+    "--filter",
+    "web",
+    "exec",
+    "wrangler",
+    "d1",
+    "execute",
+    database,
+    "--command",
+    sql,
+    flag
+  ]
+  return execute_command(cmd)
+
 def get_local_flag():
   try:
     flag = sys.argv[2]

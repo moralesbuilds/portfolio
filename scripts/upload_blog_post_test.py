@@ -28,25 +28,13 @@ def test_insert_category_sql_success(mocker):
 
 def test_create_category_record_success(mocker):
   mocker.patch("upload_blog_post.insert_category_sql", return_value="INSERT INTO categories (name) VALUES ('name') RETURNING id;")
-  execute_command_mock = mocker.patch("upload_blog_post.execute_command", return_value=types.SimpleNamespace(stdout="The result, trust me!"))
+  execute_sql_command_mock = mocker.patch("upload_blog_post.execute_sql_command", return_value=types.SimpleNamespace(stdout="The result, trust me!"))
   parse_mock = mocker.patch("upload_blog_post.parse_wrangler_json", return_value=[{ "results": [{ "id": 10 }]} ])
   post = types.SimpleNamespace(metadata = {})
 
   result = create_category_record(post, "--flag")
 
-  execute_command_mock.assert_called_once_with([
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
-    "wrangler",
-    "d1",
-    "execute",
-    "contents-db",
-    "--command",
-    "INSERT INTO categories (name) VALUES ('name') RETURNING id;",
-    "--flag"
-  ])
+  execute_sql_command_mock.assert_called_once_with("contents-db", "INSERT INTO categories (name) VALUES ('name') RETURNING id;", "--flag")
   parse_mock.assert_called_once_with("The result, trust me!")
   assert result == 10
 
@@ -75,25 +63,13 @@ def test_insert_blog_post_sql_success():
 
 def test_create_blog_post_record_success(mocker):
   mocker.patch("upload_blog_post.insert_blog_post_sql", return_value="INSERT INTO blog_posts (name) VALUES ('example') RETURNING id;")
-  execute_command_mock = mocker.patch("upload_blog_post.execute_command", return_value=types.SimpleNamespace(stdout="The result, trust me!"))
+  execute_sql_command_mock = mocker.patch("upload_blog_post.execute_sql_command", return_value=types.SimpleNamespace(stdout="The result, trust me!"))
   parse_mock = mocker.patch("upload_blog_post.parse_wrangler_json", return_value=[{ "results": [{ "id": 20 }]} ])
   post = types.SimpleNamespace(metadata = {})
 
   result = create_blog_post_record(post, "--flag")
 
-  execute_command_mock.assert_called_once_with([
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
-    "wrangler",
-    "d1",
-    "execute",
-    "contents-db",
-    "--command",
-    "INSERT INTO blog_posts (name) VALUES ('example') RETURNING id;",
-    "--flag"
-  ])
+  execute_sql_command_mock.assert_called_once_with("contents-db", "INSERT INTO blog_posts (name) VALUES ('example') RETURNING id;", "--flag")
   parse_mock.assert_called_once_with("The result, trust me!")
   assert result == 20
 
@@ -107,24 +83,12 @@ def test_insert_blog_post_tag_sql_success():
 
 def test_create_blog_post_record_success(mocker):
   mocker.patch("upload_blog_post.insert_blog_post_tag_sql", return_value="INSERT INTO blog_post_tags (blog_post_id, tag_id) VALUES (100, 10);")
-  execute_command_mock = mocker.patch("upload_blog_post.execute_command", return_value=types.SimpleNamespace(stdout="The result, trust me!"))
+  execute_sql_command_mock = mocker.patch("upload_blog_post.execute_sql_command", return_value=types.SimpleNamespace(stdout="The result, trust me!"))
   post = types.SimpleNamespace(metadata = {})
 
   create_blog_post_tag_records(100, [10], "--flag")
 
-  execute_command_mock.assert_called_once_with([
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
-    "wrangler",
-    "d1",
-    "execute",
-    "contents-db",
-    "--command",
-    "INSERT INTO blog_post_tags (blog_post_id, tag_id) VALUES (100, 10);",
-    "--flag"
-  ])
+  execute_sql_command_mock.assert_called_once_with("contents-db", "INSERT INTO blog_post_tags (blog_post_id, tag_id) VALUES (100, 10);", "--flag")
 
 script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "upload_blog_post.py")
 
@@ -134,7 +98,7 @@ def run_script(mocker, argv, post, tag_ids):
   mocker.patch("utilities.get_local_flag", return_value="--local")
   mocker.patch("utilities.parse_wrangler_json", return_value=[{ "results": [{ "id": 200 }] }])
   mocks = types.SimpleNamespace(
-    execute_command = mocker.patch("utilities.execute_command", return_value=types.SimpleNamespace(stdout="stdout")),
+    execute_sql_command = mocker.patch("utilities.execute_sql_command", return_value=types.SimpleNamespace(stdout="stdout")),
     create_tag_records = mocker.patch("utilities.create_tag_records", return_value=tag_ids),
     upload_markdown_file = mocker.patch("utilities.upload_markdown_file")
   )
@@ -154,16 +118,16 @@ def test_main_uploads_everything(mocker):
 
   mocks = run_script(mocker, ["upload_blog_post.py", "blog_posts/example.md"], post, [1])
 
-  databases = [call.args[0][7] for call in mocks.execute_command.call_args_list]
+  databases = [call.args[0] for call in mocks.execute_sql_command.call_args_list]
   assert databases == ["contents-db", "contents-db", "contents-db"]
 
-  blog_post_tags_cmd = mocks.execute_command.call_args_list[2].args[0]
-  assert blog_post_tags_cmd[9] == (
+  blog_post_tags_cmd = mocks.execute_sql_command.call_args_list[2].args[1]
+  assert blog_post_tags_cmd == (
     "INSERT INTO blog_post_tags (blog_post_id, tag_id) VALUES "
     "(200, 1) "
     "ON CONFLICT (blog_post_id, tag_id) DO NOTHING;"
   )
-  assert all(call.args[0][-1] == "--local" for call in mocks.execute_command.call_args_list)
+  assert all(call.args[2] == "--local" for call in mocks.execute_sql_command.call_args_list)
 
   mocks.create_tag_records.assert_called_once_with(post, "--local")
   mocks.upload_markdown_file.assert_called_once_with("blog_posts/example.md", "blog_posts", post, "--local")
@@ -173,7 +137,7 @@ def test_main_skips_tags_when_missing(mocker):
 
   mocks = run_script(mocker, ["upload_blog_post.py", "blog_posts/example.md"], post, None)
 
-  databases = [call.args[0][7] for call in mocks.execute_command.call_args_list]
+  databases = [call.args[0] for call in mocks.execute_sql_command.call_args_list]
   assert databases == ["contents-db", "contents-db"]
 
   mocks.upload_markdown_file.assert_called_once_with("blog_posts/example.md", "blog_posts", post, "--local")

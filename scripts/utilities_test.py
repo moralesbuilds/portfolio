@@ -2,7 +2,7 @@ import sys
 import types
 import pytest
 import subprocess
-from utilities import execute_command, get_local_flag, parse_wrangler_json, insert_tags_sql, create_tag_records, get_locale, upload_markdown_file, get_optional, get_required, get_bool
+from utilities import execute_command, get_local_flag, parse_wrangler_json, insert_tags_sql, create_tag_records, get_locale, upload_markdown_file, get_optional, get_required, get_bool, execute_sql_command
 
 def test_execute_command_success(mocker):
   mock_run = mocker.patch("subprocess.run")
@@ -34,7 +34,25 @@ def test_execute_command_failed(mocker):
     ["cat", "example.txt"], capture_output=True, text=True, check=False
   )
   mock_exit.assert_called_once_with(1)
-  
+
+def test_execute_sql_command_success(mocker):
+  mock_execute_command = mocker.patch("utilities.execute_command", return_value="Done")
+  result = execute_sql_command("examples-db", "INSERT INTO examples (name) VALUES ('example');", "--remote")
+  mock_execute_command.assert_called_once_with([
+    "pnpm",
+    "--filter",
+    "web",
+    "exec",
+    "wrangler",
+    "d1",
+    "execute",
+    "examples-db",
+    "--command",
+    "INSERT INTO examples (name) VALUES ('example');",
+    "--remote"
+  ])
+  assert result == "Done"
+
 @pytest.mark.parametrize(
   "flag", ["--local", "--remote"]
 )

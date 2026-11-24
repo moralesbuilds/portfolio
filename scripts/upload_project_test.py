@@ -41,25 +41,13 @@ def test_insert_project_sql_success(metadata, values):
 
 def test_create_project_record_success(mocker):
   mocker.patch("upload_project.insert_project_sql", return_value="INSERT INTO tests (name) VALUES ('example') RETURNING id;")
-  execute_command_mock = mocker.patch("upload_project.execute_command", return_value=types.SimpleNamespace(stdout="The result, trust me!"))
+  execute_sql_command_mock = mocker.patch("upload_project.execute_sql_command", return_value=types.SimpleNamespace(stdout="The result, trust me!"))
   parse_mock = mocker.patch("upload_project.parse_wrangler_json", return_value=[{ "results": [{ "id": 100 }]} ])
   post = types.SimpleNamespace(metadata = {})
   
   result = create_project_record(post, "--flag")
 
-  execute_command_mock.assert_called_once_with([
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
-    "wrangler",
-    "d1",
-    "execute",
-    "contents-db",
-    "--command",
-    "INSERT INTO tests (name) VALUES ('example') RETURNING id;",
-    "--flag"
-  ])
+  execute_sql_command_mock.assert_called_once_with("contents-db", "INSERT INTO tests (name) VALUES ('example') RETURNING id;", "--flag")
   parse_mock.assert_called_once_with("The result, trust me!")
   assert result == 100
 
@@ -73,24 +61,12 @@ def test_insert_project_tag_sql_success():
 
 def test_create_project_tag_records(mocker):
   mocker.patch("upload_project.insert_project_tag_sql", return_value="INSERT INTO project_tags (project_id, tag_id) VALUES (1, 1);")
-  execute_command_mock = mocker.patch("upload_project.execute_command", return_value=types.SimpleNamespace(stdout="The result, trust me!"))
+  execute_sql_command_mock = mocker.patch("upload_project.execute_sql_command", return_value=types.SimpleNamespace(stdout="The result, trust me!"))
   post = types.SimpleNamespace(metadata = {})
 
   create_project_tag_records(1, [1], "--local")
 
-  execute_command_mock.assert_called_once_with([
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
-    "wrangler",
-    "d1",
-    "execute",
-    "contents-db",
-    "--command",
-    "INSERT INTO project_tags (project_id, tag_id) VALUES (1, 1);",
-    "--local"
-  ])
+  execute_sql_command_mock.assert_called_once_with("contents-db", "INSERT INTO project_tags (project_id, tag_id) VALUES (1, 1);", "--local")
 
 def test_insert_project_metrics_sql_no_metrics():
   post = types.SimpleNamespace(metadata = { "name": "example" })
@@ -137,34 +113,22 @@ def test_insert_project_metrics_sql_escapes_project_name():
 
 def test_create_project_metrics_without_metrics(mocker):
   mocker.patch("upload_project.insert_project_metrics_sql", return_value=None)
-  execute_command_mock = mocker.patch("upload_project.execute_command")
+  execute_sql_command_mock = mocker.patch("upload_project.execute_sql_command")
   post = types.SimpleNamespace(metadata = {})
 
   result = create_project_metrics(post, "--local")
 
-  execute_command_mock.assert_not_called()
+  execute_sql_command_mock.assert_not_called()
   assert result is None
 
 def test_create_project_metrics_success(mocker):
   mocker.patch("upload_project.insert_project_metrics_sql", return_value="INSERT INTO project_metrics (project_name) VALUES ('example');")
-  execute_command_mock = mocker.patch("upload_project.execute_command")
+  execute_sql_command_mock = mocker.patch("upload_project.execute_sql_command")
   post = types.SimpleNamespace(metadata = {})
 
   create_project_metrics(post, "--remote")
 
-  execute_command_mock.assert_called_once_with([
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
-    "wrangler",
-    "d1",
-    "execute",
-    "metrics-db",
-    "--command",
-    "INSERT INTO project_metrics (project_name) VALUES ('example');",
-    "--remote"
-  ])
+  execute_sql_command_mock.assert_called_once_with("metrics-db", "INSERT INTO project_metrics (project_name) VALUES ('example');", "--remote")
 
 script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "upload_project.py")
 
@@ -174,7 +138,7 @@ def run_script(mocker, argv, post, tag_ids):
   mocker.patch("utilities.get_local_flag", return_value="--local")
   mocker.patch("utilities.parse_wrangler_json", return_value=[{ "results": [{ "id": 100 }] }])
   mocks = types.SimpleNamespace(
-    execute_command = mocker.patch("utilities.execute_command", return_value=types.SimpleNamespace(stdout="stdout")),
+    execute_sql_command = mocker.patch("utilities.execute_sql_command", return_value=types.SimpleNamespace(stdout="stdout")),
     create_tag_records = mocker.patch("utilities.create_tag_records", return_value=tag_ids),
     upload_markdown_file = mocker.patch("utilities.upload_markdown_file")
   )
@@ -194,16 +158,16 @@ def test_main_uploads_everything(mocker):
 
   mocks = run_script(mocker, ["upload_project.py", "projects/example.md"], post, [1, 2])
 
-  databases = [call.args[0][7] for call in mocks.execute_command.call_args_list]
+  databases = [call.args[0] for call in mocks.execute_sql_command.call_args_list]
   assert databases == ["contents-db", "contents-db", "metrics-db"]
 
-  project_tags_cmd = mocks.execute_command.call_args_list[1].args[0]
-  assert project_tags_cmd[9] == (
+  project_tags_cmd = mocks.execute_sql_command.call_args_list[1].args[1]
+  assert project_tags_cmd == (
     "INSERT INTO project_tags (project_id, tag_id) VALUES "
     "(100, 1), (100, 2) "
     "ON CONFLICT (project_id, tag_id) DO NOTHING;"
   )
-  assert all(call.args[0][-1] == "--local" for call in mocks.execute_command.call_args_list)
+  assert all(call.args[-1] == "--local" for call in mocks.execute_sql_command.call_args_list)
 
   mocks.create_tag_records.assert_called_once_with(post, "--local")
   mocks.upload_markdown_file.assert_called_once_with("projects/example.md", "projects", post, "--local")
@@ -213,7 +177,7 @@ def test_main_skips_tags_and_metrics_when_missing(mocker):
 
   mocks = run_script(mocker, ["upload_project.py", "projects/example.md"], post, None)
 
-  databases = [call.args[0][7] for call in mocks.execute_command.call_args_list]
+  databases = [call.args[0] for call in mocks.execute_sql_command.call_args_list]
   assert databases == ["contents-db"]
   
   mocks.upload_markdown_file.assert_called_once_with("projects/example.md", "projects", post, "--local")
