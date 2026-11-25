@@ -45,6 +45,12 @@ def get_local_flag():
   except IndexError:
     return "--local"
 
+def get_use_npx():
+  try:
+    return sys.argv[3] == "--npx"
+  except IndexError:
+    return False
+
 def get_required(post, field):
   val = post.metadata.get(field)
   if val is None:

@@ -10,7 +10,7 @@ import sys
 import types
 import casefy
 import frontmatter
-from utilities import create_tag_records, get_local_flag, parse_wrangler_json, upload_markdown_file, get_required, get_locale, execute_sql_command
+from utilities import create_tag_records, get_local_flag, parse_wrangler_json, upload_markdown_file, get_required, get_locale, execute_sql_command, get_use_npx
 
 def insert_category_sql(post):
   label = get_required(post, "category")
@@ -66,12 +66,11 @@ def create_blog_post_tag_records(blog_post_id, tag_ids, settings):
   
 if __name__ == "__main__":
   if len(sys.argv) < 2:
-    print("Usage: python scripts/upload_blog_post.py <blog post file path> <--local | --remote>")
+    print("Usage: python scripts/upload_blog_post.py <blog post file path> <--local | --remote> [--npx]")
     sys.exit(1)
     
   markdown_file = sys.argv[1]
-  flag = get_local_flag()
-  settings = types.SimpleNamespace(flag=flag)
+  settings = types.SimpleNamespace(flag=get_local_flag(), use_npx=get_use_npx())
   
   post = frontmatter.load(markdown_file)
   category_id = create_category_record(post, settings)

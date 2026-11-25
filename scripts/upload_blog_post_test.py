@@ -118,7 +118,7 @@ def test_main_missing_arguments(mocker, capsys):
 
 def test_main_uploads_everything(mocker):
   post = types.SimpleNamespace(metadata = { "name": "blog-post-example", "locale": "en", "slug": "blog-post-example", "title": "Post Title: A Clear Promise to the Reader", "summary": "A brief of the blog post", "category": "Testing", "tags": ["Tests"] })
-  settings = types.SimpleNamespace(flag="--local")
+  settings = types.SimpleNamespace(flag="--local", use_npx=False)
 
   mocks = run_script(mocker, ["upload_blog_post.py", "blog_posts/example.md"], post, [1])
 
@@ -138,7 +138,7 @@ def test_main_uploads_everything(mocker):
 
 def test_main_skips_tags_when_missing(mocker):
   post = types.SimpleNamespace(metadata = { "name": "blog-post-example", "locale": "en", "slug": "blog-post-example", "title": "Post Title: A Clear Promise to the Reader", "summary": "A brief of the blog post", "category": "Testing" })
-  settings = types.SimpleNamespace(flag="--local")
+  settings = types.SimpleNamespace(flag="--local", use_npx=False)
 
   mocks = run_script(mocker, ["upload_blog_post.py", "blog_posts/example.md"], post, None)
 

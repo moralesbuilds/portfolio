@@ -9,7 +9,7 @@
 import sys
 import types
 import frontmatter
-from utilities import get_local_flag, parse_wrangler_json, create_tag_records, upload_markdown_file, get_locale, get_required, get_optional, get_bool, execute_sql_command
+from utilities import get_local_flag, parse_wrangler_json, create_tag_records, upload_markdown_file, get_locale, get_required, get_optional, get_bool, execute_sql_command, get_use_npx
 
 def insert_project_sql(post):
   name = get_required(post, "name")
@@ -83,8 +83,7 @@ if __name__ == "__main__":
     sys.exit(1)
 
   markdown_file = sys.argv[1]
-  flag = get_local_flag()
-  settings = types.SimpleNamespace(flag=flag)
+  settings = types.SimpleNamespace(flag=get_local_flag(), use_npx=get_use_npx())
 
   post = frontmatter.load(markdown_file)
   project_id = create_project_record(post, settings)

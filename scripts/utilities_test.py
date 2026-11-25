@@ -2,7 +2,7 @@ import sys
 import types
 import pytest
 import subprocess
-from utilities import execute_command, get_local_flag, parse_wrangler_json, insert_tags_sql, create_tag_records, get_locale, upload_markdown_file, get_optional, get_required, get_bool, execute_sql_command
+from utilities import execute_command, get_local_flag, parse_wrangler_json, insert_tags_sql, create_tag_records, get_locale, upload_markdown_file, get_optional, get_required, get_bool, execute_sql_command, get_use_npx
 
 def test_execute_command_success(mocker):
   mock_run = mocker.patch("subprocess.run")
@@ -89,6 +89,14 @@ def test_get_local_flag_default(mocker):
   mocker.patch.object(sys, "argv", ["main.py", "file.md"])
   result = get_local_flag()
   assert result == "--local"
+
+def test_get_use_npx_present(mocker):
+  mocker.patch.object(sys, "argv", ["main.py", "file.md", "--local", "--npx"])
+  assert get_use_npx() == True
+
+def test_get_use_npx_present(mocker):
+  mocker.patch.object(sys, "argv", ["main.py", "file.md", "--local"])
+  assert get_use_npx() == False
 
 @pytest.mark.parametrize(
   "metadata,expected", [
