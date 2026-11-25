@@ -35,6 +35,40 @@ def test_execute_command_failed(mocker):
   )
   mock_exit.assert_called_once_with(1)
 
+def test_execute_command_falls_back_to_interactive_shell(mocker):
+  ok = mocker.MagicMock(spec=subprocess.CompletedProcess, returncode=0, stdout="ok")
+  mock_run = mocker.patch("subprocess.run", side_effect=[FileNotFoundError(), ok])
+  mocker.patch.dict("os.environ", {"SHELL": "/bin/zsh"})
+
+  result = execute_command(["pnpm", "--filter", "web", "exec", "wrangler", "d1", "execute", "db", "--command", "SELECT 'a b';"])
+
+  assert result is ok
+  assert mock_run.call_count == 2
+  mock_run.assert_called_with(
+    ["/bin/zsh", "-ic", "pnpm --filter web exec wrangler d1 execute db --command 'SELECT '\"'\"'a b'\"'\"';'"],
+    capture_output=True, text=True, check=False
+  )
+
+def test_execute_command_fallback_defaults_to_bash(mocker):
+  ok = mocker.MagicMock(spec=subprocess.CompletedProcess, returncode=0, stdout="ok")
+  mock_run = mocker.patch("subprocess.run", side_effect=[FileNotFoundError(), ok])
+  mocker.patch.dict("os.environ", {}, clear=True)
+
+  execute_command(["pnpm", "-v"])
+
+  mock_run.assert_called_with(
+    ["bash", "-ic", "pnpm -v"], capture_output=True, text=True, check=False
+  )
+
+def test_execute_command_fallback_failure_exits(mocker):
+  failed = mocker.MagicMock(spec=subprocess.CompletedProcess, returncode=127, stdout="", stderr="not found")
+  mocker.patch("subprocess.run", side_effect=[FileNotFoundError(), failed])
+  mock_exit = mocker.patch("sys.exit")
+
+  execute_command(["pnpm", "-v"])
+
+  mock_exit.assert_called_once_with(127)
+
 def test_execute_sql_command_pnpm(mocker):
   mock_execute_command = mocker.patch("utilities.execute_command", return_value="Done")
   settings = types.SimpleNamespace(flag="--remote", use_npx=False)

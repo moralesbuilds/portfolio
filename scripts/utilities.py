@@ -2,6 +2,7 @@ import os
 import re
 import sys
 import json
+import shlex
 import casefy
 import subprocess
 from dotenv import load_dotenv
@@ -13,7 +14,14 @@ npx_cmd = ["npx"]
 pnpm_cmd = ["pnpm", "--filter", "web", "exec"]
 
 def execute_command(cmd):
-  result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+  try:
+    result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+  except FileNotFoundError:
+    shell = os.environ.get("SHELL", "bash")
+    result = subprocess.run(
+      [shell, "-ic", shlex.join(cmd)],
+      capture_output=True, text=True, check=False
+    )
   print(result.stdout)
   if result.returncode != 0:
     print(result.stderr)
