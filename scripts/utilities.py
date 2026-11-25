@@ -7,7 +7,10 @@ import subprocess
 from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
+
 default_locale = "en"
+npx_cmd = ["npx"]
+pnpm_cmd = ["pnpm", "--filter", "web", "exec"]
 
 def execute_command(cmd):
   result = subprocess.run(cmd, capture_output=True, text=True, check=False)
@@ -18,21 +21,18 @@ def execute_command(cmd):
   else:
     return result
 
-def execute_sql_command(database, sql, flag):
+def execute_sql_command(database, sql, settings):
+  start_cmd = npx_cmd if settings.use_npx else pnpm_cmd
   cmd = [
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
     "wrangler",
     "d1",
     "execute",
     database,
     "--command",
     sql,
-    flag
+    settings.flag
   ]
-  return execute_command(cmd)
+  return execute_command(start_cmd + cmd)
 
 def get_local_flag():
   try:
@@ -98,25 +98,12 @@ def insert_tags_sql(post):
     "RETURNING id;"
   )
   
-def create_tag_records(post, flag):
+def create_tag_records(post, settings):
   sql = insert_tags_sql(post)
-  if sql is None or flag is None:
+  if sql is None or settings.flag is None:
     return None
   
-  cmd = [
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
-    "wrangler",
-    "d1",
-    "execute",
-    "contents-db",
-    "--command",
-    sql,
-    flag
-  ]
-  result = execute_command(cmd)
+  result = execute_sql_command("contents-db", sql, settings)
   json_result = parse_wrangler_json(result.stdout)
 
   if not isinstance(json_result, list) or len(json_result) == 0:
@@ -128,22 +115,19 @@ def create_tag_records(post, flag):
 
   return [tag['id'] for tag in results]
 
-def upload_markdown_file(markdown_file, type, post, flag):
+def upload_markdown_file(markdown_file, type, post, settings):
   if markdown_file is None:
     raise ValueError("A markdown file is required.")
 
   slug = get_required(post, "slug")
   if type is None:
     raise ValueError("A type is required")
-  if flag is None:
+  if settings.flag is None:
     raise ValueError("A flag is required")
 
   locale = get_locale(post)
+  start_cmd = npx_cmd if settings.use_npx else pnpm_cmd
   cmd = [
-    "pnpm",
-    "--filter",
-    "web",
-    "exec",
     "wrangler",
     "r2",
     "object",
@@ -151,6 +135,6 @@ def upload_markdown_file(markdown_file, type, post, flag):
     f"blog-contents/{type}/{locale}/{slug}.md",
     "--file",
     os.path.abspath(markdown_file),
-    flag
+    settings.flag
   ]
-  execute_command(cmd)
+  execute_command(start_cmd + cmd)

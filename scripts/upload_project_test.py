@@ -44,10 +44,11 @@ def test_create_project_record_success(mocker):
   execute_sql_command_mock = mocker.patch("upload_project.execute_sql_command", return_value=types.SimpleNamespace(stdout="The result, trust me!"))
   parse_mock = mocker.patch("upload_project.parse_wrangler_json", return_value=[{ "results": [{ "id": 100 }]} ])
   post = types.SimpleNamespace(metadata = {})
+  settings = types.SimpleNamespace(flag="--flag")
   
-  result = create_project_record(post, "--flag")
+  result = create_project_record(post, settings)
 
-  execute_sql_command_mock.assert_called_once_with("contents-db", "INSERT INTO tests (name) VALUES ('example') RETURNING id;", "--flag")
+  execute_sql_command_mock.assert_called_once_with("contents-db", "INSERT INTO tests (name) VALUES ('example') RETURNING id;", settings)
   parse_mock.assert_called_once_with("The result, trust me!")
   assert result == 100
 
@@ -114,9 +115,10 @@ def test_insert_project_metrics_sql_escapes_project_name():
 def test_create_project_metrics_without_metrics(mocker):
   mocker.patch("upload_project.insert_project_metrics_sql", return_value=None)
   execute_sql_command_mock = mocker.patch("upload_project.execute_sql_command")
-  post = types.SimpleNamespace(metadata = {})
+  post = types.SimpleNamespace(metadata={})
+  settings = types.SimpleNamespace(flag="--local")
 
-  result = create_project_metrics(post, "--local")
+  result = create_project_metrics(post, settings)
 
   execute_sql_command_mock.assert_not_called()
   assert result is None
@@ -125,10 +127,11 @@ def test_create_project_metrics_success(mocker):
   mocker.patch("upload_project.insert_project_metrics_sql", return_value="INSERT INTO project_metrics (project_name) VALUES ('example');")
   execute_sql_command_mock = mocker.patch("upload_project.execute_sql_command")
   post = types.SimpleNamespace(metadata = {})
+  settings = types.SimpleNamespace(flag="--remote")
 
-  create_project_metrics(post, "--remote")
+  create_project_metrics(post, settings)
 
-  execute_sql_command_mock.assert_called_once_with("metrics-db", "INSERT INTO project_metrics (project_name) VALUES ('example');", "--remote")
+  execute_sql_command_mock.assert_called_once_with("metrics-db", "INSERT INTO project_metrics (project_name) VALUES ('example');", settings)
 
 script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "upload_project.py")
 
@@ -155,6 +158,7 @@ def test_main_missing_arguments(mocker, capsys):
 
 def test_main_uploads_everything(mocker):
   post = types.SimpleNamespace(metadata = { "name": "example", "slug": "example", "title": "Example", "summary": "This is an example", "metrics": ["Forks"] })
+  settings = types.SimpleNamespace(flag="--local")
 
   mocks = run_script(mocker, ["upload_project.py", "projects/example.md"], post, [1, 2])
 
@@ -167,17 +171,18 @@ def test_main_uploads_everything(mocker):
     "(100, 1), (100, 2) "
     "ON CONFLICT (project_id, tag_id) DO NOTHING;"
   )
-  assert all(call.args[-1] == "--local" for call in mocks.execute_sql_command.call_args_list)
+  assert all(call.args[-1].flag == "--local" for call in mocks.execute_sql_command.call_args_list)
 
-  mocks.create_tag_records.assert_called_once_with(post, "--local")
-  mocks.upload_markdown_file.assert_called_once_with("projects/example.md", "projects", post, "--local")
+  mocks.create_tag_records.assert_called_once_with(post, settings)
+  mocks.upload_markdown_file.assert_called_once_with("projects/example.md", "projects", post, settings)
 
 def test_main_skips_tags_and_metrics_when_missing(mocker):
   post = types.SimpleNamespace(metadata = { "name": "example", "slug": "example", "title": "Example", "summary": "This is an example" })
+  settings = types.SimpleNamespace(flag="--local")
 
   mocks = run_script(mocker, ["upload_project.py", "projects/example.md"], post, None)
 
   databases = [call.args[0] for call in mocks.execute_sql_command.call_args_list]
   assert databases == ["contents-db"]
   
-  mocks.upload_markdown_file.assert_called_once_with("projects/example.md", "projects", post, "--local")
+  mocks.upload_markdown_file.assert_called_once_with("projects/example.md", "projects", post, settings)

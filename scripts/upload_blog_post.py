@@ -7,6 +7,7 @@
 # ///
 
 import sys
+import types
 import casefy
 import frontmatter
 from utilities import create_tag_records, get_local_flag, parse_wrangler_json, upload_markdown_file, get_required, get_locale, execute_sql_command
@@ -24,8 +25,8 @@ def insert_category_sql(post):
     "RETURNING id;"
   )
   
-def create_category_record(post, flag):
-  result = execute_sql_command("contents-db", insert_category_sql(post), flag)
+def create_category_record(post, settings):
+  result = execute_sql_command("contents-db", insert_category_sql(post), settings)
   json_result = parse_wrangler_json(result.stdout)
   category_id = json_result[0]["results"][0]["id"]
   print(f"Category ID: {category_id}")
@@ -45,8 +46,8 @@ def insert_blog_post_sql(post, category_id):
     "RETURNING id;"
   )
 
-def create_blog_post_record(post, category_id, flag):
-  result = execute_sql_command("contents-db", insert_blog_post_sql(post, category_id), flag)
+def create_blog_post_record(post, category_id, settings):
+  result = execute_sql_command("contents-db", insert_blog_post_sql(post, category_id), settings)
   json_result = parse_wrangler_json(result.stdout)
   blog_post_id = json_result[0]["results"][0]["id"]
   print(f"Blog Post ID: {blog_post_id}")
@@ -60,8 +61,8 @@ def insert_blog_post_tag_sql(blog_post_id, tag_ids):
     "ON CONFLICT (blog_post_id, tag_id) DO NOTHING;"
   )
 
-def create_blog_post_tag_records(blog_post_id, tag_ids, flag):
-  execute_sql_command("contents-db", insert_blog_post_tag_sql(blog_post_id, tag_ids), flag)
+def create_blog_post_tag_records(blog_post_id, tag_ids, settings):
+  execute_sql_command("contents-db", insert_blog_post_tag_sql(blog_post_id, tag_ids), settings)
   
 if __name__ == "__main__":
   if len(sys.argv) < 2:
@@ -70,12 +71,13 @@ if __name__ == "__main__":
     
   markdown_file = sys.argv[1]
   flag = get_local_flag()
+  settings = types.SimpleNamespace(flag=flag)
   
   post = frontmatter.load(markdown_file)
-  category_id = create_category_record(post, flag)
-  blog_post_id = create_blog_post_record(post, category_id, flag)
-  tag_ids = create_tag_records(post, flag)
+  category_id = create_category_record(post, settings)
+  blog_post_id = create_blog_post_record(post, category_id, settings)
+  tag_ids = create_tag_records(post, settings)
   if tag_ids is not None:
-    create_blog_post_tag_records(blog_post_id, tag_ids, flag)
-  upload_markdown_file(markdown_file, "blog_posts", post, flag)
+    create_blog_post_tag_records(blog_post_id, tag_ids, settings)
+  upload_markdown_file(markdown_file, "blog_posts", post, settings)
   

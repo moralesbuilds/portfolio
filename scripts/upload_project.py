@@ -7,6 +7,7 @@
 # ///
 
 import sys
+import types
 import frontmatter
 from utilities import get_local_flag, parse_wrangler_json, create_tag_records, upload_markdown_file, get_locale, get_required, get_optional, get_bool, execute_sql_command
 
@@ -27,8 +28,8 @@ def insert_project_sql(post):
     "RETURNING id;"
   )
 
-def create_project_record(post, flag):
-  result = execute_sql_command("contents-db", insert_project_sql(post), flag)
+def create_project_record(post, settings):
+  result = execute_sql_command("contents-db", insert_project_sql(post), settings)
   json_result = parse_wrangler_json(result.stdout)
   project_id = json_result[0]["results"][0]["id"]
   print(f"Project ID: {project_id}")
@@ -42,8 +43,8 @@ def insert_project_tag_sql(project_id, tag_ids):
     "ON CONFLICT (project_id, tag_id) DO NOTHING;"
   )
 
-def create_project_tag_records(project_id, tag_ids, flag):
-  execute_sql_command("contents-db", insert_project_tag_sql(project_id, tag_ids), flag)
+def create_project_tag_records(project_id, tag_ids, settings):
+  execute_sql_command("contents-db", insert_project_tag_sql(project_id, tag_ids), settings)
 
 def insert_project_metrics_sql(post):
   metrics = []
@@ -70,11 +71,11 @@ def insert_project_metrics_sql(post):
     "DO UPDATE SET pinned = excluded.pinned, sort_order = excluded.sort_order"
   )
 
-def create_project_metrics(post, flag):
+def create_project_metrics(post, settings):
   sql = insert_project_metrics_sql(post)
   if sql is None:
     return None
-  execute_sql_command("metrics-db", sql, flag)
+  execute_sql_command("metrics-db", sql, settings)
 
 if __name__ == "__main__":
   if len(sys.argv) < 2:
@@ -83,14 +84,15 @@ if __name__ == "__main__":
 
   markdown_file = sys.argv[1]
   flag = get_local_flag()
+  settings = types.SimpleNamespace(flag=flag)
 
   post = frontmatter.load(markdown_file)
-  project_id = create_project_record(post, flag)
+  project_id = create_project_record(post, settings)
   
-  tag_ids = create_tag_records(post, flag)
+  tag_ids = create_tag_records(post, settings)
   if tag_ids is not None:
-    create_project_tag_records(project_id, tag_ids, flag)
+    create_project_tag_records(project_id, tag_ids, settings)
     
-  create_project_metrics(post, flag)
+  create_project_metrics(post, settings)
   
-  upload_markdown_file(markdown_file, "projects", post, flag)
+  upload_markdown_file(markdown_file, "projects", post, settings)

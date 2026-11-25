@@ -31,10 +31,11 @@ def test_create_category_record_success(mocker):
   execute_sql_command_mock = mocker.patch("upload_blog_post.execute_sql_command", return_value=types.SimpleNamespace(stdout="The result, trust me!"))
   parse_mock = mocker.patch("upload_blog_post.parse_wrangler_json", return_value=[{ "results": [{ "id": 10 }]} ])
   post = types.SimpleNamespace(metadata = {})
+  settings = types.SimpleNamespace(flag="--flag")
 
-  result = create_category_record(post, "--flag")
+  result = create_category_record(post, settings)
 
-  execute_sql_command_mock.assert_called_once_with("contents-db", "INSERT INTO categories (name) VALUES ('name') RETURNING id;", "--flag")
+  execute_sql_command_mock.assert_called_once_with("contents-db", "INSERT INTO categories (name) VALUES ('name') RETURNING id;", settings)
   parse_mock.assert_called_once_with("The result, trust me!")
   assert result == 10
 
@@ -66,10 +67,11 @@ def test_create_blog_post_record_success(mocker):
   execute_sql_command_mock = mocker.patch("upload_blog_post.execute_sql_command", return_value=types.SimpleNamespace(stdout="The result, trust me!"))
   parse_mock = mocker.patch("upload_blog_post.parse_wrangler_json", return_value=[{ "results": [{ "id": 20 }]} ])
   post = types.SimpleNamespace(metadata = {})
+  settings = types.SimpleNamespace(flag="--flag")
 
-  result = create_blog_post_record(post, "--flag")
+  result = create_blog_post_record(post, settings)
 
-  execute_sql_command_mock.assert_called_once_with("contents-db", "INSERT INTO blog_posts (name) VALUES ('example') RETURNING id;", "--flag")
+  execute_sql_command_mock.assert_called_once_with("contents-db", "INSERT INTO blog_posts (name) VALUES ('example') RETURNING id;", settings)
   parse_mock.assert_called_once_with("The result, trust me!")
   assert result == 20
 
@@ -85,10 +87,11 @@ def test_create_blog_post_record_success(mocker):
   mocker.patch("upload_blog_post.insert_blog_post_tag_sql", return_value="INSERT INTO blog_post_tags (blog_post_id, tag_id) VALUES (100, 10);")
   execute_sql_command_mock = mocker.patch("upload_blog_post.execute_sql_command", return_value=types.SimpleNamespace(stdout="The result, trust me!"))
   post = types.SimpleNamespace(metadata = {})
+  settings = types.SimpleNamespace(flag="--flag")
 
-  create_blog_post_tag_records(100, [10], "--flag")
+  create_blog_post_tag_records(100, [10], settings)
 
-  execute_sql_command_mock.assert_called_once_with("contents-db", "INSERT INTO blog_post_tags (blog_post_id, tag_id) VALUES (100, 10);", "--flag")
+  execute_sql_command_mock.assert_called_once_with("contents-db", "INSERT INTO blog_post_tags (blog_post_id, tag_id) VALUES (100, 10);", settings)
 
 script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "upload_blog_post.py")
 
@@ -115,6 +118,7 @@ def test_main_missing_arguments(mocker, capsys):
 
 def test_main_uploads_everything(mocker):
   post = types.SimpleNamespace(metadata = { "name": "blog-post-example", "locale": "en", "slug": "blog-post-example", "title": "Post Title: A Clear Promise to the Reader", "summary": "A brief of the blog post", "category": "Testing", "tags": ["Tests"] })
+  settings = types.SimpleNamespace(flag="--local")
 
   mocks = run_script(mocker, ["upload_blog_post.py", "blog_posts/example.md"], post, [1])
 
@@ -127,17 +131,18 @@ def test_main_uploads_everything(mocker):
     "(200, 1) "
     "ON CONFLICT (blog_post_id, tag_id) DO NOTHING;"
   )
-  assert all(call.args[2] == "--local" for call in mocks.execute_sql_command.call_args_list)
+  assert all(call.args[2].flag == "--local" for call in mocks.execute_sql_command.call_args_list)
 
-  mocks.create_tag_records.assert_called_once_with(post, "--local")
-  mocks.upload_markdown_file.assert_called_once_with("blog_posts/example.md", "blog_posts", post, "--local")
+  mocks.create_tag_records.assert_called_once_with(post, settings)
+  mocks.upload_markdown_file.assert_called_once_with("blog_posts/example.md", "blog_posts", post, settings)
 
 def test_main_skips_tags_when_missing(mocker):
   post = types.SimpleNamespace(metadata = { "name": "blog-post-example", "locale": "en", "slug": "blog-post-example", "title": "Post Title: A Clear Promise to the Reader", "summary": "A brief of the blog post", "category": "Testing" })
+  settings = types.SimpleNamespace(flag="--local")
 
   mocks = run_script(mocker, ["upload_blog_post.py", "blog_posts/example.md"], post, None)
 
   databases = [call.args[0] for call in mocks.execute_sql_command.call_args_list]
   assert databases == ["contents-db", "contents-db"]
 
-  mocks.upload_markdown_file.assert_called_once_with("blog_posts/example.md", "blog_posts", post, "--local")
+  mocks.upload_markdown_file.assert_called_once_with("blog_posts/example.md", "blog_posts", post, settings)
